@@ -12,14 +12,24 @@ remember your favorites and avoid repeating mistakes.
 - **Search & Filter**: Easily find beverages by name, type, or rating
 - **User Authentication**: Secure login via Supabase
 - **Responsive Design**: Works on desktop and mobile devices
+- **Modern UI Components**: Built with Shadcn UI and Radix UI
+- **Simplified Authentication Flow**: Streamlined login, registration, and
+  password reset
+- **Dynamic Route Protection**: Intelligent middleware for secure access control
+- **Intuitive Dashboard**: Redesigned with improved statistics and beverage
+  management
 
 ## Tech Stack
 
 - **Frontend**: React with Next.js, TypeScript, and TailwindCSS
+- **UI Components**: Shadcn UI and Radix UI
+- **Icons**: Lucide React
+- **Typography**: Space Grotesk font
 - **Backend API**: Python with Flask and SQLAlchemy
 - **Database**: PostgreSQL managed by Supabase
 - **Authentication**: Supabase Auth
 - **Deployment**: Docker container on Fly.io
+- **Development**: Turbopack for faster development experience
 
 ## Getting Started
 

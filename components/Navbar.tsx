@@ -22,7 +22,7 @@ export default async function Navbar() {
           </Link>
         </div>
         <div className="flex items-center gap-4">
-          <NavbarClient />
+          {session && <NavbarClient />}
           <AuthButton />
         </div>
       </div>

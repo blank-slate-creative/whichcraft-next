@@ -1,11 +1,9 @@
 "use client";
 
-import { signOutAction } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
@@ -13,13 +11,33 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Laptop, LogOut, Moon, Settings, Sun, User, Check } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { signOutAction } from "@/app/actions";
+import { Laptop, Moon, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+
+function SignOutButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      type="submit"
+      variant="ghost"
+      className="w-full justify-start"
+      disabled={pending}
+    >
+      {pending ? "Signing out..." : "Sign out"}
+    </Button>
+  );
+}
 
 export default function UserMenu({ userName = "User" }: { userName?: string }) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const [_, formAction] = useActionState(signOutAction, null);
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {
@@ -33,144 +51,54 @@ export default function UserMenu({ userName = "User" }: { userName?: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="relative h-10 w-10 rounded-full flex items-center justify-center hidden md:flex"
-        >
-          <User className="h-5 w-5" />
+        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+          <Avatar className="h-8 w-8">
+            <AvatarFallback>
+              {userName
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{userName}</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              Account Settings
-            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
-            <DropdownMenuRadioItem value="light">
-              <Sun className="mr-2 h-4 w-4" />
-              <span>Light</span>
-            </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="dark">
-              <Moon className="mr-2 h-4 w-4" />
-              <span>Dark</span>
-            </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="system">
-              <Laptop className="mr-2 h-4 w-4" />
-              <span>System</span>
-            </DropdownMenuRadioItem>
-          </DropdownMenuRadioGroup>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <form action={signOutAction}>
-          <Button
-            type="submit"
-            variant="ghost"
-            className="w-full justify-start text-sm px-2 py-1.5 cursor-default"
-          >
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Sign Out</span>
-          </Button>
-        </form>
+        <UserMenuItems userName={userName} />
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
-// For use in mobile sidebar
 export function UserMenuItems({ userName = "User" }: { userName?: string }) {
   const { theme, setTheme } = useTheme();
+  const [_, formAction] = useActionState(signOutAction, null);
 
   return (
-    <div className="space-y-4">
-      <div className="py-2">
-        <h2 className="mb-2 text-lg font-semibold tracking-tight">
-          {userName}
-        </h2>
-        <div className="space-y-1">
-          <Button variant="ghost" className="w-full justify-start">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
-          </Button>
-        </div>
-      </div>
-      <div className="py-2">
-        <h2 className="mb-2 text-lg font-semibold tracking-tight">Theme</h2>
-        <div className="space-y-1">
-          <Button
-            variant={theme === "light" ? "secondary" : "ghost"}
-            className="w-full justify-between"
-            onClick={() => setTheme("light")}
-          >
-            <div className="flex items-center">
-              <Sun className="mr-2 h-4 w-4" />
-              <span>Light</span>
-            </div>
-            {theme === "light" && (
-              <div className="flex h-3.5 w-3.5 items-center justify-center">
-                <Check className="h-4 w-4" />
-              </div>
-            )}
-          </Button>
-          <Button
-            variant={theme === "dark" ? "secondary" : "ghost"}
-            className="w-full justify-between"
-            onClick={() => setTheme("dark")}
-          >
-            <div className="flex items-center">
-              <Moon className="mr-2 h-4 w-4" />
-              <span>Dark</span>
-            </div>
-            {theme === "dark" && (
-              <div className="flex h-3.5 w-3.5 items-center justify-center">
-                <Check className="h-4 w-4" />
-              </div>
-            )}
-          </Button>
-          <Button
-            variant={theme === "system" ? "secondary" : "ghost"}
-            className="w-full justify-between"
-            onClick={() => setTheme("system")}
-          >
-            <div className="flex items-center">
-              <Laptop className="mr-2 h-4 w-4" />
-              <span>System</span>
-            </div>
-            {theme === "system" && (
-              <div className="flex h-3.5 w-3.5 items-center justify-center">
-                <Check className="h-4 w-4" />
-              </div>
-            )}
-          </Button>
-        </div>
-      </div>
-      <div className="py-2">
-        <div className="space-y-1">
-          <form action={signOutAction}>
-            <Button
-              type="submit"
-              variant="ghost"
-              className="w-full justify-start"
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Sign Out</span>
-            </Button>
-          </form>
-        </div>
-      </div>
-    </div>
+    <>
+      <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+        <DropdownMenuRadioItem value="light">
+          <Sun className="mr-2 h-4 w-4" />
+          <span>Light</span>
+        </DropdownMenuRadioItem>
+        <DropdownMenuRadioItem value="dark">
+          <Moon className="mr-2 h-4 w-4" />
+          <span>Dark</span>
+        </DropdownMenuRadioItem>
+        <DropdownMenuRadioItem value="system">
+          <Laptop className="mr-2 h-4 w-4" />
+          <span>System</span>
+        </DropdownMenuRadioItem>
+      </DropdownMenuRadioGroup>
+      <DropdownMenuSeparator />
+      <form action={formAction}>
+        <SignOutButton />
+      </form>
+    </>
   );
 }

@@ -6,3 +6,4 @@ alwaysApply: false
 
 - Use Shadcn and Radix for new UI components
 - Get icons from Lucide
+- Use latest React 19 features

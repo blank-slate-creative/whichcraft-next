@@ -8,6 +8,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useFormStatus } from "react-dom";
+import { saveBeverageAction } from "./actions";
 
 // Custom Textarea component
 interface TextareaProps
@@ -46,6 +48,11 @@ interface BeverageData {
   notes?: string;
   liked: boolean | null;
   location?: string;
+}
+
+interface FormState {
+  status: "idle" | "submitting" | "success" | "error";
+  message?: string;
 }
 
 // Client component for the search functionality
@@ -168,9 +175,24 @@ function BeverageSearch({
   );
 }
 
+// Submit button component
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? "Saving..." : "Save Beverage"}
+    </Button>
+  );
+}
+
 // Main form component
 export default function AddBeverageForm({ user }: { user: { id: string } }) {
-  const [formData, setFormData] = useState<BeverageData>({
+  const [formState, formAction] = React.useActionState(saveBeverageAction, {
+    status: "idle",
+  });
+
+  const [beverageData, setBeverageData] = useState<BeverageData>({
     name: "",
     producer: "",
     type: "Beer",
@@ -180,54 +202,21 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
     location: "",
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
-  };
-
-  const handleSelectBeverage = (beverageData: BeverageData) => {
-    setFormData({ ...formData, ...beverageData });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validate form
-    if (!formData.name || !formData.type || formData.liked === null) {
-      alert("Please fill in all required fields and rate the beverage");
-      return;
-    }
-
-    try {
-      // Submit to API
-      const response = await fetch("/api/beverages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          user_id: user.id,
-          rating: formData.liked ? 1 : 0,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save beverage");
-      }
-
-      // Redirect to dashboard on success
-      window.location.href = "/dashboard";
-    } catch (error) {
-      console.error("Error saving beverage:", error);
-      alert("Failed to save beverage. Please try again.");
-    }
+  const handleSelectBeverage = (data: BeverageData) => {
+    setBeverageData(data);
   };
 
   return (
-    <form className="space-y-8" onSubmit={handleSubmit}>
+    <form action={formAction} className="space-y-8">
+      {/* Hidden fields for form state */}
+      <input type="hidden" name="user_id" value={user.id} />
+      <input type="hidden" name="type" value={beverageData.type} />
+      <input
+        type="hidden"
+        name="liked"
+        value={beverageData.liked === null ? "" : String(beverageData.liked)}
+      />
+
       {/* Search Section */}
       <div className="space-y-4 p-6 bg-card rounded-lg border">
         <h2 className="text-xl font-semibold mb-4">Search for a Beverage</h2>
@@ -243,9 +232,9 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
             <Label htmlFor="name">Beverage Name*</Label>
             <Input
               id="name"
+              name="name"
               placeholder="e.g. Sierra Nevada Pale Ale"
-              value={formData.name}
-              onChange={handleInputChange}
+              defaultValue={beverageData.name}
               required
             />
           </div>
@@ -254,9 +243,9 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
             <Label htmlFor="producer">Producer/Brewery/Winery</Label>
             <Input
               id="producer"
+              name="producer"
               placeholder="e.g. Sierra Nevada Brewing Co."
-              value={formData.producer}
-              onChange={handleInputChange}
+              defaultValue={beverageData.producer}
             />
           </div>
         </div>
@@ -268,9 +257,9 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="type-beer"
-                  checked={formData.type === "Beer"}
+                  checked={beverageData.type === "Beer"}
                   onCheckedChange={() =>
-                    setFormData({ ...formData, type: "Beer" })
+                    setBeverageData({ ...beverageData, type: "Beer" })
                   }
                 />
                 <Label htmlFor="type-beer" className="font-normal">
@@ -280,9 +269,9 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="type-wine"
-                  checked={formData.type === "Wine"}
+                  checked={beverageData.type === "Wine"}
                   onCheckedChange={() =>
-                    setFormData({ ...formData, type: "Wine" })
+                    setBeverageData({ ...beverageData, type: "Wine" })
                   }
                 />
                 <Label htmlFor="type-wine" className="font-normal">
@@ -292,9 +281,9 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="type-other"
-                  checked={formData.type === "Other"}
+                  checked={beverageData.type === "Other"}
                   onCheckedChange={() =>
-                    setFormData({ ...formData, type: "Other" })
+                    setBeverageData({ ...beverageData, type: "Other" })
                   }
                 />
                 <Label htmlFor="type-other" className="font-normal">
@@ -308,9 +297,9 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
             <Label htmlFor="style">Style</Label>
             <Input
               id="style"
+              name="style"
               placeholder="e.g. Pale Ale, Sauvignon Blanc"
-              value={formData.style}
-              onChange={handleInputChange}
+              defaultValue={beverageData.style}
             />
           </div>
         </div>
@@ -325,8 +314,8 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
           <div className="flex items-center space-x-4">
             <Button
               type="button"
-              variant={formData.liked === true ? "default" : "outline"}
-              onClick={() => setFormData({ ...formData, liked: true })}
+              variant={beverageData.liked === true ? "default" : "outline"}
+              onClick={() => setBeverageData({ ...beverageData, liked: true })}
               className="flex items-center space-x-2"
             >
               <span>👍</span>
@@ -334,8 +323,8 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
             </Button>
             <Button
               type="button"
-              variant={formData.liked === false ? "default" : "outline"}
-              onClick={() => setFormData({ ...formData, liked: false })}
+              variant={beverageData.liked === false ? "default" : "outline"}
+              onClick={() => setBeverageData({ ...beverageData, liked: false })}
               className="flex items-center space-x-2"
             >
               <span>👎</span>
@@ -348,10 +337,10 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
           <Label htmlFor="notes">Tasting Notes</Label>
           <Textarea
             id="notes"
+            name="notes"
             placeholder="Describe the flavor, aroma, appearance, and your overall impression..."
             rows={5}
-            value={formData.notes}
-            onChange={handleInputChange}
+            defaultValue={beverageData.notes}
           />
         </div>
       </div>
@@ -364,18 +353,25 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
           <Label htmlFor="location">Where did you try it?</Label>
           <Input
             id="location"
+            name="location"
             placeholder="e.g. Craft Beer Bar, Home"
-            value={formData.location}
-            onChange={handleInputChange}
+            defaultValue={beverageData.location}
           />
         </div>
       </div>
+
+      {/* Form error message */}
+      {formState.status === "error" && (
+        <div className="text-destructive-foreground border-l-2 border-destructive-foreground px-4 py-2">
+          {formState.message}
+        </div>
+      )}
 
       <div className="flex justify-end space-x-4">
         <Button variant="outline" asChild>
           <Link href="/dashboard">Cancel</Link>
         </Button>
-        <Button type="submit">Save Beverage</Button>
+        <SubmitButton />
       </div>
     </form>
   );
