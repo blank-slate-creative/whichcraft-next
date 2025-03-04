@@ -4,8 +4,12 @@ import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { redirectAuthenticatedToHome } from "@/utils/auth";
 
 export default async function Login(props: { searchParams: Promise<Message> }) {
+  // Redirect authenticated users to dashboard
+  await redirectAuthenticatedToHome();
+
   const searchParams = await props.searchParams;
   return (
     <form className="flex-1 flex flex-col min-w-64">
