@@ -9,7 +9,7 @@ export default async function ResetPassword(props: {
 }) {
   const searchParams = await props.searchParams;
   return (
-    <form className="flex flex-col w-full max-w-md mx-auto">
+    <form className="flex flex-col w-full max-w-80 mx-auto">
       <h1 className="text-3xl font-bold mb-2">Reset password</h1>
       <p className="text-base text-muted-foreground mb-8">
         Please enter your new password below.

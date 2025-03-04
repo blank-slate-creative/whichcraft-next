@@ -48,7 +48,7 @@ export default function Signup() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col min-w-64 max-w-64 mx-auto"
+      className="flex flex-col min-w-80 max-w-80 mx-auto"
     >
       <h1 className="text-3xl font-bold mb-2">Sign up</h1>
       <p className="text-base text-muted-foreground mb-8">

@@ -24,7 +24,10 @@ export default function Login() {
   const [state, formAction] = useActionState(signInAction, initialState);
 
   return (
-    <form action={formAction} className="flex-1 flex flex-col min-w-64">
+    <form
+      action={formAction}
+      className="flex-1 flex flex-col min-w-80 max-w-80"
+    >
       <h1 className="text-3xl font-bold mb-2">Sign in</h1>
       <p className="text-base text-muted-foreground mb-8">
         Don't have an account?{" "}
