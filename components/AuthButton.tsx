@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
-import { signOutAction } from "@/app/actions";
 import { Button } from "./ui/button";
 
 export default async function AuthButton() {
@@ -10,13 +9,8 @@ export default async function AuthButton() {
   } = await supabase.auth.getSession();
 
   if (session) {
-    return (
-      <form action={signOutAction}>
-        <Button type="submit" variant="outline">
-          Sign Out
-        </Button>
-      </form>
-    );
+    // Return null when user is signed in, as the UserMenu will handle sign out
+    return null;
   }
 
   return (

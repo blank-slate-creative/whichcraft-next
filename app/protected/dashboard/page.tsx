@@ -56,7 +56,7 @@ export default async function Dashboard() {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Dashboard Header */}
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="text-4xl font-bold tracking-tight mb-2">
           Your Beverage Collection
         </h1>
@@ -65,53 +65,47 @@ export default async function Dashboard() {
         </p>
       </div>
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-card border rounded-xl p-6 shadow-sm flex items-center space-x-4">
-          <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-            <span className="text-xl text-primary">📊</span>
+      {/* Stats Overview - Redesigned to be more compact */}
+      <div className="bg-card border rounded-xl p-4 mb-6 shadow-sm">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="flex items-center gap-2">
+            <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+              <span className="text-lg text-primary">📊</span>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">Total</p>
+              <h3 className="text-xl font-bold">{totalCount}</h3>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">
-              Total Beverages
-            </p>
-            <h3 className="text-2xl font-bold">{totalCount}</h3>
-          </div>
-        </div>
 
-        <div className="bg-card border rounded-xl p-6 shadow-sm flex items-center space-x-4">
-          <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-            <span className="text-xl text-amber-600">🍺</span>
+          <div className="flex items-center gap-2">
+            <div className="h-9 w-9 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+              <span className="text-lg text-amber-600">🍺</span>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">Beer</p>
+              <h3 className="text-xl font-bold">{beerCount}</h3>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">
-              Beer Collection
-            </p>
-            <h3 className="text-2xl font-bold">{beerCount}</h3>
-          </div>
-        </div>
 
-        <div className="bg-card border rounded-xl p-6 shadow-sm flex items-center space-x-4">
-          <div className="h-12 w-12 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
-            <span className="text-xl text-rose-600">🍷</span>
+          <div className="flex items-center gap-2">
+            <div className="h-9 w-9 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
+              <span className="text-lg text-rose-600">🍷</span>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">Wine</p>
+              <h3 className="text-xl font-bold">{wineCount}</h3>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">
-              Wine Collection
-            </p>
-            <h3 className="text-2xl font-bold">{wineCount}</h3>
-          </div>
-        </div>
 
-        <div className="bg-card border rounded-xl p-6 shadow-sm flex items-center space-x-4">
-          <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-            <span className="text-xl text-green-600">👍</span>
-          </div>
-          <div>
-            <p className="text-sm font-medium text-muted-foreground">
-              Liked Beverages
-            </p>
-            <h3 className="text-2xl font-bold">{likedCount}</h3>
+          <div className="flex items-center gap-2">
+            <div className="h-9 w-9 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+              <span className="text-lg text-green-600">👍</span>
+            </div>
+            <div>
+              <p className="text-xs font-medium text-muted-foreground">Liked</p>
+              <h3 className="text-xl font-bold">{likedCount}</h3>
+            </div>
           </div>
         </div>
       </div>
@@ -193,7 +187,7 @@ export default async function Dashboard() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+                  d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L6.8 7.933a4 4 0 00-.8 2.4z"
                 />
               </svg>
               Liked
@@ -233,13 +227,30 @@ export default async function Dashboard() {
         {mockBeverages.map((beverage) => (
           <div
             key={beverage.id}
-            className="bg-card border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col min-h-[19rem]"
+            className="bg-card border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col"
           >
             <div className="p-5 flex-1 flex flex-col">
               <div className="flex justify-between items-start mb-3">
                 <div className="flex items-start gap-3">
                   <div className="h-11 w-11 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-1">
-                    <span className="text-xl">{beverage.image}</span>
+                    {beverage.liked ?
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6 text-green-600"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                      </svg>
+                    : <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6 text-muted-foreground"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2h-5.416a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z" />
+                      </svg>
+                    }
                   </div>
                   <div className="min-w-0 flex-1">
                     <h3 className="font-semibold text-base leading-tight break-words mb-1">
@@ -250,6 +261,27 @@ export default async function Dashboard() {
                     </p>
                   </div>
                 </div>
+                <TooltipButton
+                  variant="ghost"
+                  size="icon"
+                  className="text-primary h-8 w-8 -mt-1 -mr-1"
+                  tooltip="Edit"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                    />
+                  </svg>
+                </TooltipButton>
               </div>
 
               <div className="flex gap-2 mb-3">
@@ -286,91 +318,6 @@ export default async function Dashboard() {
                   />
                 </svg>
                 Added on {beverage.dateAdded}
-              </div>
-            </div>
-
-            <div className="bg-muted/30 px-4 py-2 flex justify-between items-center mt-auto">
-              <div className="flex items-center">
-                <TooltipButton
-                  variant="ghost"
-                  size="icon"
-                  className={
-                    beverage.liked ?
-                      "text-green-600 h-9 w-9"
-                    : "text-muted-foreground h-9 w-9"
-                  }
-                  tooltip={beverage.liked ? "Unlike" : "Like"}
-                >
-                  {beverage.liked ?
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                    </svg>
-                  : <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
-                      />
-                    </svg>
-                  }
-                </TooltipButton>
-              </div>
-              <div className="flex gap-2">
-                <TooltipButton
-                  variant="ghost"
-                  size="icon"
-                  className="text-primary h-9 w-9"
-                  tooltip="Edit"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                    />
-                  </svg>
-                </TooltipButton>
-
-                <TooltipButton
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive h-9 w-9"
-                  tooltip="Delete"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                    />
-                  </svg>
-                </TooltipButton>
               </div>
             </div>
           </div>
