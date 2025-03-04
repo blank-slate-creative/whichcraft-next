@@ -51,12 +51,9 @@ class Beverage(db.Model):
     producer = db.Column(db.String(255))
     abv = db.Column(db.Float)
     year = db.Column(db.String(50))
-    rating = db.Column(db.Integer)
+    liked = db.Column(db.Boolean, nullable=False)  # True for liked, False for disliked
     notes = db.Column(db.Text)
-    favorite = db.Column(db.Boolean, default=False)
     location = db.Column(db.String(255))
-    price = db.Column(db.String(50))
-    purchase_location = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
@@ -71,12 +68,9 @@ class Beverage(db.Model):
             "producer": self.producer,
             "abv": self.abv,
             "year": self.year,
-            "rating": self.rating,
+            "liked": self.liked,
             "notes": self.notes,
-            "favorite": self.favorite,
             "location": self.location,
-            "price": self.price,
-            "purchase_location": self.purchase_location,
             "created_at": self.created_at.isoformat(),
         }
 
@@ -134,30 +128,29 @@ def create_beverage(current_user):
     data = request.get_json()
 
     # Validate required fields
-    if not data or not data.get("name") or not data.get("type"):
+    if not data.get("name") or not data.get("type"):
         return jsonify({"message": "Name and type are required"}), 400
 
     # Create new beverage
     new_beverage = Beverage(
-        user_id=current_user.id,
+        user_id=current_user["id"],
         name=data.get("name"),
         type=data.get("type"),
         style=data.get("style"),
         producer=data.get("producer"),
         abv=data.get("abv"),
         year=data.get("year"),
-        rating=data.get("rating"),
+        liked=bool(data.get("liked", False)),  # Convert to boolean
         notes=data.get("notes"),
-        favorite=data.get("favorite", False),
         location=data.get("location"),
-        price=data.get("price"),
-        purchase_location=data.get("purchase_location"),
     )
 
     db.session.add(new_beverage)
     db.session.commit()
 
-    return jsonify(new_beverage.to_dict()), 201
+    return jsonify(
+        {"message": "Beverage created successfully", "id": str(new_beverage.id)}
+    ), 201
 
 
 @app.route("/api/beverages/<uuid:beverage_id>", methods=["GET"])
@@ -194,18 +187,12 @@ def update_beverage(current_user, beverage_id):
         beverage.abv = data.get("abv")
     if "year" in data:
         beverage.year = data.get("year")
-    if "rating" in data:
-        beverage.rating = data.get("rating")
+    if "liked" in data:
+        beverage.liked = data.get("liked")
     if "notes" in data:
         beverage.notes = data.get("notes")
-    if "favorite" in data:
-        beverage.favorite = data.get("favorite")
     if "location" in data:
         beverage.location = data.get("location")
-    if "price" in data:
-        beverage.price = data.get("price")
-    if "purchase_location" in data:
-        beverage.purchase_location = data.get("purchase_location")
 
     db.session.commit()
 

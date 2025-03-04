@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { redirectAuthenticatedToHome } from "@/utils/auth";
+import { ClipboardList, Search, Sun } from "lucide-react";
 
 export default async function Home() {
   // Redirect authenticated users to dashboard
@@ -36,20 +37,7 @@ export default async function Home() {
             {/* Feature 1 */}
             <div className="flex flex-col items-center text-center p-6 bg-background rounded-lg shadow-sm">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-primary"
-                >
-                  <path d="M6 8h12M8 8v12a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V8M7 8V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1" />
-                </svg>
+                <ClipboardList className="text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">
                 Track Your Tastings
@@ -62,20 +50,7 @@ export default async function Home() {
             {/* Feature 2 */}
             <div className="flex flex-col items-center text-center p-6 bg-background rounded-lg shadow-sm">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-primary"
-                >
-                  <path d="M12 2v2M12 14v8M2 12h2M14 12h8M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M17.66 6.34l1.41-1.41M4.93 19.07l1.41-1.41" />
-                </svg>
+                <Sun className="text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Rate & Review</h3>
               <p className="text-muted-foreground">
@@ -87,21 +62,7 @@ export default async function Home() {
             {/* Feature 3 */}
             <div className="flex flex-col items-center text-center p-6 bg-background rounded-lg shadow-sm">
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="text-primary"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
+                <Search className="text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Search & Discover</h3>
               <p className="text-muted-foreground">

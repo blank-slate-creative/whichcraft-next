@@ -53,7 +53,7 @@ export default function MobileSidebar({
                 asChild
                 onClick={() => setOpen(false)}
               >
-                <Link href="/protected/dashboard">Dashboard</Link>
+                <Link href="/dashboard">Dashboard</Link>
               </Button>
               <Button
                 variant="ghost"

@@ -1,0 +1,8 @@
+---
+description: When updating UIs
+globs: *.tsx
+alwaysApply: false
+---
+
+- Use Shadcn and Radix for new UI components
+- Get icons from Lucide
