@@ -42,7 +42,7 @@ export default async function AddBeveragePage() {
         <h1 className="text-3xl font-bold">Add New Beverage</h1>
       </div>
 
-      <AddBeverageForm user={user} />
+      <AddBeverageForm />
     </div>
   );
 }

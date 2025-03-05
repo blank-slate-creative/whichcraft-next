@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { useFormStatus } from "react-dom";
-import { saveBeverageAction } from "./actions";
+import { saveBeverageAction, redirectToDashboard } from "./actions";
+import { Search } from "lucide-react";
 
 // Custom Textarea component
 interface TextareaProps
@@ -40,6 +41,18 @@ interface Brewery {
   brewery_type?: string;
 }
 
+interface Beer {
+  id: number;
+  name: string;
+  type_name: string;
+  rating: number;
+  rating_count: number;
+  image_url?: string;
+  abv: number;
+  brewery_name: string;
+  brewery_id: number;
+}
+
 interface BeverageData {
   name: string;
   producer: string;
@@ -47,7 +60,6 @@ interface BeverageData {
   style?: string;
   notes?: string;
   liked: boolean | null;
-  location?: string;
 }
 
 interface FormState {
@@ -63,27 +75,50 @@ function BeverageSearch({
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("beer");
-  const [searchResults, setSearchResults] = useState<Brewery[]>([]);
+  const [searchResults, setSearchResults] = useState<Beer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = async () => {
-    if (!searchTerm) return;
+    if (!searchTerm) {
+      setSearchResults([]);
+      return;
+    }
 
     setIsLoading(true);
+    setIsOpen(true);
 
     try {
       if (searchType === "beer") {
-        // Search for breweries using Open Brewery DB
+        // Use our Flask API that proxies the Untappd Algolia search
         const response = await fetch(
-          `https://api.openbrewerydb.org/v1/breweries/search?query=${encodeURIComponent(searchTerm)}`
+          `/api/search/beer?q=${encodeURIComponent(searchTerm)}`
         );
+
         const data = await response.json();
-        setSearchResults(data);
+
+        if (Array.isArray(data)) {
+          setSearchResults(data);
+        } else {
+          setSearchResults([]);
+        }
       } else if (searchType === "wine") {
         // For wine, we would integrate with a wine API
         // For now, just show a placeholder message
         setSearchResults([
-          { id: "wine-placeholder", name: "Wine API integration coming soon" },
+          {
+            id: 0,
+            name: "Wine API integration coming soon",
+            type_name: "Coming soon",
+            brewery_name: "Wine search will be available in a future update",
+            brewery_id: 0,
+            rating: 0,
+            rating_count: 0,
+            image_url: "",
+            abv: 0,
+          },
         ]);
       }
     } catch (error) {
@@ -94,32 +129,141 @@ function BeverageSearch({
     }
   };
 
-  const handleBrewerySelect = (brewery: Brewery) => {
+  const handleBeerSelect = (beer: Beer) => {
     onSelect({
-      name: `Beer from ${brewery.name}`,
-      producer: brewery.name,
+      name: beer.name,
+      producer: beer.brewery_name || "Unknown Brewery",
       type: "Beer",
-      location:
-        brewery.city && brewery.state ?
-          `${brewery.city}, ${brewery.state}`
-        : "",
-      style: brewery.brewery_type || "",
+      style: beer.type_name,
       liked: null,
     });
+    setIsOpen(false);
   };
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="space-y-4">
-      <div className="flex items-center space-x-4">
-        <div className="flex-1">
+    <div className="relative w-full space-y-3">
+      <div className="relative w-full">
+        <div className="relative">
           <Input
-            placeholder="Search for a brewery or wine..."
+            ref={searchInputRef}
+            placeholder="Search for a beer or wine..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearch();
+              }
+            }}
+            onFocus={() => {
+              if (searchResults.length > 0) setIsOpen(true);
+            }}
+            className="pr-10"
           />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground"
+            onClick={handleSearch}
+            disabled={isLoading}
+          >
+            <Search className="h-4 w-4" />
+            {isLoading && <span className="sr-only">Loading...</span>}
+          </Button>
         </div>
-        <div className="flex items-center space-x-2">
+
+        {isOpen && searchResults.length > 0 && (
+          <div
+            ref={dropdownRef}
+            className="absolute z-50 w-full mt-1 bg-card border rounded-lg shadow-md overflow-hidden max-h-[350px] overflow-y-auto"
+          >
+            <div className="p-3 bg-muted/50 border-b flex items-center justify-between">
+              <h3 className="text-sm font-medium">Search Results</h3>
+              <div className="flex items-center space-x-2 text-xs text-muted-foreground">
+                <span>{searchResults.length} results</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 px-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Close
+                </Button>
+              </div>
+            </div>
+            <ul className="divide-y">
+              {searchResults.map((result) => (
+                <li key={result.id}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full justify-start text-left p-3 h-auto rounded-none hover:bg-accent"
+                    onClick={() => handleBeerSelect(result)}
+                  >
+                    <div className="flex items-start gap-4 w-full">
+                      {result.image_url ?
+                        <div className="flex-shrink-0">
+                          <img
+                            src={result.image_url}
+                            alt={result.name}
+                            className="h-14 w-auto object-contain rounded-sm"
+                          />
+                        </div>
+                      : <div className="flex-shrink-0 h-14 w-14 bg-muted rounded-sm flex items-center justify-center">
+                          <span className="text-muted-foreground text-xs">
+                            No image
+                          </span>
+                        </div>
+                      }
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium truncate">
+                          {result.name}
+                        </div>
+                        <div className="text-sm text-muted-foreground flex items-center gap-1 mt-0.5">
+                          <span>{result.brewery_name}</span>
+                        </div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                            {result.abv}% ABV
+                          </span>
+                          {result.type_name && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                              {result.type_name}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <Checkbox
               id="type-beer"
@@ -145,32 +289,6 @@ function BeverageSearch({
           {isLoading ? "Searching..." : "Search"}
         </Button>
       </div>
-
-      {searchResults.length > 0 && (
-        <div className="bg-card border rounded-lg p-4 max-h-60 overflow-y-auto">
-          <h3 className="text-sm font-medium mb-2">Search Results</h3>
-          <ul className="space-y-2">
-            {searchResults.map((result) => (
-              <li key={result.id}>
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-left"
-                  onClick={() => handleBrewerySelect(result)}
-                >
-                  <div>
-                    <div className="font-medium">{result.name}</div>
-                    {result.city && result.state && (
-                      <div className="text-sm text-muted-foreground">
-                        {result.city}, {result.state}
-                      </div>
-                    )}
-                  </div>
-                </Button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 }
@@ -187,7 +305,7 @@ function SubmitButton() {
 }
 
 // Main form component
-export default function AddBeverageForm({ user }: { user: { id: string } }) {
+export default function AddBeverageForm() {
   const [formState, formAction] = React.useActionState(saveBeverageAction, {
     status: "idle",
   });
@@ -199,17 +317,22 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
     style: "",
     notes: "",
     liked: null,
-    location: "",
   });
 
   const handleSelectBeverage = (data: BeverageData) => {
     setBeverageData(data);
   };
 
+  // Redirect to dashboard when form submission is successful
+  React.useEffect(() => {
+    if (formState.status === "success") {
+      redirectToDashboard();
+    }
+  }, [formState.status]);
+
   return (
     <form action={formAction} className="space-y-8">
       {/* Hidden fields for form state */}
-      <input type="hidden" name="user_id" value={user.id} />
       <input type="hidden" name="type" value={beverageData.type} />
       <input
         type="hidden"
@@ -345,24 +468,15 @@ export default function AddBeverageForm({ user }: { user: { id: string } }) {
         </div>
       </div>
 
-      {/* Location */}
-      <div className="space-y-4 p-6 bg-card rounded-lg border">
-        <h2 className="text-xl font-semibold mb-4">Location</h2>
-
-        <div className="space-y-2">
-          <Label htmlFor="location">Where did you try it?</Label>
-          <Input
-            id="location"
-            name="location"
-            placeholder="e.g. Craft Beer Bar, Home"
-            defaultValue={beverageData.location}
-          />
-        </div>
-      </div>
-
-      {/* Form error message */}
+      {/* Form status messages */}
       {formState.status === "error" && (
-        <div className="text-destructive-foreground border-l-2 border-destructive-foreground px-4 py-2">
+        <div className="text-destructive-foreground border-l-2 border-destructive-foreground px-4 py-2 bg-destructive/10 rounded">
+          {formState.message}
+        </div>
+      )}
+
+      {formState.status === "success" && (
+        <div className="text-green-700 border-l-2 border-green-500 px-4 py-2 bg-green-50 rounded">
           {formState.message}
         </div>
       )}
