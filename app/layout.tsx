@@ -1,6 +1,7 @@
 import { Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import Navbar from "@/components/Navbar";
+import BottomNav from "@/components/BottomNav";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -13,12 +14,13 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata = {
   title: "WhichCraft",
   description: "WhichCraft App",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 };
 
 export default function RootLayout({
@@ -35,13 +37,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-h-screen flex flex-col items-center">
-            <Navbar />
-            <div className="flex-1 w-full flex flex-col items-center">
+          <Navbar />
+          <main className="min-h-screen flex flex-col items-center pt-16">
+            <div className="flex-1 w-full flex flex-col items-center pb-16 md:pb-0">
               <div className="w-full flex flex-col max-w-5xl px-3 sm:px-4 md:px-5">
                 {children}
               </div>
             </div>
+            <BottomNav />
           </main>
         </ThemeProvider>
       </body>

@@ -12,7 +12,11 @@ import { Laptop, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-const ThemeSwitcher = () => {
+const ThemeSwitcher = ({
+  variant = "dropdown",
+}: {
+  variant?: "dropdown" | "buttons";
+}) => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -26,6 +30,37 @@ const ThemeSwitcher = () => {
   }
 
   const ICON_SIZE = 16;
+
+  if (variant === "buttons") {
+    return (
+      <div className="flex flex-col gap-2">
+        <Button
+          variant={theme === "light" ? "default" : "outline"}
+          className="w-full justify-start"
+          onClick={() => setTheme("light")}
+        >
+          <Sun className="mr-2 h-4 w-4" />
+          <span>Light</span>
+        </Button>
+        <Button
+          variant={theme === "dark" ? "default" : "outline"}
+          className="w-full justify-start"
+          onClick={() => setTheme("dark")}
+        >
+          <Moon className="mr-2 h-4 w-4" />
+          <span>Dark</span>
+        </Button>
+        <Button
+          variant={theme === "system" ? "default" : "outline"}
+          className="w-full justify-start"
+          onClick={() => setTheme("system")}
+        >
+          <Laptop className="mr-2 h-4 w-4" />
+          <span>System</span>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <DropdownMenu>

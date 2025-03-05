@@ -24,21 +24,20 @@ export default function Login() {
   const [state, formAction] = useActionState(signInAction, initialState);
 
   return (
-    <form
-      action={formAction}
-      className="flex-1 flex flex-col min-w-80 max-w-80"
-    >
-      <h1 className="text-3xl font-bold mb-2">Sign in</h1>
-      <p className="text-base text-muted-foreground mb-8">
-        Don't have an account?{" "}
-        <Link
-          className="text-primary font-medium underline hover:text-primary/90"
-          href="/sign-up"
-        >
-          Sign up
-        </Link>
-      </p>
-      <div className="flex flex-col gap-4">
+    <form action={formAction} className="w-full space-y-6">
+      <div className="space-y-2 text-center">
+        <h1 className="text-2xl font-bold sm:text-3xl">Sign in</h1>
+        <p className="text-sm text-muted-foreground sm:text-base">
+          Don't have an account?{" "}
+          <Link
+            className="text-primary font-medium underline hover:text-primary/90"
+            href="/sign-up"
+          >
+            Sign up
+          </Link>
+        </p>
+      </div>
+      <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input

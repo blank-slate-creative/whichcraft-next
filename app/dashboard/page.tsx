@@ -27,9 +27,9 @@ export default async function Dashboard({
   const resolvedParams = await searchParams;
   const type = resolvedParams.type as string | undefined;
   const liked =
-    resolvedParams.liked !== undefined ?
-      resolvedParams.liked === "true"
-    : undefined;
+    resolvedParams.liked !== undefined
+      ? resolvedParams.liked === "true"
+      : undefined;
 
   // Extract sorting parameters
   const sort_by = resolvedParams.sort_by as

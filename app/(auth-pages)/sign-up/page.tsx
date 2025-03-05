@@ -37,8 +37,9 @@ export default function Signup() {
   // If we have a success message, show it
   if (state.success) {
     return (
-      <div className="w-full flex-1 flex items-center h-screen sm:max-w-md justify-center gap-2 p-4">
-        <div className="text-foreground border-l-2 border-foreground px-4">
+      <div className="w-full space-y-4 text-center">
+        <h1 className="text-2xl font-bold sm:text-3xl">Sign up</h1>
+        <div className="text-foreground border-l-2 border-foreground p-4 mx-auto text-left max-w-md">
           {state.success}
         </div>
       </div>
@@ -46,21 +47,20 @@ export default function Signup() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col min-w-80 max-w-80 mx-auto"
-    >
-      <h1 className="text-3xl font-bold mb-2">Sign up</h1>
-      <p className="text-base text-muted-foreground mb-8">
-        Already have an account?{" "}
-        <Link
-          className="text-primary font-medium underline hover:text-primary/90"
-          href="/sign-in"
-        >
-          Sign in
-        </Link>
-      </p>
-      <div className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="w-full space-y-6">
+      <div className="space-y-2 text-center">
+        <h1 className="text-2xl font-bold sm:text-3xl">Sign up</h1>
+        <p className="text-sm text-muted-foreground sm:text-base">
+          Already have an account?{" "}
+          <Link
+            className="text-primary font-medium underline hover:text-primary/90"
+            href="/sign-in"
+          >
+            Sign in
+          </Link>
+        </p>
+      </div>
+      <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input
