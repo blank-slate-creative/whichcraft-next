@@ -1,5 +1,5 @@
 app = "whichcraft-api"
-primary_region = "sjc"
+primary_region = "ord"
 
 [build]
   dockerfile = "Dockerfile"
