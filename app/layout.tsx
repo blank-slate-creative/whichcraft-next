@@ -13,6 +13,12 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata = {
   title: "WhichCraft",
   description: "WhichCraft App",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
 };
 
 export default function RootLayout({
@@ -22,6 +28,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={spaceGrotesk.className} suppressHydrationWarning>
+      <head>
+        <style>{`
+          input, textarea, select {
+            font-size: 16px;
+          }
+        `}</style>
+      </head>
       <body className="bg-background text-foreground">
         <ThemeProvider
           attribute="class"
