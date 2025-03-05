@@ -33,6 +33,7 @@ export async function saveBeverageAction(
       style: formData.get("style"),
       notes: formData.get("notes"),
       liked: liked === "true",
+      abv: formData.get("abv"),
     });
 
     // Return success state before redirecting

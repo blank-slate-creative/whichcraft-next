@@ -60,6 +60,7 @@ interface BeverageData {
   style?: string;
   notes?: string;
   liked: boolean | null;
+  abv?: number | string;
 }
 
 interface FormState {
@@ -136,6 +137,7 @@ function BeverageSearch({
       type: "Beer",
       style: beer.type_name,
       liked: null,
+      abv: beer.abv || "",
     });
     setIsOpen(false);
   };
@@ -317,6 +319,7 @@ export default function AddBeverageForm() {
     style: "",
     notes: "",
     liked: null,
+    abv: "",
   });
 
   const handleSelectBeverage = (data: BeverageData) => {
@@ -422,7 +425,27 @@ export default function AddBeverageForm() {
               id="style"
               name="style"
               placeholder="e.g. Pale Ale, Sauvignon Blanc"
-              defaultValue={beverageData.style}
+              value={beverageData.style}
+              onChange={(e) =>
+                setBeverageData({ ...beverageData, style: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="abv">ABV (%)</Label>
+            <Input
+              id="abv"
+              name="abv"
+              type="number"
+              step="0.1"
+              min="0"
+              max="100"
+              placeholder="e.g. 5.5"
+              value={beverageData.abv}
+              onChange={(e) =>
+                setBeverageData({ ...beverageData, abv: e.target.value })
+              }
             />
           </div>
         </div>

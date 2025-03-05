@@ -39,6 +39,7 @@ interface BeverageData {
   style?: string;
   notes?: string;
   liked: boolean | null;
+  abv?: number | string;
 }
 
 interface FormState {
@@ -85,6 +86,7 @@ export default function EditBeverageForm({
     style: initialBeverage.style || "",
     notes: initialBeverage.notes || "",
     liked: initialBeverage.liked,
+    abv: initialBeverage.abv || "",
   });
 
   // Redirect to dashboard when form submission is successful
@@ -189,6 +191,23 @@ export default function EditBeverageForm({
               value={beverageData.style}
               onChange={(e) =>
                 setBeverageData({ ...beverageData, style: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="abv">ABV (%)</Label>
+            <Input
+              id="abv"
+              name="abv"
+              type="number"
+              step="0.1"
+              min="0"
+              max="100"
+              placeholder="e.g. 5.5"
+              value={beverageData.abv}
+              onChange={(e) =>
+                setBeverageData({ ...beverageData, abv: e.target.value })
               }
             />
           </div>

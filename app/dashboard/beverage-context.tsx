@@ -18,6 +18,7 @@ export interface Beverage {
   liked: boolean;
   notes: string;
   created_at: string;
+  abv?: number | string;
 }
 
 interface BeverageContextType {
