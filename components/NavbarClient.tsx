@@ -35,36 +35,44 @@ export default function NavbarClient() {
     return false;
   };
 
+  const navLinks = [
+    {
+      href: "/dashboard",
+      label: "Collection",
+      icon: <Beer className="h-4 w-4" />,
+    },
+    {
+      href: "/dashboard/stats",
+      label: "Stats",
+      icon: <BarChart3 className="h-4 w-4" />,
+    },
+    {
+      href: "/about",
+      label: "About",
+      icon: <Home className="h-4 w-4" />,
+    },
+  ];
+
   return (
     <div className="flex items-center gap-4">
       <div className="hidden md:flex items-center gap-4">
-        <Link
-          href="/dashboard"
-          className={`text-sm font-medium ${isActive("/dashboard") ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
-        >
-          <span className="flex items-center gap-1">
-            <Beer className="h-4 w-4" />
-            Collection
-          </span>
-        </Link>
-        <Link
-          href="/dashboard/stats"
-          className={`text-sm font-medium ${isActive("/dashboard/stats") ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
-        >
-          <span className="flex items-center gap-1">
-            <BarChart3 className="h-4 w-4" />
-            Stats
-          </span>
-        </Link>
-        <Link
-          href="/about"
-          className={`text-sm font-medium ${isActive("/about") ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
-        >
-          <span className="flex items-center gap-1">
-            <Home className="h-4 w-4" />
-            About
-          </span>
-        </Link>
+        {navLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            prefetch={true}
+            className={`text-sm font-medium transition-colors duration-200 ${
+              isActive(link.href) ? "text-primary" : (
+                "text-muted-foreground hover:text-foreground"
+              )
+            }`}
+          >
+            <span className="flex items-center gap-1">
+              {link.icon}
+              {link.label}
+            </span>
+          </Link>
+        ))}
       </div>
       <div className="hidden sm:block">
         <UserMenu userName={userName} />

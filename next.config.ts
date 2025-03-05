@@ -4,6 +4,10 @@ const nextConfig: NextConfig = {
   /* config options here */
   output: "standalone",
   reactStrictMode: true,
+  poweredByHeader: false,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   async rewrites() {
     return [
       {
