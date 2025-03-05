@@ -7,8 +7,10 @@ import EditBeverageForm from "../edit-form";
 export default async function EditBeveragePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
+
   const supabase = await createClient();
 
   // Replace getSession with getUser for secure authentication
@@ -21,9 +23,6 @@ export default async function EditBeveragePage({
   if (error || !user) {
     redirect("/sign-in");
   }
-
-  // Get the beverage ID from the URL parameters
-  const { id } = params;
 
   if (!id) {
     redirect("/dashboard");

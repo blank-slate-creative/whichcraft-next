@@ -18,26 +18,27 @@ interface Beverage {
 export default async function Dashboard({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   // Ensure user is authenticated
   const { user } = await requireAuth();
 
   // Extract filter parameters from URL
-  const type = searchParams.type as string | undefined;
+  const resolvedParams = await searchParams;
+  const type = resolvedParams.type as string | undefined;
   const liked =
-    searchParams.liked !== undefined
-      ? searchParams.liked === "true"
-      : undefined;
+    resolvedParams.liked !== undefined ?
+      resolvedParams.liked === "true"
+    : undefined;
 
   // Extract sorting parameters
-  const sort_by = searchParams.sort_by as
+  const sort_by = resolvedParams.sort_by as
     | "name"
     | "type"
     | "producer"
     | "created_at"
     | undefined;
-  const sort_order = searchParams.sort_order as "asc" | "desc" | undefined;
+  const sort_order = resolvedParams.sort_order as "asc" | "desc" | undefined;
 
   // Fetch beverages from the API with filters and sorting
   let beverages: Beverage[] = [];
