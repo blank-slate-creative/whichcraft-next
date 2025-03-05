@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { useFormStatus } from "react-dom";
 import { updateBeverageAction, redirectToDashboard } from "./actions";
 import { Beverage } from "../beverage-context";
+import { Loader2 } from "lucide-react";
 
 // Custom Textarea component
 interface TextareaProps
@@ -22,13 +23,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <textarea
         className={cn(
           "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className,
+          className
         )}
         ref={ref}
         {...props}
       />
     );
-  },
+  }
 );
 Textarea.displayName = "Textarea";
 
@@ -47,12 +48,22 @@ interface FormState {
   message?: string;
 }
 
+// Submit button component
 function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending}>
-      {pending ? "Saving..." : "Update Beverage"}
+    <Button
+      type="submit"
+      disabled={pending}
+      className="w-full sm:w-auto min-w-[120px]"
+    >
+      {pending ?
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Saving...
+        </>
+      : "Save Changes"}
     </Button>
   );
 }
@@ -69,10 +80,10 @@ export default function EditBeverageForm({
       return updateBeverageAction(
         initialBeverage.id.toString(),
         prevState,
-        formData,
+        formData
       );
     },
-    [initialBeverage.id],
+    [initialBeverage.id]
   );
 
   const [formState, formAction] = React.useActionState(updateWithId, {
@@ -97,7 +108,7 @@ export default function EditBeverageForm({
   }, [formState.status]);
 
   return (
-    <form action={formAction} className="space-y-8">
+    <form action={formAction} className="space-y-6 sm:space-y-8">
       {/* Hidden fields for form state */}
       <input type="hidden" name="type" value={beverageData.type} />
       <input
@@ -107,11 +118,13 @@ export default function EditBeverageForm({
       />
 
       {/* Basic Information */}
-      <div className="space-y-4 p-6 bg-card rounded-lg border">
-        <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
+      <div className="space-y-3 sm:space-y-4 p-4 sm:p-6 bg-card rounded-lg border">
+        <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
+          Basic Information
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="name">Beverage Name*</Label>
             <Input
               id="name"
@@ -125,7 +138,7 @@ export default function EditBeverageForm({
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="producer">Producer/Brewery/Winery</Label>
             <Input
               id="producer"
@@ -139,10 +152,10 @@ export default function EditBeverageForm({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label>Type*</Label>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="type-beer"
@@ -182,7 +195,7 @@ export default function EditBeverageForm({
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="style">Style</Label>
             <Input
               id="style"
@@ -195,7 +208,7 @@ export default function EditBeverageForm({
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="abv">ABV (%)</Label>
             <Input
               id="abv"
@@ -215,17 +228,20 @@ export default function EditBeverageForm({
       </div>
 
       {/* Rating & Notes */}
-      <div className="space-y-4 p-6 bg-card rounded-lg border">
-        <h2 className="text-xl font-semibold mb-4">Rating & Notes</h2>
+      <div className="space-y-3 sm:space-y-4 p-4 sm:p-6 bg-card rounded-lg border">
+        <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
+          Rating & Notes
+        </h2>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5 sm:space-y-2">
           <Label>Did you like it?*</Label>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Button
               type="button"
               variant={beverageData.liked === true ? "default" : "outline"}
               onClick={() => setBeverageData({ ...beverageData, liked: true })}
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-2 flex-1 sm:flex-none justify-center"
+              size="sm"
             >
               <span>👍</span>
               <span>Like</span>
@@ -234,7 +250,8 @@ export default function EditBeverageForm({
               type="button"
               variant={beverageData.liked === false ? "default" : "outline"}
               onClick={() => setBeverageData({ ...beverageData, liked: false })}
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-2 flex-1 sm:flex-none justify-center"
+              size="sm"
             >
               <span>👎</span>
               <span>Dislike</span>
@@ -242,13 +259,13 @@ export default function EditBeverageForm({
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5 sm:space-y-2">
           <Label htmlFor="notes">Tasting Notes</Label>
           <Textarea
             id="notes"
             name="notes"
             placeholder="Describe the flavor, aroma, appearance, and your overall impression..."
-            rows={5}
+            rows={4}
             value={beverageData.notes}
             onChange={(e) =>
               setBeverageData({ ...beverageData, notes: e.target.value })
@@ -259,21 +276,13 @@ export default function EditBeverageForm({
 
       {/* Form status messages */}
       {formState.status === "error" && (
-        <div className="text-destructive-foreground border-l-2 border-destructive-foreground px-4 py-2 bg-destructive/10 rounded">
+        <div className="text-destructive-foreground border-l-2 border-destructive-foreground px-3 sm:px-4 py-2 bg-destructive/10 rounded text-sm">
           {formState.message}
         </div>
       )}
 
-      {formState.status === "success" && (
-        <div className="text-green-700 border-l-2 border-green-500 px-4 py-2 bg-green-50 rounded">
-          {formState.message}
-        </div>
-      )}
-
-      <div className="flex justify-end space-x-4">
-        <Button variant="outline" asChild>
-          <Link href="/dashboard">Cancel</Link>
-        </Button>
+      {/* Submit Button */}
+      <div className="flex justify-center sm:justify-end">
         <SubmitButton />
       </div>
     </form>

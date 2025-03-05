@@ -17,16 +17,13 @@ export async function getServerAuthToken() {
 export async function serverApiRequest(
   endpoint: string,
   method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
-  body?: any,
+  body?: any
 ) {
   const token = await getServerAuthToken();
 
   if (!token) {
     throw new Error("Authentication required");
   }
-
-  // Debug token (only first few characters for security)
-  console.log("Token prefix:", token.substring(0, 10) + "...");
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -42,17 +39,13 @@ export async function serverApiRequest(
     options.body = JSON.stringify(body);
   }
 
-  console.log(`Making ${method} request to ${API_URL}${endpoint}`);
-
   const response = await fetch(`${API_URL}${endpoint}`, options);
-
-  console.log(`Response status:`, response.status);
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     console.error("API error response:", error);
     throw new Error(
-      error.message || `API request failed with status ${response.status}`,
+      error.message || `API request failed with status ${response.status}`
     );
   }
 

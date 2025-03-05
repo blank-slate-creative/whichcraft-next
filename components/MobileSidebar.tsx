@@ -8,10 +8,28 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Laptop, Menu, Moon, Sun } from "lucide-react";
 import Link from "next/link";
-import { UserMenuItems } from "./UserMenu";
 import { useState } from "react";
+import { useTheme } from "next-themes";
+import { signOutAction } from "@/app/actions";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+
+function SignOutButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      type="submit"
+      variant="ghost"
+      className="w-full justify-start"
+      disabled={pending}
+    >
+      {pending ? "Signing out..." : "Sign out"}
+    </Button>
+  );
+}
 
 export default function MobileSidebar({
   userName = "User",
@@ -19,6 +37,8 @@ export default function MobileSidebar({
   userName?: string;
 }) {
   const [open, setOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [_, formAction] = useActionState(signOutAction, null);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -66,7 +86,46 @@ export default function MobileSidebar({
             </div>
           </div>
 
-          <UserMenuItems userName={userName} />
+          <div className="py-2">
+            <h2 className="mb-2 text-lg font-semibold tracking-tight">Theme</h2>
+            <div className="space-y-1">
+              <Button
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => setTheme("light")}
+              >
+                <Sun className="mr-2 h-4 w-4" />
+                <span>Light</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => setTheme("dark")}
+              >
+                <Moon className="mr-2 h-4 w-4" />
+                <span>Dark</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start"
+                onClick={() => setTheme("system")}
+              >
+                <Laptop className="mr-2 h-4 w-4" />
+                <span>System</span>
+              </Button>
+            </div>
+          </div>
+
+          <div className="py-2">
+            <h2 className="mb-2 text-lg font-semibold tracking-tight">
+              Account
+            </h2>
+            <div className="space-y-1">
+              <form action={formAction}>
+                <SignOutButton />
+              </form>
+            </div>
+          </div>
         </div>
       </SheetContent>
     </Sheet>

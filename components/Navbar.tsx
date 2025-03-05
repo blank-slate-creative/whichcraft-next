@@ -14,7 +14,7 @@ export default async function Navbar() {
 
   return (
     <nav className="w-full border-b border-b-foreground/10 h-16">
-      <div className="w-full max-w-5xl mx-auto flex justify-between items-center p-3 px-5">
+      <div className="w-full max-w-5xl mx-auto flex justify-between items-center px-3 sm:px-4 md:px-5 h-full">
         <div className="flex items-center gap-4">
           {session && <MobileSidebar userName={userName} />}
           <Link href="/" className="font-bold text-xl">

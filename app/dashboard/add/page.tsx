@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 import AddBeverageForm from "./add-form"; // We'll create this client component
 
 export default async function AddBeveragePage() {
@@ -19,27 +20,18 @@ export default async function AddBeveragePage() {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <div className="flex items-center mb-8">
-        <Link
-          href="/dashboard"
-          className="mr-4 text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+    <div className="w-full max-w-3xl mx-auto px-2 sm:px-0 py-4 sm:py-8">
+      <div className="flex items-center mb-4 sm:mb-8">
+        <Button variant="ghost" size="icon" className="mr-2 sm:mr-4" asChild>
+          <Link
+            href="/dashboard"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-        </Link>
-        <h1 className="text-3xl font-bold">Add New Beverage</h1>
+            <ArrowLeft className="h-5 w-5" />
+            <span className="sr-only">Back to dashboard</span>
+          </Link>
+        </Button>
+        <h1 className="text-2xl sm:text-3xl font-bold">Add New Beverage</h1>
       </div>
 
       <AddBeverageForm />

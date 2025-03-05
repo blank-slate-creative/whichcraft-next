@@ -10,7 +10,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { useFormStatus } from "react-dom";
 import { saveBeverageAction, redirectToDashboard } from "./actions";
-import { Search } from "lucide-react";
+import { Search, Loader2 } from "lucide-react";
 
 // Custom Textarea component
 interface TextareaProps
@@ -22,13 +22,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <textarea
         className={cn(
           "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className,
+          className
         )}
         ref={ref}
         {...props}
       />
     );
-  },
+  }
 );
 Textarea.displayName = "Textarea";
 
@@ -95,7 +95,7 @@ function BeverageSearch({
       if (searchType === "beer") {
         // Use our Flask API that proxies the Untappd Algolia search
         const response = await fetch(
-          `/api/search/beer?q=${encodeURIComponent(searchTerm)}`,
+          `/api/search/beer?q=${encodeURIComponent(searchTerm)}`
         );
 
         const data = await response.json();
@@ -162,7 +162,7 @@ function BeverageSearch({
   }, []);
 
   return (
-    <div className="relative w-full space-y-3">
+    <div className="relative w-full space-y-2 sm:space-y-3">
       <div className="relative w-full">
         <div className="relative">
           <Input
@@ -197,12 +197,14 @@ function BeverageSearch({
         {isOpen && searchResults.length > 0 && (
           <div
             ref={dropdownRef}
-            className="absolute z-50 w-full mt-1 bg-card border rounded-lg shadow-md overflow-hidden max-h-[350px] overflow-y-auto"
+            className="absolute z-50 w-full mt-1 bg-card border rounded-lg shadow-md overflow-hidden max-h-[300px] sm:max-h-[350px] overflow-y-auto"
           >
-            <div className="p-3 bg-muted/50 border-b flex items-center justify-between">
-              <h3 className="text-sm font-medium">Search Results</h3>
+            <div className="p-2 sm:p-3 bg-muted/50 border-b flex items-center justify-between">
+              <h3 className="text-xs sm:text-sm font-medium">Search Results</h3>
               <div className="flex items-center space-x-2 text-xs text-muted-foreground">
-                <span>{searchResults.length} results</span>
+                <span className="hidden sm:inline">
+                  {searchResults.length} results
+                </span>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -219,38 +221,37 @@ function BeverageSearch({
                   <Button
                     type="button"
                     variant="ghost"
-                    className="w-full justify-start text-left p-3 h-auto rounded-none hover:bg-accent"
+                    className="w-full justify-start text-left p-2 sm:p-3 h-auto rounded-none hover:bg-accent"
                     onClick={() => handleBeerSelect(result)}
                   >
-                    <div className="flex items-start gap-4 w-full">
-                      {result.image_url ? (
+                    <div className="flex items-start gap-2 sm:gap-4 w-full">
+                      {result.image_url ?
                         <div className="flex-shrink-0">
                           <img
                             src={result.image_url}
                             alt={result.name}
-                            className="h-14 w-auto object-contain rounded-sm"
+                            className="h-10 sm:h-14 w-auto object-contain rounded-sm"
                           />
                         </div>
-                      ) : (
-                        <div className="flex-shrink-0 h-14 w-14 bg-muted rounded-sm flex items-center justify-center">
+                      : <div className="flex-shrink-0 h-10 w-10 sm:h-14 sm:w-14 bg-muted rounded-sm flex items-center justify-center">
                           <span className="text-muted-foreground text-xs">
                             No image
                           </span>
                         </div>
-                      )}
+                      }
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium truncate">
+                        <div className="font-medium truncate text-sm sm:text-base">
                           {result.name}
                         </div>
-                        <div className="text-sm text-muted-foreground flex items-center gap-1 mt-0.5">
+                        <div className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1 mt-0.5">
                           <span>{result.brewery_name}</span>
                         </div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                        <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-1">
+                          <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
                             {result.abv}% ABV
                           </span>
                           {result.type_name && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                            <span className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
                               {result.type_name}
                             </span>
                           )}
@@ -265,7 +266,7 @@ function BeverageSearch({
         )}
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <Checkbox
@@ -288,7 +289,11 @@ function BeverageSearch({
             </Label>
           </div>
         </div>
-        <Button onClick={handleSearch} disabled={isLoading}>
+        <Button
+          onClick={handleSearch}
+          disabled={isLoading}
+          className="w-full sm:w-auto"
+        >
           {isLoading ? "Searching..." : "Search"}
         </Button>
       </div>
@@ -301,8 +306,17 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending}>
-      {pending ? "Saving..." : "Save Beverage"}
+    <Button
+      type="submit"
+      disabled={pending}
+      className="w-full sm:w-auto min-w-[120px]"
+    >
+      {pending ?
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Saving...
+        </>
+      : "Save Beverage"}
     </Button>
   );
 }
@@ -335,7 +349,7 @@ export default function AddBeverageForm() {
   }, [formState.status]);
 
   return (
-    <form action={formAction} className="space-y-8">
+    <form action={formAction} className="space-y-6 sm:space-y-8">
       {/* Hidden fields for form state */}
       <input type="hidden" name="type" value={beverageData.type} />
       <input
@@ -345,42 +359,52 @@ export default function AddBeverageForm() {
       />
 
       {/* Search Section */}
-      <div className="space-y-4 p-6 bg-card rounded-lg border">
-        <h2 className="text-xl font-semibold mb-4">Search for a Beverage</h2>
+      <div className="space-y-3 sm:space-y-4 p-4 sm:p-6 bg-card rounded-lg border">
+        <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
+          Search for a Beverage
+        </h2>
         <BeverageSearch onSelect={handleSelectBeverage} />
       </div>
 
       {/* Basic Information */}
-      <div className="space-y-4 p-6 bg-card rounded-lg border">
-        <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
+      <div className="space-y-3 sm:space-y-4 p-4 sm:p-6 bg-card rounded-lg border">
+        <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
+          Basic Information
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="name">Beverage Name*</Label>
             <Input
               id="name"
               name="name"
               placeholder="e.g. Sierra Nevada Pale Ale"
-              defaultValue={beverageData.name}
+              value={beverageData.name}
+              onChange={(e) =>
+                setBeverageData({ ...beverageData, name: e.target.value })
+              }
               required
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="producer">Producer/Brewery/Winery</Label>
             <Input
               id="producer"
               name="producer"
               placeholder="e.g. Sierra Nevada Brewing Co."
-              defaultValue={beverageData.producer}
+              value={beverageData.producer}
+              onChange={(e) =>
+                setBeverageData({ ...beverageData, producer: e.target.value })
+              }
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label>Type*</Label>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="type-beer"
@@ -420,7 +444,7 @@ export default function AddBeverageForm() {
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="style">Style</Label>
             <Input
               id="style"
@@ -433,7 +457,7 @@ export default function AddBeverageForm() {
             />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-1.5 sm:space-y-2">
             <Label htmlFor="abv">ABV (%)</Label>
             <Input
               id="abv"
@@ -453,17 +477,20 @@ export default function AddBeverageForm() {
       </div>
 
       {/* Rating & Notes */}
-      <div className="space-y-4 p-6 bg-card rounded-lg border">
-        <h2 className="text-xl font-semibold mb-4">Rating & Notes</h2>
+      <div className="space-y-3 sm:space-y-4 p-4 sm:p-6 bg-card rounded-lg border">
+        <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
+          Rating & Notes
+        </h2>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5 sm:space-y-2">
           <Label>Did you like it?*</Label>
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Button
               type="button"
               variant={beverageData.liked === true ? "default" : "outline"}
               onClick={() => setBeverageData({ ...beverageData, liked: true })}
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-2 flex-1 sm:flex-none justify-center"
+              size="sm"
             >
               <span>👍</span>
               <span>Like</span>
@@ -472,7 +499,8 @@ export default function AddBeverageForm() {
               type="button"
               variant={beverageData.liked === false ? "default" : "outline"}
               onClick={() => setBeverageData({ ...beverageData, liked: false })}
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-2 flex-1 sm:flex-none justify-center"
+              size="sm"
             >
               <span>👎</span>
               <span>Dislike</span>
@@ -480,13 +508,13 @@ export default function AddBeverageForm() {
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5 sm:space-y-2">
           <Label htmlFor="notes">Tasting Notes</Label>
           <Textarea
             id="notes"
             name="notes"
             placeholder="Describe the flavor, aroma, appearance, and your overall impression..."
-            rows={5}
+            rows={4}
             defaultValue={beverageData.notes}
           />
         </div>
@@ -494,21 +522,13 @@ export default function AddBeverageForm() {
 
       {/* Form status messages */}
       {formState.status === "error" && (
-        <div className="text-destructive-foreground border-l-2 border-destructive-foreground px-4 py-2 bg-destructive/10 rounded">
+        <div className="text-destructive-foreground border-l-2 border-destructive-foreground px-3 sm:px-4 py-2 bg-destructive/10 rounded text-sm">
           {formState.message}
         </div>
       )}
 
-      {formState.status === "success" && (
-        <div className="text-green-700 border-l-2 border-green-500 px-4 py-2 bg-green-50 rounded">
-          {formState.message}
-        </div>
-      )}
-
-      <div className="flex justify-end space-x-4">
-        <Button variant="outline" asChild>
-          <Link href="/dashboard">Cancel</Link>
-        </Button>
+      {/* Submit Button */}
+      <div className="flex justify-center sm:justify-end">
         <SubmitButton />
       </div>
     </form>

@@ -18,7 +18,7 @@ export default function AboutPage() {
 
       {/* Mission Section */}
       <section className="w-full py-12 md:py-16">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
@@ -68,7 +68,7 @@ export default function AboutPage() {
 
       {/* How It Works Section */}
       <section className="w-full py-12 md:py-16 bg-muted/50 rounded-lg">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-3 sm:px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center mb-12">
             How WhichCraft Works
           </h2>
