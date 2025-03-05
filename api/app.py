@@ -93,9 +93,6 @@ def token_required(f):
             return jsonify({"message": "Token is missing"}), 401
 
         try:
-            # For debugging
-            print(f"Received token: {token[:10]}...")
-
             # Decode Supabase token without verification
             # In production, you should properly verify the token with Supabase's public key
             payload = jwt.decode(token, options={"verify_signature": False})
@@ -104,10 +101,7 @@ def token_required(f):
             if "sub" not in payload or "aud" not in payload:
                 raise jwt.InvalidTokenError("Not a valid Supabase token format")
 
-            print(f"Decoded payload: {payload}")
-
             user_id = payload["sub"]
-            print(f"User ID from token: {user_id}")
 
             # Get user from database or create if not exists
             current_user = User.query.filter_by(id=uuid.UUID(user_id)).first()
