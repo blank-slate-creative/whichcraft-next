@@ -16,8 +16,8 @@ export const metadata = {
   viewport: {
     width: "device-width",
     initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
+    maximumScale: 1,
+    userScalable: false,
   },
 };
 
@@ -28,13 +28,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={spaceGrotesk.className} suppressHydrationWarning>
-      <head>
-        <style>{`
-          input, textarea, select {
-            font-size: 16px;
-          }
-        `}</style>
-      </head>
       <body className="bg-background text-foreground">
         <ThemeProvider
           attribute="class"
