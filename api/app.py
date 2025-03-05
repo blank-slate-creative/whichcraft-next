@@ -140,7 +140,44 @@ def health_check():
 @app.route("/api/beverages", methods=["GET"])
 @token_required
 def get_beverages(current_user):
-    beverages = Beverage.query.filter_by(user_id=current_user.id).all()
+    # Start with base query filtered by user
+    query = Beverage.query.filter_by(user_id=current_user.id)
+
+    # Log request parameters
+    print(f"GET /api/beverages - Request args: {request.args}")
+
+    # Apply type filter if provided
+    type_filter = request.args.get("type")
+    if type_filter:
+        print(f"Filtering by type: {type_filter}")
+        query = query.filter(Beverage.type == type_filter)
+
+    # Apply liked filter if provided
+    liked_filter = request.args.get("liked")
+    if liked_filter is not None:
+        # Convert string 'true'/'false' to boolean
+        liked_bool = liked_filter.lower() == "true"
+        print(f"Filtering by liked: {liked_bool}")
+        query = query.filter(Beverage.liked == liked_bool)
+
+    # Apply sorting if provided
+    sort_by = request.args.get("sort_by", "created_at")  # Default sort by created_at
+    sort_order = request.args.get("sort_order", "desc")  # Default descending
+
+    # Validate sort_by parameter to prevent SQL injection
+    valid_sort_fields = ["name", "type", "producer", "created_at"]
+    if sort_by not in valid_sort_fields:
+        sort_by = "created_at"  # Default to created_at if invalid
+
+    # Apply sorting
+    if sort_order.lower() == "asc":
+        query = query.order_by(getattr(Beverage, sort_by).asc())
+    else:
+        query = query.order_by(getattr(Beverage, sort_by).desc())
+
+    # Execute query and return results
+    beverages = query.all()
+    print(f"Found {len(beverages)} beverages matching filters")
     return jsonify([beverage.to_dict() for beverage in beverages]), 200
 
 

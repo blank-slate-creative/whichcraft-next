@@ -65,9 +65,43 @@ export async function serverApiRequest(
 export const serverBeverageApi = {
   /**
    * Get all beverages for the current user
+   * @param filters Optional filters to apply (type, liked, sort_by, sort_order)
    */
-  getAll: async () => {
-    return serverApiRequest("/api/beverages");
+  getAll: async (filters?: {
+    type?: string;
+    liked?: boolean;
+    sort_by?: "name" | "type" | "producer" | "created_at";
+    sort_order?: "asc" | "desc";
+  }) => {
+    let endpoint = "/api/beverages";
+
+    // Add query parameters if filters are provided
+    if (filters) {
+      const params = new URLSearchParams();
+
+      if (filters.type) {
+        params.append("type", filters.type);
+      }
+
+      if (filters.liked !== undefined) {
+        params.append("liked", filters.liked.toString());
+      }
+
+      if (filters.sort_by) {
+        params.append("sort_by", filters.sort_by);
+      }
+
+      if (filters.sort_order) {
+        params.append("sort_order", filters.sort_order);
+      }
+
+      const queryString = params.toString();
+      if (queryString) {
+        endpoint += `?${queryString}`;
+      }
+    }
+
+    return serverApiRequest(endpoint);
   },
 
   /**

@@ -19,3 +19,28 @@ export async function deleteBeverageAction(id: string) {
     };
   }
 }
+
+/**
+ * Server action to fetch beverages with filters
+ */
+export async function fetchBeveragesAction(filters?: {
+  type?: string;
+  liked?: boolean;
+  sort_by?: "name" | "type" | "producer" | "created_at";
+  sort_order?: "asc" | "desc";
+}) {
+  try {
+    console.log("Fetching beverages with filters:", filters);
+    const beverages = await serverBeverageApi.getAll(filters);
+    console.log(`Fetched ${beverages.length} beverages`);
+    return { success: true, data: beverages };
+  } catch (error) {
+    console.error("Error fetching beverages:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "Failed to fetch beverages",
+      data: [],
+    };
+  }
+}

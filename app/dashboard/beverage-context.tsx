@@ -6,6 +6,9 @@ import React, {
   useState,
   useCallback,
   ReactNode,
+  Dispatch,
+  SetStateAction,
+  useEffect,
 } from "react";
 
 // Define the Beverage interface
@@ -23,8 +26,10 @@ export interface Beverage {
 
 interface BeverageContextType {
   beverages: Beverage[];
-  setBeverages: (beverages: Beverage[]) => void;
+  setBeverages: Dispatch<SetStateAction<Beverage[]>>;
   deleteBeverage: (id: string | number) => void;
+  allBeverages: Beverage[];
+  setAllBeverages: Dispatch<SetStateAction<Beverage[]>>;
   stats: {
     beerCount: number;
     wineCount: number;
@@ -56,14 +61,16 @@ export function BeverageProvider({
   children,
 }: BeverageProviderProps) {
   const [beverages, setBeverages] = useState<Beverage[]>(initialBeverages);
+  const [allBeverages, setAllBeverages] =
+    useState<Beverage[]>(initialBeverages);
 
-  // Calculate stats based on current beverages
+  // Calculate stats based on all beverages, not filtered ones
   const stats = {
-    beerCount: beverages.filter((b) => b.type === "Beer").length,
-    wineCount: beverages.filter((b) => b.type === "Wine").length,
-    totalCount: beverages.length,
-    likedCount: beverages.filter((b) => b.liked).length,
-    dislikedCount: beverages.filter((b) => !b.liked).length,
+    beerCount: allBeverages.filter((b) => b.type === "Beer").length,
+    wineCount: allBeverages.filter((b) => b.type === "Wine").length,
+    totalCount: allBeverages.length,
+    likedCount: allBeverages.filter((b) => b.liked).length,
+    dislikedCount: allBeverages.filter((b) => !b.liked).length,
   };
 
   // Optimistically delete a beverage
@@ -73,11 +80,23 @@ export function BeverageProvider({
         (beverage) => beverage.id.toString() !== id.toString()
       )
     );
+    setAllBeverages((prevBeverages) =>
+      prevBeverages.filter(
+        (beverage) => beverage.id.toString() !== id.toString()
+      )
+    );
   }, []);
 
   return (
     <BeverageContext.Provider
-      value={{ beverages, setBeverages, deleteBeverage, stats }}
+      value={{
+        beverages,
+        setBeverages,
+        deleteBeverage,
+        stats,
+        allBeverages,
+        setAllBeverages,
+      }}
     >
       {children}
     </BeverageContext.Provider>
