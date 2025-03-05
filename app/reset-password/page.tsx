@@ -17,15 +17,16 @@ export default function ResetPassword() {
   // Initialize with null state
   const [state, formAction] = useActionState<ResetPasswordState, FormData>(
     resetPasswordAction,
-    null
+    null,
   );
 
   // Convert the state to a Message type for FormMessage component
-  const message: Message | null =
-    state ?
-      "error" in state && state.error ? { error: state.error }
-      : "success" in state && state.success ? { success: state.success }
-      : null
+  const message: Message | null = state
+    ? "error" in state && state.error
+      ? { error: state.error }
+      : "success" in state && state.success
+        ? { success: state.success }
+        : null
     : null;
 
   return (

@@ -22,13 +22,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <textarea
         className={cn(
           "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
+          className,
         )}
         ref={ref}
         {...props}
       />
     );
-  }
+  },
 );
 Textarea.displayName = "Textarea";
 
@@ -95,7 +95,7 @@ function BeverageSearch({
       if (searchType === "beer") {
         // Use our Flask API that proxies the Untappd Algolia search
         const response = await fetch(
-          `/api/search/beer?q=${encodeURIComponent(searchTerm)}`
+          `/api/search/beer?q=${encodeURIComponent(searchTerm)}`,
         );
 
         const data = await response.json();
@@ -223,7 +223,7 @@ function BeverageSearch({
                     onClick={() => handleBeerSelect(result)}
                   >
                     <div className="flex items-start gap-4 w-full">
-                      {result.image_url ?
+                      {result.image_url ? (
                         <div className="flex-shrink-0">
                           <img
                             src={result.image_url}
@@ -231,12 +231,13 @@ function BeverageSearch({
                             className="h-14 w-auto object-contain rounded-sm"
                           />
                         </div>
-                      : <div className="flex-shrink-0 h-14 w-14 bg-muted rounded-sm flex items-center justify-center">
+                      ) : (
+                        <div className="flex-shrink-0 h-14 w-14 bg-muted rounded-sm flex items-center justify-center">
                           <span className="text-muted-foreground text-xs">
                             No image
                           </span>
                         </div>
-                      }
+                      )}
                       <div className="flex-1 min-w-0">
                         <div className="font-medium truncate">
                           {result.name}

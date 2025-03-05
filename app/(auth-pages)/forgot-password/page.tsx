@@ -19,16 +19,16 @@ export default function ForgotPassword() {
   // Initialize with null state
   const [state, formAction] = useActionState<ForgotPasswordState, FormData>(
     forgotPasswordAction,
-    null
+    null,
   );
 
   // Convert the state to a Message type for FormMessage component
-  const message: Message | null =
-    state ?
-      "error" in state && state.error ? { error: state.error }
-      : "success" in state && typeof state.success === "string" ?
-        { success: state.success }
-      : null
+  const message: Message | null = state
+    ? "error" in state && state.error
+      ? { error: state.error }
+      : "success" in state && typeof state.success === "string"
+        ? { success: state.success }
+        : null
     : null;
 
   return (

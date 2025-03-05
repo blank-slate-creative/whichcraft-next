@@ -26,9 +26,9 @@ export default async function Dashboard({
   // Extract filter parameters from URL
   const type = searchParams.type as string | undefined;
   const liked =
-    searchParams.liked !== undefined ?
-      searchParams.liked === "true"
-    : undefined;
+    searchParams.liked !== undefined
+      ? searchParams.liked === "true"
+      : undefined;
 
   // Extract sorting parameters
   const sort_by = searchParams.sort_by as

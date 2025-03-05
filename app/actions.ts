@@ -36,7 +36,7 @@ export const signUpAction = async (prevState: any, formData: FormData) => {
 
 export const signInAction = async (
   prevState: { error?: string } = {},
-  formData: FormData
+  formData: FormData,
 ) => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
@@ -56,7 +56,7 @@ export const signInAction = async (
 
 export const forgotPasswordAction = async (
   prevState: any,
-  formData: FormData
+  formData: FormData,
 ) => {
   const email = formData.get("email")?.toString();
   const supabase = await createClient();
@@ -87,7 +87,7 @@ export const forgotPasswordAction = async (
 
 export const resetPasswordAction = async (
   prevState: any,
-  formData: FormData
+  formData: FormData,
 ) => {
   const supabase = await createClient();
 

@@ -109,7 +109,7 @@ export function DashboardContent({ error }: DashboardContentProps) {
   const currentSortOption =
     sortOptions.find(
       (option) =>
-        option.field === currentSortBy && option.order === currentSortOrder
+        option.field === currentSortBy && option.order === currentSortOrder,
     ) || sortOptions[0];
 
   // State for search input
@@ -130,8 +130,8 @@ export function DashboardContent({ error }: DashboardContentProps) {
             beverage.name.toLowerCase().includes(query) ||
             beverage.producer.toLowerCase().includes(query) ||
             beverage.style.toLowerCase().includes(query) ||
-            beverage.notes.toLowerCase().includes(query)
-        )
+            beverage.notes.toLowerCase().includes(query),
+        ),
       );
     }
   }, [searchQuery, beverages]);
@@ -205,25 +205,25 @@ export function DashboardContent({ error }: DashboardContentProps) {
         }
       });
     },
-    [router, setBeverages, currentSortBy, currentSortOrder]
+    [router, setBeverages, currentSortBy, currentSortOrder],
   );
 
   // Handle sort change
   const handleSortChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selectedOption = sortOptions.find(
-        (option) => option.value === e.target.value
+        (option) => option.value === e.target.value,
       );
       if (selectedOption) {
         applyFilter(
           currentType || undefined,
           currentLiked || undefined,
           selectedOption.field,
-          selectedOption.order
+          selectedOption.order,
         );
       }
     },
-    [applyFilter, currentType, currentLiked]
+    [applyFilter, currentType, currentLiked],
   );
 
   // Clear all filters
@@ -433,21 +433,21 @@ export function DashboardContent({ error }: DashboardContentProps) {
 
       {/* Beverage Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-        {isPending ?
+        {isPending ? (
           // Show skeleton UI during loading
           Array.from({ length: 3 }).map((_, index) => (
             <BeverageCardSkeleton key={`skeleton-${index}`} />
           ))
-        : filteredBeverages.length === 0 && !error ?
+        ) : filteredBeverages.length === 0 && !error ? (
           <div className="col-span-full text-center py-12">
             <div className="mx-auto w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-4">
               <Wine className="h-12 w-12 text-primary/50" />
             </div>
             <h3 className="text-xl font-medium mb-2">No beverages found</h3>
             <p className="text-muted-foreground mb-6">
-              {searchQuery ?
-                "Try adjusting your search or filters."
-              : "Start building your collection by adding your first beverage."}
+              {searchQuery
+                ? "Try adjusting your search or filters."
+                : "Start building your collection by adding your first beverage."}
             </p>
             {!searchQuery && (
               <Button asChild>
@@ -461,7 +461,8 @@ export function DashboardContent({ error }: DashboardContentProps) {
               <Button onClick={clearFilters}>Clear Filters</Button>
             )}
           </div>
-        : filteredBeverages.map((beverage: Beverage) => (
+        ) : (
+          filteredBeverages.map((beverage: Beverage) => (
             <div
               key={beverage.id}
               className="bg-card border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col"
@@ -477,22 +478,24 @@ export function DashboardContent({ error }: DashboardContentProps) {
                       <Badge
                         variant="outline"
                         className={`${
-                          beverage.type === "Beer" ?
-                            "bg-amber-50 text-amber-700 border-amber-200"
-                          : "bg-rose-50 text-rose-700 border-rose-200"
+                          beverage.type === "Beer"
+                            ? "bg-amber-50 text-amber-700 border-amber-200"
+                            : "bg-rose-50 text-rose-700 border-rose-200"
                         } flex items-center gap-1`}
                       >
-                        {beverage.type === "Beer" ?
+                        {beverage.type === "Beer" ? (
                           <Beer className="h-3 w-3" />
-                        : <Wine className="h-3 w-3" />}
+                        ) : (
+                          <Wine className="h-3 w-3" />
+                        )}
                         {beverage.type}
                       </Badge>
                       <Badge
                         variant="outline"
                         className={`${
-                          beverage.type === "Beer" ?
-                            "bg-amber-50 text-amber-700 border-amber-200"
-                          : "bg-rose-50 text-rose-700 border-rose-200"
+                          beverage.type === "Beer"
+                            ? "bg-amber-50 text-amber-700 border-amber-200"
+                            : "bg-rose-50 text-rose-700 border-rose-200"
                         }`}
                       >
                         {beverage.style}
@@ -507,9 +510,11 @@ export function DashboardContent({ error }: DashboardContentProps) {
 
                 <div className="flex justify-between items-center mt-2">
                   <div className="flex items-center gap-1">
-                    {beverage.liked ?
+                    {beverage.liked ? (
                       <ThumbsUp className="h-5 w-5 text-green-500" />
-                    : <ThumbsDown className="h-5 w-5 text-red-500" />}
+                    ) : (
+                      <ThumbsDown className="h-5 w-5 text-red-500" />
+                    )}
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -544,7 +549,7 @@ export function DashboardContent({ error }: DashboardContentProps) {
               </div>
             </div>
           ))
-        }
+        )}
       </div>
     </div>
   );

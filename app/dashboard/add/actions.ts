@@ -10,7 +10,7 @@ interface FormState {
 
 export async function saveBeverageAction(
   prevState: FormState,
-  formData: FormData
+  formData: FormData,
 ): Promise<FormState> {
   // Validate form
   const name = formData.get("name") as string;

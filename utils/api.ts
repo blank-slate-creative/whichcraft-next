@@ -17,7 +17,7 @@ async function getAuthToken() {
 async function apiRequest(
   endpoint: string,
   method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
-  body?: any
+  body?: any,
 ) {
   const token = await getAuthToken();
 
@@ -45,7 +45,7 @@ async function apiRequest(
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     throw new Error(
-      error.message || `API request failed with status ${response.status}`
+      error.message || `API request failed with status ${response.status}`,
     );
   }
 

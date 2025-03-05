@@ -40,7 +40,7 @@ interface BeverageContextType {
 }
 
 const BeverageContext = createContext<BeverageContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function useBeverages() {
@@ -77,13 +77,13 @@ export function BeverageProvider({
   const deleteBeverage = useCallback((id: string | number) => {
     setBeverages((prevBeverages) =>
       prevBeverages.filter(
-        (beverage) => beverage.id.toString() !== id.toString()
-      )
+        (beverage) => beverage.id.toString() !== id.toString(),
+      ),
     );
     setAllBeverages((prevBeverages) =>
       prevBeverages.filter(
-        (beverage) => beverage.id.toString() !== id.toString()
-      )
+        (beverage) => beverage.id.toString() !== id.toString(),
+      ),
     );
   }, []);
 

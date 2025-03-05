@@ -22,17 +22,17 @@ export const updateSession = async (request: NextRequest) => {
           },
           setAll(cookiesToSet) {
             cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value)
+              request.cookies.set(name, value),
             );
             response = NextResponse.next({
               request,
             });
             cookiesToSet.forEach(({ name, value, options }) =>
-              response.cookies.set(name, value, options)
+              response.cookies.set(name, value, options),
             );
           },
         },
-      }
+      },
     );
 
     // This will refresh session if required - required for Server Components
@@ -46,7 +46,7 @@ export const updateSession = async (request: NextRequest) => {
     const isProtectedPath = protectedPaths.some(
       (path) =>
         request.nextUrl.pathname === path ||
-        request.nextUrl.pathname.startsWith(`${path}/`)
+        request.nextUrl.pathname.startsWith(`${path}/`),
     );
 
     // Redirect to sign-in if accessing a protected route without authentication
