@@ -114,7 +114,7 @@ export function DashboardContent({ error }: DashboardContentProps) {
   const currentSortOption =
     sortOptions.find(
       (option) =>
-        option.field === currentSortBy && option.order === currentSortOrder,
+        option.field === currentSortBy && option.order === currentSortOrder
     ) || sortOptions[0];
 
   // State for search input and filter drawer
@@ -136,8 +136,8 @@ export function DashboardContent({ error }: DashboardContentProps) {
             beverage.name.toLowerCase().includes(query) ||
             beverage.producer.toLowerCase().includes(query) ||
             beverage.style.toLowerCase().includes(query) ||
-            beverage.notes.toLowerCase().includes(query),
-        ),
+            beverage.notes.toLowerCase().includes(query)
+        )
       );
     }
   }, [searchQuery, beverages]);
@@ -214,25 +214,25 @@ export function DashboardContent({ error }: DashboardContentProps) {
         }
       });
     },
-    [router, setBeverages, currentSortBy, currentSortOrder],
+    [router, setBeverages, currentSortBy, currentSortOrder]
   );
 
   // Handle sort change
   const handleSortChange = useCallback(
     (value: string) => {
       const selectedOption = sortOptions.find(
-        (option) => option.value === value,
+        (option) => option.value === value
       );
       if (selectedOption) {
         applyFilter(
           currentType || undefined,
           currentLiked || undefined,
           selectedOption.field,
-          selectedOption.order,
+          selectedOption.order
         );
       }
     },
-    [applyFilter, currentType, currentLiked],
+    [applyFilter, currentType, currentLiked]
   );
 
   // Clear all filters
@@ -328,11 +328,9 @@ export function DashboardContent({ error }: DashboardContentProps) {
               <span className="text-xs text-muted-foreground">Filters:</span>
               {currentType && (
                 <Badge variant="secondary" className="flex items-center gap-1">
-                  {currentType === "Beer" ? (
+                  {currentType === "Beer" ?
                     <Beer className="h-3 w-3" />
-                  ) : (
-                    <Wine className="h-3 w-3" />
-                  )}
+                  : <Wine className="h-3 w-3" />}
                   {currentType}
                   <Button
                     variant="ghost"
@@ -348,11 +346,9 @@ export function DashboardContent({ error }: DashboardContentProps) {
               )}
               {currentLiked && (
                 <Badge variant="secondary" className="flex items-center gap-1">
-                  {currentLiked === "true" ? (
+                  {currentLiked === "true" ?
                     <ThumbsUp className="h-3 w-3" />
-                  ) : (
-                    <ThumbsDown className="h-3 w-3" />
-                  )}
+                  : <ThumbsDown className="h-3 w-3" />}
                   {currentLiked === "true" ? "Liked" : "Disliked"}
                   <Button
                     variant="ghost"
@@ -379,21 +375,22 @@ export function DashboardContent({ error }: DashboardContentProps) {
 
           {/* Beverage Cards - Mobile optimized */}
           <div className="space-y-3">
-            {isPending ? (
+            {isPending ?
               // Show skeleton UI during loading
               Array.from({ length: 3 }).map((_, index) => (
                 <BeverageCardSkeleton key={`skeleton-${index}`} />
               ))
-            ) : filteredBeverages.length === 0 && !error ? (
+            : filteredBeverages.length === 0 && !error ?
               <div className="text-center py-8">
                 <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3">
                   <Wine className="h-8 w-8 text-primary/50" />
                 </div>
                 <h3 className="text-lg font-medium mb-2">No beverages found</h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  {searchQuery
-                    ? "Try adjusting your search or filters."
-                    : "Start building your collection by adding your first beverage."}
+                  {searchQuery ?
+                    "Try adjusting your search or filters."
+                  : "Start building your collection by adding your first beverage."
+                  }
                 </p>
                 {!searchQuery && (
                   <Button size="sm" asChild>
@@ -409,11 +406,10 @@ export function DashboardContent({ error }: DashboardContentProps) {
                   </Button>
                 )}
               </div>
-            ) : (
-              filteredBeverages.map((beverage: Beverage) => (
+            : filteredBeverages.map((beverage: Beverage) => (
                 <Link
                   key={beverage.id}
-                  href={`/dashboard/view/${beverage.id}`}
+                  href={`/dashboard/edit/${beverage.id}`}
                   className="block"
                 >
                   <div className="bg-card border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 active:bg-muted/50">
@@ -430,24 +426,22 @@ export function DashboardContent({ error }: DashboardContentProps) {
                             <Badge
                               variant="outline"
                               className={`${
-                                beverage.type === "Beer"
-                                  ? "bg-amber-50 text-amber-700 border-amber-200"
-                                  : "bg-rose-50 text-rose-700 border-rose-200"
+                                beverage.type === "Beer" ?
+                                  "bg-amber-50 text-amber-700 border-amber-200"
+                                : "bg-rose-50 text-rose-700 border-rose-200"
                               } flex items-center gap-1 text-xs`}
                             >
-                              {beverage.type === "Beer" ? (
+                              {beverage.type === "Beer" ?
                                 <Beer className="h-3 w-3" />
-                              ) : (
-                                <Wine className="h-3 w-3" />
-                              )}
+                              : <Wine className="h-3 w-3" />}
                               {beverage.type}
                             </Badge>
                             <Badge
                               variant="outline"
                               className={`${
-                                beverage.type === "Beer"
-                                  ? "bg-amber-50 text-amber-700 border-amber-200"
-                                  : "bg-rose-50 text-rose-700 border-rose-200"
+                                beverage.type === "Beer" ?
+                                  "bg-amber-50 text-amber-700 border-amber-200"
+                                : "bg-rose-50 text-rose-700 border-rose-200"
                               } text-xs`}
                             >
                               {beverage.style}
@@ -455,18 +449,16 @@ export function DashboardContent({ error }: DashboardContentProps) {
                           </div>
                         </div>
                         <div className="ml-2 flex-shrink-0">
-                          {beverage.liked ? (
+                          {beverage.liked ?
                             <ThumbsUp className="h-4 w-4 text-green-500" />
-                          ) : (
-                            <ThumbsDown className="h-4 w-4 text-red-500" />
-                          )}
+                          : <ThumbsDown className="h-4 w-4 text-red-500" />}
                         </div>
                       </div>
                     </div>
                   </div>
                 </Link>
               ))
-            )}
+            }
           </div>
         </div>
       </div>
@@ -553,9 +545,9 @@ export function DashboardContent({ error }: DashboardContentProps) {
                   <Button
                     key={option.value}
                     variant={
-                      currentSortOption.value === option.value
-                        ? "default"
-                        : "outline"
+                      currentSortOption.value === option.value ?
+                        "default"
+                      : "outline"
                     }
                     size="sm"
                     className="justify-start"
