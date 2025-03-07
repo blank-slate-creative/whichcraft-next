@@ -10,7 +10,9 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { useFormStatus } from "react-dom";
 import { saveBeverageAction, redirectToDashboard } from "./actions";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, Upload, X } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Badge } from "@/components/ui/badge";
 
 // Custom Textarea component
 interface TextareaProps
@@ -22,13 +24,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <textarea
         className={cn(
           "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className,
+          className
         )}
         ref={ref}
         {...props}
       />
     );
-  },
+  }
 );
 Textarea.displayName = "Textarea";
 
@@ -61,6 +63,9 @@ interface BeverageData {
   notes?: string;
   liked: boolean | null;
   abv?: number | string;
+  untappd_beer_id?: number;
+  untappd_brewery_id?: number;
+  image_url?: string;
 }
 
 interface FormState {
@@ -95,7 +100,7 @@ function BeverageSearch({
       if (searchType === "beer") {
         // Use our Flask API that proxies the Untappd Algolia search
         const response = await fetch(
-          `/api/search/beer?q=${encodeURIComponent(searchTerm)}`,
+          `/api/search/beer?q=${encodeURIComponent(searchTerm)}`
         );
 
         const data = await response.json();
@@ -138,6 +143,9 @@ function BeverageSearch({
       style: beer.type_name,
       liked: null,
       abv: beer.abv || "",
+      untappd_beer_id: beer.id,
+      untappd_brewery_id: beer.brewery_id,
+      image_url: beer.image_url,
     });
     setIsOpen(false);
   };
@@ -225,7 +233,7 @@ function BeverageSearch({
                     onClick={() => handleBeerSelect(result)}
                   >
                     <div className="flex items-start gap-2 sm:gap-4 w-full">
-                      {result.image_url ? (
+                      {result.image_url ?
                         <div className="flex-shrink-0">
                           <img
                             src={result.image_url}
@@ -233,13 +241,12 @@ function BeverageSearch({
                             className="h-10 sm:h-14 w-auto object-contain rounded-sm"
                           />
                         </div>
-                      ) : (
-                        <div className="flex-shrink-0 h-10 w-10 sm:h-14 sm:w-14 bg-muted rounded-sm flex items-center justify-center">
+                      : <div className="flex-shrink-0 h-10 w-10 sm:h-14 sm:w-14 bg-muted rounded-sm flex items-center justify-center">
                           <span className="text-muted-foreground text-xs">
                             No image
                           </span>
                         </div>
-                      )}
+                      }
                       <div className="flex-1 min-w-0">
                         <div className="font-medium truncate text-sm sm:text-base">
                           {result.name}
@@ -269,26 +276,24 @@ function BeverageSearch({
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="type-beer"
-              checked={searchType === "beer"}
-              onCheckedChange={() => setSearchType("beer")}
-            />
-            <Label htmlFor="type-beer" className="font-normal">
-              Beer
-            </Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="type-wine"
-              checked={searchType === "wine"}
-              onCheckedChange={() => setSearchType("wine")}
-            />
-            <Label htmlFor="type-wine" className="font-normal">
-              Wine
-            </Label>
-          </div>
+          <RadioGroup
+            value={searchType}
+            onValueChange={setSearchType}
+            className="flex items-center space-x-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem id="type-beer" value="beer" />
+              <Label htmlFor="type-beer" className="font-normal">
+                Beer
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem id="type-wine" value="wine" />
+              <Label htmlFor="type-wine" className="font-normal">
+                Wine
+              </Label>
+            </div>
+          </RadioGroup>
         </div>
         <Button
           onClick={handleSearch}
@@ -312,14 +317,12 @@ function SubmitButton() {
       disabled={pending}
       className="w-full sm:w-auto min-w-[120px]"
     >
-      {pending ? (
+      {pending ?
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Saving...
         </>
-      ) : (
-        "Save Beverage"
-      )}
+      : "Save Beverage"}
     </Button>
   );
 }
@@ -359,6 +362,21 @@ export default function AddBeverageForm() {
         type="hidden"
         name="liked"
         value={beverageData.liked === null ? "" : String(beverageData.liked)}
+      />
+      <input
+        type="hidden"
+        name="untappd_beer_id"
+        value={beverageData.untappd_beer_id || ""}
+      />
+      <input
+        type="hidden"
+        name="untappd_brewery_id"
+        value={beverageData.untappd_brewery_id || ""}
+      />
+      <input
+        type="hidden"
+        name="image_url"
+        value={beverageData.image_url || ""}
       />
 
       {/* Search Section */}
@@ -407,44 +425,32 @@ export default function AddBeverageForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           <div className="space-y-1.5 sm:space-y-2">
             <Label>Type*</Label>
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            <RadioGroup
+              value={beverageData.type}
+              onValueChange={(value: string) =>
+                setBeverageData({ ...beverageData, type: value })
+              }
+              className="flex flex-wrap items-center gap-3 sm:gap-4"
+            >
               <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="type-beer"
-                  checked={beverageData.type === "Beer"}
-                  onCheckedChange={() =>
-                    setBeverageData({ ...beverageData, type: "Beer" })
-                  }
-                />
-                <Label htmlFor="type-beer" className="font-normal">
+                <RadioGroupItem id="form-type-beer" value="Beer" />
+                <Label htmlFor="form-type-beer" className="font-normal">
                   Beer
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="type-wine"
-                  checked={beverageData.type === "Wine"}
-                  onCheckedChange={() =>
-                    setBeverageData({ ...beverageData, type: "Wine" })
-                  }
-                />
-                <Label htmlFor="type-wine" className="font-normal">
+                <RadioGroupItem id="form-type-wine" value="Wine" />
+                <Label htmlFor="form-type-wine" className="font-normal">
                   Wine
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="type-other"
-                  checked={beverageData.type === "Other"}
-                  onCheckedChange={() =>
-                    setBeverageData({ ...beverageData, type: "Other" })
-                  }
-                />
-                <Label htmlFor="type-other" className="font-normal">
+                <RadioGroupItem id="form-type-other" value="Other" />
+                <Label htmlFor="form-type-other" className="font-normal">
                   Other
                 </Label>
               </div>
-            </div>
+            </RadioGroup>
           </div>
 
           <div className="space-y-1.5 sm:space-y-2">
@@ -470,11 +476,73 @@ export default function AddBeverageForm() {
               min="0"
               max="100"
               placeholder="e.g. 5.5"
-              value={beverageData.abv}
+              value={beverageData.abv || ""}
               onChange={(e) =>
                 setBeverageData({ ...beverageData, abv: e.target.value })
               }
             />
+          </div>
+
+          <div className="space-y-1.5 sm:space-y-2">
+            <Label>Image</Label>
+            <div className="flex flex-col gap-2">
+              {beverageData.image_url ?
+                <div className="relative w-full h-32 bg-muted rounded-md overflow-hidden">
+                  <img
+                    src={beverageData.image_url}
+                    alt={beverageData.name}
+                    className="w-full h-full object-contain"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="icon"
+                    className="absolute top-1 right-1 h-6 w-6"
+                    onClick={() =>
+                      setBeverageData({ ...beverageData, image_url: "" })
+                    }
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+              : <div className="flex items-center justify-center w-full">
+                  <label
+                    htmlFor="image-upload"
+                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer bg-muted/50 hover:bg-muted"
+                  >
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
+                      <p className="text-sm text-muted-foreground">
+                        Click to upload image
+                      </p>
+                    </div>
+                    <input
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          // Create a temporary URL for preview
+                          const imageUrl = URL.createObjectURL(file);
+                          setBeverageData({
+                            ...beverageData,
+                            image_url: imageUrl,
+                          });
+
+                          // TODO: In a real app, you would upload this to a storage service
+                          // and get back a permanent URL to store
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
+              }
+              <div className="text-xs text-muted-foreground">
+                Upload your own image or use the one from search results
+              </div>
+            </div>
           </div>
         </div>
       </div>

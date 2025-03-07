@@ -29,7 +29,16 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 // Define sort options
 interface SortOption {
@@ -123,6 +132,7 @@ export function DashboardContent({ error }: DashboardContentProps) {
     useState<Beverage[]>(beverages);
   const [filterError, setFilterError] = useState<string | null>(error);
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   // Apply search filter locally
   useEffect(() => {
@@ -463,121 +473,259 @@ export function DashboardContent({ error }: DashboardContentProps) {
         </div>
       </div>
 
-      {/* Filter Drawer */}
-      <Sheet open={isFilterDrawerOpen} onOpenChange={setIsFilterDrawerOpen}>
-        <SheetContent side="bottom" className="h-[80vh] rounded-t-xl">
-          <SheetHeader className="text-left">
-            <SheetTitle>Filters</SheetTitle>
-          </SheetHeader>
-          <div className="py-4 space-y-6">
-            <div className="space-y-3">
-              <h3 className="text-sm font-medium">Beverage Type</h3>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant={!currentType ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-full"
-                  onClick={() =>
-                    applyFilter(undefined, currentLiked || undefined)
-                  }
-                >
-                  All Types
-                </Button>
-                <Button
-                  variant={currentType === "Beer" ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-full"
-                  onClick={() => applyFilter("Beer", currentLiked || undefined)}
-                >
-                  <Beer className="h-4 w-4 mr-1" />
-                  Beer
-                </Button>
-                <Button
-                  variant={currentType === "Wine" ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-full"
-                  onClick={() => applyFilter("Wine", currentLiked || undefined)}
-                >
-                  <Wine className="h-4 w-4 mr-1" />
-                  Wine
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-sm font-medium">Rating</h3>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  variant={!currentLiked ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-full"
-                  onClick={() =>
-                    applyFilter(currentType || undefined, undefined)
-                  }
-                >
-                  All Ratings
-                </Button>
-                <Button
-                  variant={currentLiked === "true" ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-full"
-                  onClick={() => applyFilter(currentType || undefined, "true")}
-                >
-                  <ThumbsUp className="h-4 w-4 mr-1" />
-                  Liked
-                </Button>
-                <Button
-                  variant={currentLiked === "false" ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-full"
-                  onClick={() => applyFilter(currentType || undefined, "false")}
-                >
-                  <ThumbsDown className="h-4 w-4 mr-1" />
-                  Disliked
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <h3 className="text-sm font-medium">Sort By</h3>
-              <div className="grid grid-cols-1 gap-2">
-                {sortOptions.map((option) => (
+      {/* Filter UI - Dialog on Desktop, Sheet on Mobile */}
+      {isDesktop ?
+        <Dialog open={isFilterDrawerOpen} onOpenChange={setIsFilterDrawerOpen}>
+          <DialogContent className="max-w-md overflow-y-auto max-h-[85vh]">
+            <DialogHeader className="text-left">
+              <DialogTitle>Filters</DialogTitle>
+              <DialogDescription>
+                Filter your beverage collection
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4 space-y-6 overflow-y-auto">
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium">Beverage Type</h3>
+                <div className="flex flex-wrap gap-2">
                   <Button
-                    key={option.value}
-                    variant={
-                      currentSortOption.value === option.value ?
-                        "default"
-                      : "outline"
-                    }
+                    variant={!currentType ? "default" : "outline"}
                     size="sm"
-                    className="justify-start"
-                    onClick={() => handleSortChange(option.value)}
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter(undefined, currentLiked || undefined)
+                    }
                   >
-                    {option.label}
+                    All Types
                   </Button>
-                ))}
+                  <Button
+                    variant={currentType === "Beer" ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter("Beer", currentLiked || undefined)
+                    }
+                  >
+                    <Beer className="h-4 w-4 mr-1" />
+                    Beer
+                  </Button>
+                  <Button
+                    variant={currentType === "Wine" ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter("Wine", currentLiked || undefined)
+                    }
+                  >
+                    <Wine className="h-4 w-4 mr-1" />
+                    Wine
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium">Rating</h3>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant={!currentLiked ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter(currentType || undefined, undefined)
+                    }
+                  >
+                    All Ratings
+                  </Button>
+                  <Button
+                    variant={currentLiked === "true" ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter(currentType || undefined, "true")
+                    }
+                  >
+                    <ThumbsUp className="h-4 w-4 mr-1" />
+                    Liked
+                  </Button>
+                  <Button
+                    variant={currentLiked === "false" ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter(currentType || undefined, "false")
+                    }
+                  >
+                    <ThumbsDown className="h-4 w-4 mr-1" />
+                    Disliked
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium">Sort By</h3>
+                <div className="grid grid-cols-1 gap-2">
+                  {sortOptions.map((option) => (
+                    <Button
+                      key={option.value}
+                      variant={
+                        currentSortOption.value === option.value ?
+                          "default"
+                        : "outline"
+                      }
+                      size="sm"
+                      className="justify-start"
+                      onClick={() => handleSortChange(option.value)}
+                    >
+                      {option.label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-4">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setIsFilterDrawerOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="default"
+                  className="flex-1"
+                  onClick={clearFilters}
+                >
+                  Reset All
+                </Button>
               </div>
             </div>
+          </DialogContent>
+        </Dialog>
+      : <Sheet open={isFilterDrawerOpen} onOpenChange={setIsFilterDrawerOpen}>
+          <SheetContent side="bottom" className="h-[80vh] overflow-y-auto">
+            <SheetHeader className="text-left">
+              <SheetTitle>Filters</SheetTitle>
+              <SheetDescription>
+                Filter your beverage collection
+              </SheetDescription>
+            </SheetHeader>
+            <div className="py-4 space-y-6 overflow-y-auto">
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium">Beverage Type</h3>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant={!currentType ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter(undefined, currentLiked || undefined)
+                    }
+                  >
+                    All Types
+                  </Button>
+                  <Button
+                    variant={currentType === "Beer" ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter("Beer", currentLiked || undefined)
+                    }
+                  >
+                    <Beer className="h-4 w-4 mr-1" />
+                    Beer
+                  </Button>
+                  <Button
+                    variant={currentType === "Wine" ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter("Wine", currentLiked || undefined)
+                    }
+                  >
+                    <Wine className="h-4 w-4 mr-1" />
+                    Wine
+                  </Button>
+                </div>
+              </div>
 
-            <div className="flex gap-2 pt-4">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => setIsFilterDrawerOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="default"
-                className="flex-1"
-                onClick={clearFilters}
-              >
-                Reset All
-              </Button>
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium">Rating</h3>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant={!currentLiked ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter(currentType || undefined, undefined)
+                    }
+                  >
+                    All Ratings
+                  </Button>
+                  <Button
+                    variant={currentLiked === "true" ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter(currentType || undefined, "true")
+                    }
+                  >
+                    <ThumbsUp className="h-4 w-4 mr-1" />
+                    Liked
+                  </Button>
+                  <Button
+                    variant={currentLiked === "false" ? "default" : "outline"}
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() =>
+                      applyFilter(currentType || undefined, "false")
+                    }
+                  >
+                    <ThumbsDown className="h-4 w-4 mr-1" />
+                    Disliked
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium">Sort By</h3>
+                <div className="grid grid-cols-1 gap-2">
+                  {sortOptions.map((option) => (
+                    <Button
+                      key={option.value}
+                      variant={
+                        currentSortOption.value === option.value ?
+                          "default"
+                        : "outline"
+                      }
+                      size="sm"
+                      className="justify-start"
+                      onClick={() => handleSortChange(option.value)}
+                    >
+                      {option.label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-4">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setIsFilterDrawerOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="default"
+                  className="flex-1"
+                  onClick={clearFilters}
+                >
+                  Reset All
+                </Button>
+              </div>
             </div>
-          </div>
-        </SheetContent>
-      </Sheet>
+          </SheetContent>
+        </Sheet>
+      }
 
       {/* Floating Action Button for Mobile */}
       <div className="md:hidden fixed bottom-20 right-4 z-10">

@@ -10,7 +10,7 @@ interface FormState {
 
 export async function saveBeverageAction(
   prevState: FormState,
-  formData: FormData,
+  formData: FormData
 ): Promise<FormState> {
   // Validate form
   const name = formData.get("name") as string;
@@ -34,6 +34,9 @@ export async function saveBeverageAction(
       notes: formData.get("notes"),
       liked: liked === "true",
       abv: formData.get("abv"),
+      untappd_beer_id: formData.get("untappd_beer_id"),
+      untappd_brewery_id: formData.get("untappd_brewery_id"),
+      image_url: formData.get("image_url"),
     });
 
     // Return success state before redirecting

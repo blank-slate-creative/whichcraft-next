@@ -57,7 +57,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
       acc[style] = (acc[style] || 0) + 1;
       return acc;
     },
-    {} as Record<string, number>,
+    {} as Record<string, number>
   );
 
   const topStyles = Object.entries(styleCount)
@@ -71,7 +71,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
       acc[producer] = (acc[producer] || 0) + 1;
       return acc;
     },
-    {} as Record<string, number>,
+    {} as Record<string, number>
   );
 
   const topProducers = Object.entries(producerCount)
@@ -111,7 +111,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
       )}
 
       {/* Main Stats - Horizontal layout on mobile */}
-      <div className="space-y-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:gap-4 mb-4 sm:mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-4 sm:mb-8">
         {/* Total Beverages */}
         <div className="bg-card border rounded-lg p-3 sm:p-6 shadow-sm flex sm:flex-col items-center sm:items-center">
           <div className="h-8 w-8 sm:h-12 sm:w-12 rounded-full bg-primary/10 flex items-center justify-center sm:mb-3 mr-3 sm:mr-0">
@@ -233,7 +233,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
             <h3 className="text-base sm:text-lg font-semibold">Top Styles</h3>
           </div>
 
-          {topStyles.length > 0 ? (
+          {topStyles.length > 0 ?
             <div className="space-y-2 sm:space-y-3">
               {topStyles.map(([style, count]) => (
                 <div key={style} className="flex items-center justify-between">
@@ -256,11 +256,10 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
                 </div>
               ))}
             </div>
-          ) : (
-            <p className="text-xs sm:text-sm text-muted-foreground">
+          : <p className="text-xs sm:text-sm text-muted-foreground">
               No styles found
             </p>
-          )}
+          }
         </div>
 
         {/* Top Producers */}
@@ -272,7 +271,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
             </h3>
           </div>
 
-          {topProducers.length > 0 ? (
+          {topProducers.length > 0 ?
             <div className="space-y-2 sm:space-y-3">
               {topProducers.map(([producer, count]) => (
                 <div
@@ -298,11 +297,10 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
                 </div>
               ))}
             </div>
-          ) : (
-            <p className="text-xs sm:text-sm text-muted-foreground">
+          : <p className="text-xs sm:text-sm text-muted-foreground">
               No producers found
             </p>
-          )}
+          }
         </div>
       </div>
 

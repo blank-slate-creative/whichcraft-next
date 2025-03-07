@@ -59,6 +59,11 @@ class Beverage(db.Model):
     location = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # Untappd specific data
+    untappd_beer_id = db.Column(db.Integer)
+    untappd_brewery_id = db.Column(db.Integer)
+    image_url = db.Column(db.String(512))
+
     def __repr__(self):
         return f"<Beverage {self.name}>"
 
@@ -74,7 +79,10 @@ class Beverage(db.Model):
             "liked": self.liked,
             "notes": self.notes,
             "location": self.location,
-            "created_at": self.created_at.isoformat(),
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "untappd_beer_id": self.untappd_beer_id,
+            "untappd_brewery_id": self.untappd_brewery_id,
+            "image_url": self.image_url,
         }
 
 
@@ -202,6 +210,9 @@ def create_beverage(current_user):
         liked=bool(data.get("liked", False)),  # Convert to boolean
         notes=data.get("notes"),
         location=data.get("location"),
+        untappd_beer_id=data.get("untappd_beer_id"),
+        untappd_brewery_id=data.get("untappd_brewery_id"),
+        image_url=data.get("image_url"),
     )
 
     db.session.add(new_beverage)
@@ -252,6 +263,12 @@ def update_beverage(current_user, beverage_id):
         beverage.notes = data.get("notes")
     if "location" in data:
         beverage.location = data.get("location")
+    if "untappd_beer_id" in data:
+        beverage.untappd_beer_id = data.get("untappd_beer_id")
+    if "untappd_brewery_id" in data:
+        beverage.untappd_brewery_id = data.get("untappd_brewery_id")
+    if "image_url" in data:
+        beverage.image_url = data.get("image_url")
 
     db.session.commit()
 
