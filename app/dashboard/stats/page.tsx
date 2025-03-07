@@ -1,6 +1,6 @@
-import { requireAuth } from "@/utils/auth";
-import { serverBeverageApi } from "@/utils/server-api";
-import { StatsContent } from "./stats-content";
+import { requireAuth } from '@/utils/auth';
+import { serverBeverageApi } from '@/utils/server-api';
+import { StatsContent } from './stats-content';
 
 // Define the Beverage interface
 interface Beverage {
@@ -26,8 +26,8 @@ export default async function StatsPage() {
     // Use the server-side API utility to get all beverages
     beverages = await serverBeverageApi.getAll({});
   } catch (err) {
-    console.error("Failed to fetch beverages:", err);
-    error = err instanceof Error ? err.message : "Failed to load beverages";
+    console.error('Failed to fetch beverages:', err);
+    error = err instanceof Error ? err.message : 'Failed to load beverages';
   }
 
   return <StatsContent beverages={beverages} error={error} />;

@@ -1,5 +1,5 @@
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
 
 /**
  * Checks if a user is authenticated and redirects to the specified path if they are or aren't
@@ -39,7 +39,7 @@ export async function checkAuth({
  */
 export async function redirectAuthenticatedToHome() {
   await checkAuth({
-    redirectTo: "/dashboard",
+    redirectTo: '/dashboard',
     redirectIfFound: true,
   });
 }
@@ -50,7 +50,7 @@ export async function redirectAuthenticatedToHome() {
  */
 export async function requireAuth() {
   const { user } = await checkAuth({
-    redirectTo: "/sign-in",
+    redirectTo: '/sign-in',
     redirectIfFound: false,
   });
   return { user };

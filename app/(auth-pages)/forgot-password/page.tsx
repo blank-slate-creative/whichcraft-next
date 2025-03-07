@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { forgotPasswordAction } from "@/app/actions";
-import { FormMessage, Message } from "@/components/form-message";
-import { SubmitButton } from "@/components/submit-button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useActionState } from "react";
+import { forgotPasswordAction } from '@/app/actions';
+import { FormMessage, Message } from '@/components/form-message';
+import { SubmitButton } from '@/components/submit-button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Link from 'next/link';
+import { useActionState } from 'react';
 
 // Define the possible return types from the forgotPasswordAction
 type ForgotPasswordState =
@@ -19,14 +19,14 @@ export default function ForgotPassword() {
   // Initialize with null state
   const [state, formAction] = useActionState<ForgotPasswordState, FormData>(
     forgotPasswordAction,
-    null,
+    null
   );
 
   // Convert the state to a Message type for FormMessage component
   const message: Message | null = state
-    ? "error" in state && state.error
+    ? 'error' in state && state.error
       ? { error: state.error }
-      : "success" in state && typeof state.success === "string"
+      : 'success' in state && typeof state.success === 'string'
         ? { success: state.success }
         : null
     : null;
@@ -37,7 +37,7 @@ export default function ForgotPassword() {
         <div className="space-y-2 text-center">
           <h1 className="text-2xl font-bold sm:text-3xl">Reset Password</h1>
           <p className="text-sm text-muted-foreground sm:text-base">
-            Already have an account?{" "}
+            Already have an account?{' '}
             <Link
               className="text-primary font-medium underline hover:text-primary/90"
               href="/sign-in"

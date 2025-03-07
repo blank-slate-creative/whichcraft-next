@@ -1,27 +1,27 @@
-"use server";
+'use server';
 
-import { redirect } from "next/navigation";
-import { serverBeverageApi } from "@/utils/server-api";
+import { redirect } from 'next/navigation';
+import { serverBeverageApi } from '@/utils/server-api';
 
 interface FormState {
-  status: "idle" | "submitting" | "success" | "error";
+  status: 'idle' | 'submitting' | 'success' | 'error';
   message?: string;
 }
 
 export async function updateBeverageAction(
   id: string,
   prevState: FormState,
-  formData: FormData,
+  formData: FormData
 ): Promise<FormState> {
   // Validate form
-  const name = formData.get("name") as string;
-  const type = formData.get("type") as string;
-  const liked = formData.get("liked") as string;
+  const name = formData.get('name') as string;
+  const type = formData.get('type') as string;
+  const liked = formData.get('liked') as string;
 
   if (!name || !type || liked === undefined) {
     return {
-      status: "error",
-      message: "Please fill in all required fields and rate the beverage",
+      status: 'error',
+      message: 'Please fill in all required fields and rate the beverage',
     };
   }
 
@@ -29,29 +29,30 @@ export async function updateBeverageAction(
     // Update beverage using the server API utility
     await serverBeverageApi.update(id, {
       name,
-      producer: formData.get("producer"),
+      producer: formData.get('producer'),
       type,
-      style: formData.get("style"),
-      notes: formData.get("notes"),
-      liked: liked === "true",
-      abv: formData.get("abv"),
+      style: formData.get('style'),
+      notes: formData.get('notes'),
+      liked: liked === 'true',
+      abv: formData.get('abv'),
+      image_url: formData.get('image_url'),
     });
 
     // Return success state before redirecting
     return {
-      status: "success",
-      message: "Beverage updated successfully!",
+      status: 'success',
+      message: 'Beverage updated successfully!',
     };
   } catch (error) {
-    console.error("Error updating beverage:", error);
+    console.error('Error updating beverage:', error);
     return {
-      status: "error",
-      message: "Failed to update beverage. Please try again.",
+      status: 'error',
+      message: 'Failed to update beverage. Please try again.',
     };
   }
 }
 
 // Separate action for handling redirect after successful update
 export async function redirectToDashboard() {
-  redirect("/dashboard");
+  redirect('/dashboard');
 }

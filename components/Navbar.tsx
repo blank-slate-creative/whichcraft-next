@@ -1,9 +1,9 @@
-import Link from "next/link";
-import NavbarClient from "./NavbarClient";
-import AuthButton from "./AuthButton";
-import { createClient } from "@/utils/supabase/server";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import Link from 'next/link';
+import NavbarClient from './NavbarClient';
+import AuthButton from './AuthButton';
+import { createClient } from '@/utils/supabase/server';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 export default async function Navbar() {
   const supabase = await createClient();

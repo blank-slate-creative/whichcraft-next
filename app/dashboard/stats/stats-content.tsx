@@ -1,17 +1,8 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Beer,
-  Wine,
-  BarChart3,
-  ThumbsUp,
-  ThumbsDown,
-  ArrowLeft,
-  PieChart,
-} from "lucide-react";
-import { useState, useEffect } from "react";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Beer, Wine, BarChart3, ThumbsUp, ThumbsDown, ArrowLeft, PieChart } from 'lucide-react';
 
 // Define the Beverage interface
 interface Beverage {
@@ -33,20 +24,17 @@ interface StatsContentProps {
 export function StatsContent({ beverages, error }: StatsContentProps) {
   // Calculate stats
   const stats = {
-    beerCount: beverages.filter((b) => b.type === "Beer").length,
-    wineCount: beverages.filter((b) => b.type === "Wine").length,
+    beerCount: beverages.filter(b => b.type === 'Beer').length,
+    wineCount: beverages.filter(b => b.type === 'Wine').length,
     totalCount: beverages.length,
-    likedCount: beverages.filter((b) => b.liked).length,
-    dislikedCount: beverages.filter((b) => !b.liked).length,
+    likedCount: beverages.filter(b => b.liked).length,
+    dislikedCount: beverages.filter(b => !b.liked).length,
   };
 
   // Calculate percentages for visualization
-  const beerPercentage =
-    stats.totalCount > 0 ? (stats.beerCount / stats.totalCount) * 100 : 0;
-  const winePercentage =
-    stats.totalCount > 0 ? (stats.wineCount / stats.totalCount) * 100 : 0;
-  const likedPercentage =
-    stats.totalCount > 0 ? (stats.likedCount / stats.totalCount) * 100 : 0;
+  const beerPercentage = stats.totalCount > 0 ? (stats.beerCount / stats.totalCount) * 100 : 0;
+  const winePercentage = stats.totalCount > 0 ? (stats.wineCount / stats.totalCount) * 100 : 0;
+  const likedPercentage = stats.totalCount > 0 ? (stats.likedCount / stats.totalCount) * 100 : 0;
   const dislikedPercentage =
     stats.totalCount > 0 ? (stats.dislikedCount / stats.totalCount) * 100 : 0;
 
@@ -92,9 +80,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
               <span className="sr-only">Back to dashboard</span>
             </Link>
           </Button>
-          <h1 className="text-2xl sm:text-3xl font-bold">
-            Collection Statistics
-          </h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">Collection Statistics</h1>
         </div>
         <p className="text-sm text-muted-foreground">
           Insights and analytics about your beverage collection.
@@ -118,9 +104,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
             <BarChart3 className="h-4 w-4 sm:h-6 sm:w-6 text-primary" />
           </div>
           <div className="flex flex-col sm:items-center">
-            <h3 className="text-xl sm:text-3xl font-bold">
-              {stats.totalCount}
-            </h3>
+            <h3 className="text-xl sm:text-3xl font-bold">{stats.totalCount}</h3>
             <p className="text-xs sm:text-sm text-muted-foreground">Total</p>
           </div>
         </div>
@@ -132,9 +116,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
               <Beer className="h-4 w-4 sm:h-6 sm:w-6 text-amber-600" />
             </div>
             <div className="flex flex-col sm:items-center flex-1">
-              <h3 className="text-xl sm:text-3xl font-bold">
-                {stats.beerCount}
-              </h3>
+              <h3 className="text-xl sm:text-3xl font-bold">{stats.beerCount}</h3>
               <p className="text-xs sm:text-sm text-muted-foreground">Beers</p>
               <div className="w-full mt-1 sm:mt-2 bg-muted rounded-full h-1 sm:h-2">
                 <div
@@ -156,9 +138,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
               <Wine className="h-4 w-4 sm:h-6 sm:w-6 text-rose-600" />
             </div>
             <div className="flex flex-col sm:items-center flex-1">
-              <h3 className="text-xl sm:text-3xl font-bold">
-                {stats.wineCount}
-              </h3>
+              <h3 className="text-xl sm:text-3xl font-bold">{stats.wineCount}</h3>
               <p className="text-xs sm:text-sm text-muted-foreground">Wines</p>
               <div className="w-full mt-1 sm:mt-2 bg-muted rounded-full h-1 sm:h-2">
                 <div
@@ -180,9 +160,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
               <ThumbsUp className="h-4 w-4 sm:h-6 sm:w-6 text-green-600" />
             </div>
             <div className="flex flex-col sm:items-center flex-1">
-              <h3 className="text-xl sm:text-3xl font-bold">
-                {stats.likedCount}
-              </h3>
+              <h3 className="text-xl sm:text-3xl font-bold">{stats.likedCount}</h3>
               <p className="text-xs sm:text-sm text-muted-foreground">Liked</p>
               <div className="w-full mt-1 sm:mt-2 bg-muted rounded-full h-1 sm:h-2">
                 <div
@@ -204,12 +182,8 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
               <ThumbsDown className="h-4 w-4 sm:h-6 sm:w-6 text-red-600" />
             </div>
             <div className="flex flex-col sm:items-center flex-1">
-              <h3 className="text-xl sm:text-3xl font-bold">
-                {stats.dislikedCount}
-              </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                Disliked
-              </p>
+              <h3 className="text-xl sm:text-3xl font-bold">{stats.dislikedCount}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">Disliked</p>
               <div className="w-full mt-1 sm:mt-2 bg-muted rounded-full h-1 sm:h-2">
                 <div
                   className="bg-red-500 h-1 sm:h-2 rounded-full"
@@ -233,7 +207,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
             <h3 className="text-base sm:text-lg font-semibold">Top Styles</h3>
           </div>
 
-          {topStyles.length > 0 ?
+          {topStyles.length > 0 ? (
             <div className="space-y-2 sm:space-y-3">
               {topStyles.map(([style, count]) => (
                 <div key={style} className="flex items-center justify-between">
@@ -249,35 +223,27 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
                         }}
                       ></div>
                     </div>
-                    <span className="text-xs sm:text-sm text-muted-foreground">
-                      {count}
-                    </span>
+                    <span className="text-xs sm:text-sm text-muted-foreground">{count}</span>
                   </div>
                 </div>
               ))}
             </div>
-          : <p className="text-xs sm:text-sm text-muted-foreground">
-              No styles found
-            </p>
-          }
+          ) : (
+            <p className="text-xs sm:text-sm text-muted-foreground">No styles found</p>
+          )}
         </div>
 
         {/* Top Producers */}
         <div className="bg-card border rounded-lg p-3 sm:p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-2 sm:mb-4">
             <PieChart className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-            <h3 className="text-base sm:text-lg font-semibold">
-              Top Producers
-            </h3>
+            <h3 className="text-base sm:text-lg font-semibold">Top Producers</h3>
           </div>
 
-          {topProducers.length > 0 ?
+          {topProducers.length > 0 ? (
             <div className="space-y-2 sm:space-y-3">
               {topProducers.map(([producer, count]) => (
-                <div
-                  key={producer}
-                  className="flex items-center justify-between"
-                >
+                <div key={producer} className="flex items-center justify-between">
                   <span className="text-xs sm:text-sm truncate max-w-[120px] sm:max-w-none">
                     {producer}
                   </span>
@@ -290,17 +256,14 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
                         }}
                       ></div>
                     </div>
-                    <span className="text-xs sm:text-sm text-muted-foreground">
-                      {count}
-                    </span>
+                    <span className="text-xs sm:text-sm text-muted-foreground">{count}</span>
                   </div>
                 </div>
               ))}
             </div>
-          : <p className="text-xs sm:text-sm text-muted-foreground">
-              No producers found
-            </p>
-          }
+          ) : (
+            <p className="text-xs sm:text-sm text-muted-foreground">No producers found</p>
+          )}
         </div>
       </div>
 

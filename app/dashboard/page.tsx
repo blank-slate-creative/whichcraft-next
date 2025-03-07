@@ -1,7 +1,7 @@
-import { requireAuth } from "@/utils/auth";
-import { serverBeverageApi } from "@/utils/server-api";
-import { BeverageProvider } from "./beverage-context";
-import { DashboardContent } from "./dashboard-content";
+import { requireAuth } from '@/utils/auth';
+import { serverBeverageApi } from '@/utils/server-api';
+import { BeverageProvider } from './beverage-context';
+import { DashboardContent } from './dashboard-content';
 
 // Define the Beverage interface
 interface Beverage {
@@ -26,19 +26,11 @@ export default async function Dashboard({
   // Extract filter parameters from URL
   const resolvedParams = await searchParams;
   const type = resolvedParams.type as string | undefined;
-  const liked =
-    resolvedParams.liked !== undefined ?
-      resolvedParams.liked === "true"
-    : undefined;
+  const liked = resolvedParams.liked !== undefined ? resolvedParams.liked === 'true' : undefined;
 
   // Extract sorting parameters
-  const sort_by = resolvedParams.sort_by as
-    | "name"
-    | "type"
-    | "producer"
-    | "created_at"
-    | undefined;
-  const sort_order = resolvedParams.sort_order as "asc" | "desc" | undefined;
+  const sort_by = resolvedParams.sort_by as 'name' | 'type' | 'producer' | 'created_at' | undefined;
+  const sort_order = resolvedParams.sort_order as 'asc' | 'desc' | undefined;
 
   // Fetch beverages from the API with filters and sorting
   let beverages: Beverage[] = [];
@@ -53,8 +45,8 @@ export default async function Dashboard({
       sort_order,
     });
   } catch (err) {
-    console.error("Failed to fetch beverages:", err);
-    error = err instanceof Error ? err.message : "Failed to load beverages";
+    console.error('Failed to fetch beverages:', err);
+    error = err instanceof Error ? err.message : 'Failed to load beverages';
   }
 
   return (

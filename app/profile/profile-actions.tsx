@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { createClient } from '@/utils/supabase/client';
+import { useRouter } from 'next/navigation';
 
 export default function ProfileActions() {
   const router = useRouter();
@@ -15,11 +15,7 @@ export default function ProfileActions() {
 
   return (
     <div className="space-y-4">
-      <Button
-        variant="destructive"
-        onClick={handleSignOut}
-        className="w-full sm:w-auto"
-      >
+      <Button variant="destructive" onClick={handleSignOut} className="w-full sm:w-auto">
         Sign out
       </Button>
     </div>

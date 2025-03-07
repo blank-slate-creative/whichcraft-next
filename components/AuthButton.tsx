@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { createClient } from "@/utils/supabase/server";
-import { Button } from "./ui/button";
+import Link from 'next/link';
+import { createClient } from '@/utils/supabase/server';
 
 export default async function AuthButton() {
   const supabase = await createClient();
@@ -15,10 +14,7 @@ export default async function AuthButton() {
 
   return (
     <div className="flex items-center gap-2">
-      <Link
-        href="/sign-in"
-        className="py-2 px-4 rounded-md hover:bg-secondary transition-colors"
-      >
+      <Link href="/sign-in" className="py-2 px-4 rounded-md hover:bg-secondary transition-colors">
         Sign In
       </Link>
       <Link

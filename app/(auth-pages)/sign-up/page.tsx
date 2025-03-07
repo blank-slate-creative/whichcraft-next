@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { signUpAction } from "@/app/actions";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { useFormStatus } from "react-dom";
-import { useState } from "react";
+import { signUpAction } from '@/app/actions';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { useFormStatus } from 'react-dom';
+import { useState } from 'react';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
     <Button type="submit" disabled={pending} className="w-full">
-      {pending ? "Signing up..." : "Sign up"}
+      {pending ? 'Signing up...' : 'Sign up'}
     </Button>
   );
 }
@@ -30,7 +30,7 @@ export default function Signup() {
       const result = await signUpAction({} as any, formData);
       setState(result);
     } catch (err) {
-      setState({ error: "An unexpected error occurred" });
+      setState({ error: 'An unexpected error occurred' });
     }
   };
 
@@ -51,7 +51,7 @@ export default function Signup() {
       <div className="space-y-2 text-center">
         <h1 className="text-2xl font-bold sm:text-3xl">Sign up</h1>
         <p className="text-sm text-muted-foreground sm:text-base">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link
             className="text-primary font-medium underline hover:text-primary/90"
             href="/sign-in"
@@ -63,12 +63,7 @@ export default function Signup() {
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            placeholder="you@example.com"
-            required
-          />
+          <Input id="email" name="email" placeholder="you@example.com" required />
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>

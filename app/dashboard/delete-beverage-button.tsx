@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Trash } from "lucide-react";
-import { TooltipButton } from "@/components/ui/tooltip-button";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Trash } from 'lucide-react';
+import { TooltipButton } from '@/components/ui/tooltip-button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { deleteBeverageAction } from "./actions";
-import { useBeverages } from "./beverage-context";
+} from '@/components/ui/dialog';
+import { deleteBeverageAction } from './actions';
+import { useBeverages } from './beverage-context';
 
 interface DeleteBeverageButtonProps {
   id: string | number;
@@ -43,10 +43,10 @@ export function DeleteBeverageButton({ id, name }: DeleteBeverageButtonProps) {
       if (!result.success) {
         // If the delete failed, we should show an error toast or notification
         // For now, we'll just log to console
-        console.error("Delete failed:", result.message);
+        console.error('Delete failed:', result.message);
       }
     } catch (err) {
-      console.error("Delete error:", err);
+      console.error('Delete error:', err);
       // In a real app, you might want to show a toast notification here
       // and potentially revert the optimistic update
     } finally {
@@ -71,8 +71,7 @@ export function DeleteBeverageButton({ id, name }: DeleteBeverageButtonProps) {
           <DialogHeader>
             <DialogTitle>Delete Beverage</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{name}"? This action cannot be
-              undone.
+              Are you sure you want to delete "{name}"? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
 
@@ -83,19 +82,11 @@ export function DeleteBeverageButton({ id, name }: DeleteBeverageButtonProps) {
           )}
 
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsOpen(false)}
-              disabled={isDeleting}
-            >
+            <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isDeleting}>
               Cancel
             </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={isDeleting}
-            >
-              {isDeleting ? "Deleting..." : "Delete"}
+            <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
+              {isDeleting ? 'Deleting...' : 'Delete'}
             </Button>
           </DialogFooter>
         </DialogContent>

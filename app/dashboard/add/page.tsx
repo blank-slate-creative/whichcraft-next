@@ -1,9 +1,9 @@
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import AddBeverageForm from "./add-form"; // We'll create this client component
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import AddBeverageForm from './add-form'; // We'll create this client component
 
 export default async function AddBeveragePage() {
   const supabase = await createClient();
@@ -16,7 +16,7 @@ export default async function AddBeveragePage() {
 
   // Check for authentication errors or missing user
   if (error || !user) {
-    redirect("/sign-in");
+    redirect('/sign-in');
   }
 
   return (

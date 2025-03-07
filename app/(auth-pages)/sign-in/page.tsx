@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { signInAction } from "@/app/actions";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { useFormStatus } from "react-dom";
-import { useActionState } from "react";
+import { signInAction } from '@/app/actions';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
     <Button type="submit" disabled={pending} className="w-full">
-      {pending ? "Signing In..." : "Sign in"}
+      {pending ? 'Signing In...' : 'Sign in'}
     </Button>
   );
 }
@@ -28,7 +28,7 @@ export default function Login() {
       <div className="space-y-2 text-center">
         <h1 className="text-2xl font-bold sm:text-3xl">Sign in</h1>
         <p className="text-sm text-muted-foreground sm:text-base">
-          Don't have an account?{" "}
+          Don't have an account?{' '}
           <Link
             className="text-primary font-medium underline hover:text-primary/90"
             href="/sign-up"
@@ -40,12 +40,7 @@ export default function Login() {
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            placeholder="you@example.com"
-            required
-          />
+          <Input id="email" name="email" placeholder="you@example.com" required />
         </div>
         <div className="space-y-2">
           <div className="flex justify-between items-center">

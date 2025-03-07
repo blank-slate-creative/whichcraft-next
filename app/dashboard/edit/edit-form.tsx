@@ -1,37 +1,35 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useState, useEffect } from "react";
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { useFormStatus } from "react-dom";
-import { updateBeverageAction, redirectToDashboard } from "./actions";
-import { Beverage } from "../beverage-context";
-import { Loader2 } from "lucide-react";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useState } from 'react';
+import * as React from 'react';
+import { cn } from '@/lib/utils';
+import { useFormStatus } from 'react-dom';
+import { updateBeverageAction, redirectToDashboard } from './actions';
+import { Beverage } from '../beverage-context';
+import { Loader2, Upload, X } from 'lucide-react';
 
 // Custom Textarea component
-interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, ref) => {
     return (
       <textarea
         className={cn(
-          "flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className,
+          'flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+          className
         )}
         ref={ref}
         {...props}
       />
     );
-  },
+  }
 );
-Textarea.displayName = "Textarea";
+Textarea.displayName = 'Textarea';
 
 interface BeverageData {
   name: string;
@@ -41,10 +39,11 @@ interface BeverageData {
   notes?: string;
   liked: boolean | null;
   abv?: number | string;
+  image_url?: string;
 }
 
 interface FormState {
-  status: "idle" | "submitting" | "success" | "error";
+  status: 'idle' | 'submitting' | 'success' | 'error';
   message?: string;
 }
 
@@ -53,58 +52,47 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button
-      type="submit"
-      disabled={pending}
-      className="w-full sm:w-auto min-w-[120px]"
-    >
+    <Button type="submit" disabled={pending} className="w-full sm:w-auto min-w-[120px]">
       {pending ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           Saving...
         </>
       ) : (
-        "Save Changes"
+        'Save Changes'
       )}
     </Button>
   );
 }
 
 // Main form component
-export default function EditBeverageForm({
-  initialBeverage,
-}: {
-  initialBeverage: Beverage;
-}) {
+export default function EditBeverageForm({ initialBeverage }: { initialBeverage: Beverage }) {
   // Create a wrapper function to include the beverage ID in the action
   const updateWithId = React.useCallback(
     (prevState: FormState, formData: FormData) => {
-      return updateBeverageAction(
-        initialBeverage.id.toString(),
-        prevState,
-        formData,
-      );
+      return updateBeverageAction(initialBeverage.id.toString(), prevState, formData);
     },
-    [initialBeverage.id],
+    [initialBeverage.id]
   );
 
   const [formState, formAction] = React.useActionState(updateWithId, {
-    status: "idle",
+    status: 'idle',
   });
 
   const [beverageData, setBeverageData] = useState<BeverageData>({
-    name: initialBeverage.name || "",
-    producer: initialBeverage.producer || "",
-    type: initialBeverage.type || "Beer",
-    style: initialBeverage.style || "",
-    notes: initialBeverage.notes || "",
+    name: initialBeverage.name || '',
+    producer: initialBeverage.producer || '',
+    type: initialBeverage.type || 'Beer',
+    style: initialBeverage.style || '',
+    notes: initialBeverage.notes || '',
     liked: initialBeverage.liked,
-    abv: initialBeverage.abv || "",
+    abv: initialBeverage.abv || '',
+    image_url: initialBeverage.image_url || '',
   });
 
   // Redirect to dashboard when form submission is successful
   React.useEffect(() => {
-    if (formState.status === "success") {
+    if (formState.status === 'success') {
       redirectToDashboard();
     }
   }, [formState.status]);
@@ -116,14 +104,13 @@ export default function EditBeverageForm({
       <input
         type="hidden"
         name="liked"
-        value={beverageData.liked === null ? "" : String(beverageData.liked)}
+        value={beverageData.liked === null ? '' : String(beverageData.liked)}
       />
+      <input type="hidden" name="image_url" value={beverageData.image_url || ''} />
 
       {/* Basic Information */}
       <div className="space-y-3 sm:space-y-4 p-4 sm:p-6 bg-card rounded-lg border">
-        <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
-          Basic Information
-        </h2>
+        <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">Basic Information</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
           <div className="space-y-1.5 sm:space-y-2">
@@ -133,9 +120,7 @@ export default function EditBeverageForm({
               name="name"
               placeholder="e.g. Sierra Nevada Pale Ale"
               value={beverageData.name}
-              onChange={(e) =>
-                setBeverageData({ ...beverageData, name: e.target.value })
-              }
+              onChange={e => setBeverageData({ ...beverageData, name: e.target.value })}
               required
             />
           </div>
@@ -147,9 +132,7 @@ export default function EditBeverageForm({
               name="producer"
               placeholder="e.g. Sierra Nevada Brewing Co."
               value={beverageData.producer}
-              onChange={(e) =>
-                setBeverageData({ ...beverageData, producer: e.target.value })
-              }
+              onChange={e => setBeverageData({ ...beverageData, producer: e.target.value })}
             />
           </div>
         </div>
@@ -161,10 +144,8 @@ export default function EditBeverageForm({
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="type-beer"
-                  checked={beverageData.type === "Beer"}
-                  onCheckedChange={() =>
-                    setBeverageData({ ...beverageData, type: "Beer" })
-                  }
+                  checked={beverageData.type === 'Beer'}
+                  onCheckedChange={() => setBeverageData({ ...beverageData, type: 'Beer' })}
                 />
                 <Label htmlFor="type-beer" className="font-normal">
                   Beer
@@ -173,10 +154,8 @@ export default function EditBeverageForm({
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="type-wine"
-                  checked={beverageData.type === "Wine"}
-                  onCheckedChange={() =>
-                    setBeverageData({ ...beverageData, type: "Wine" })
-                  }
+                  checked={beverageData.type === 'Wine'}
+                  onCheckedChange={() => setBeverageData({ ...beverageData, type: 'Wine' })}
                 />
                 <Label htmlFor="type-wine" className="font-normal">
                   Wine
@@ -185,10 +164,8 @@ export default function EditBeverageForm({
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="type-other"
-                  checked={beverageData.type === "Other"}
-                  onCheckedChange={() =>
-                    setBeverageData({ ...beverageData, type: "Other" })
-                  }
+                  checked={beverageData.type === 'Other'}
+                  onCheckedChange={() => setBeverageData({ ...beverageData, type: 'Other' })}
                 />
                 <Label htmlFor="type-other" className="font-normal">
                   Other
@@ -204,9 +181,7 @@ export default function EditBeverageForm({
               name="style"
               placeholder="e.g. Pale Ale, Sauvignon Blanc"
               value={beverageData.style}
-              onChange={(e) =>
-                setBeverageData({ ...beverageData, style: e.target.value })
-              }
+              onChange={e => setBeverageData({ ...beverageData, style: e.target.value })}
             />
           </div>
 
@@ -221,26 +196,77 @@ export default function EditBeverageForm({
               max="100"
               placeholder="e.g. 5.5"
               value={beverageData.abv}
-              onChange={(e) =>
-                setBeverageData({ ...beverageData, abv: e.target.value })
-              }
+              onChange={e => setBeverageData({ ...beverageData, abv: e.target.value })}
             />
+          </div>
+
+          <div className="space-y-1.5 sm:space-y-2">
+            <Label>Image</Label>
+            <div className="flex flex-col gap-2">
+              {beverageData.image_url ? (
+                <div className="relative w-full h-32 bg-muted rounded-md overflow-hidden">
+                  <img
+                    src={beverageData.image_url}
+                    alt={beverageData.name}
+                    className="w-full h-full object-contain"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="icon"
+                    className="absolute top-1 right-1 h-6 w-6"
+                    onClick={() => setBeverageData({ ...beverageData, image_url: '' })}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+              ) : (
+                <label
+                  htmlFor="image-upload"
+                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer bg-muted/50 hover:bg-muted"
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">Click to upload image</p>
+                  </div>
+                  <input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={e => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        // Create a temporary URL for preview
+                        const imageUrl = URL.createObjectURL(file);
+                        setBeverageData({
+                          ...beverageData,
+                          image_url: imageUrl,
+                        });
+
+                        // TODO: In a real app, you would upload this to a storage service
+                        // and get back a permanent URL to store
+                      }
+                    }}
+                  />
+                </label>
+              )}
+              <div className="text-xs text-muted-foreground">Upload an image for this beverage</div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Rating & Notes */}
       <div className="space-y-3 sm:space-y-4 p-4 sm:p-6 bg-card rounded-lg border">
-        <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
-          Rating & Notes
-        </h2>
+        <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">Rating & Notes</h2>
 
         <div className="space-y-1.5 sm:space-y-2">
           <Label>Did you like it?*</Label>
           <div className="flex items-center gap-3 sm:gap-4">
             <Button
               type="button"
-              variant={beverageData.liked === true ? "default" : "outline"}
+              variant={beverageData.liked === true ? 'default' : 'outline'}
               onClick={() => setBeverageData({ ...beverageData, liked: true })}
               className="flex items-center space-x-2 flex-1 sm:flex-none justify-center"
               size="sm"
@@ -250,7 +276,7 @@ export default function EditBeverageForm({
             </Button>
             <Button
               type="button"
-              variant={beverageData.liked === false ? "default" : "outline"}
+              variant={beverageData.liked === false ? 'default' : 'outline'}
               onClick={() => setBeverageData({ ...beverageData, liked: false })}
               className="flex items-center space-x-2 flex-1 sm:flex-none justify-center"
               size="sm"
@@ -269,15 +295,13 @@ export default function EditBeverageForm({
             placeholder="Describe the flavor, aroma, appearance, and your overall impression..."
             rows={4}
             value={beverageData.notes}
-            onChange={(e) =>
-              setBeverageData({ ...beverageData, notes: e.target.value })
-            }
+            onChange={e => setBeverageData({ ...beverageData, notes: e.target.value })}
           />
         </div>
       </div>
 
       {/* Form status messages */}
-      {formState.status === "error" && (
+      {formState.status === 'error' && (
         <div className="text-destructive-foreground border-l-2 border-destructive-foreground px-3 sm:px-4 py-2 bg-destructive/10 rounded text-sm">
           {formState.message}
         </div>

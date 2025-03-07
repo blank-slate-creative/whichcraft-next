@@ -1,8 +1,7 @@
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import ProfileActions from "@/app/profile/profile-actions";
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
+import { ThemeSwitcher } from '@/components/theme-switcher';
+import ProfileActions from '@/app/profile/profile-actions';
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -11,11 +10,11 @@ export default async function ProfilePage() {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    redirect("/sign-in");
+    redirect('/sign-in');
   }
 
-  const userName = session?.user?.email?.split("@")[0] || "User";
-  const email = session?.user?.email || "";
+  const userName = session?.user?.email?.split('@')[0] || 'User';
+  const email = session?.user?.email || '';
 
   return (
     <div className="container mx-auto px-4 py-6">

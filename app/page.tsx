@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { redirectAuthenticatedToHome } from "@/utils/auth";
-import { ClipboardList, Search, Sun } from "lucide-react";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { redirectAuthenticatedToHome } from '@/utils/auth';
+import { ClipboardList, Search, Sun } from 'lucide-react';
 
 export default async function Home() {
   // Redirect authenticated users to dashboard
@@ -16,8 +16,8 @@ export default async function Home() {
           Welcome to <span className="text-primary">WhichCraft</span>
         </h1>
         <p className="text-xl md:text-2xl text-muted-foreground max-w-[800px] mb-8">
-          Never forget your favorite beers and wines again. Track, rate, and
-          discover new beverages with ease.
+          Never forget your favorite beers and wines again. Track, rate, and discover new beverages
+          with ease.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <Button asChild size="lg">
@@ -39,9 +39,7 @@ export default async function Home() {
               <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                 <ClipboardList className="text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">
-                Track Your Tastings
-              </h3>
+              <h3 className="text-xl font-semibold mb-2">Track Your Tastings</h3>
               <p className="text-muted-foreground">
                 Log every beer and wine you try in your personal collection.
               </p>
@@ -54,8 +52,7 @@ export default async function Home() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Rate & Review</h3>
               <p className="text-muted-foreground">
-                Give ratings and write notes about your experience with each
-                beverage.
+                Give ratings and write notes about your experience with each beverage.
               </p>
             </div>
 
@@ -66,8 +63,7 @@ export default async function Home() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Search & Discover</h3>
               <p className="text-muted-foreground">
-                Find your favorites and discover new beverages based on your
-                preferences.
+                Find your favorites and discover new beverages based on your preferences.
               </p>
             </div>
           </div>

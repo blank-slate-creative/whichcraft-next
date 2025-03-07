@@ -1,5 +1,5 @@
-import { createServerClient } from "@supabase/ssr";
-import { type NextRequest, NextResponse } from "next/server";
+import { createServerClient } from '@supabase/ssr';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export const updateSession = async (request: NextRequest) => {
   // This `try/catch` block is only here for the interactive tutorial.
@@ -21,9 +21,7 @@ export const updateSession = async (request: NextRequest) => {
             return request.cookies.getAll();
           },
           setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value }) =>
-              request.cookies.set(name, value)
-            );
+            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
             response = NextResponse.next({
               request,
             });
@@ -40,18 +38,16 @@ export const updateSession = async (request: NextRequest) => {
     const user = await supabase.auth.getSession();
 
     // Define protected routes without using a /protected prefix
-    const protectedPaths = ["/dashboard", "/reset-password"];
+    const protectedPaths = ['/dashboard', '/reset-password'];
 
     // Check if the current path is a protected path
     const isProtectedPath = protectedPaths.some(
-      (path) =>
-        request.nextUrl.pathname === path ||
-        request.nextUrl.pathname.startsWith(`${path}/`)
+      path => request.nextUrl.pathname === path || request.nextUrl.pathname.startsWith(`${path}/`)
     );
 
     // Redirect to sign-in if accessing a protected route without authentication
     if (isProtectedPath && user.error) {
-      return NextResponse.redirect(new URL("/sign-in", request.url));
+      return NextResponse.redirect(new URL('/sign-in', request.url));
     }
 
     return response;

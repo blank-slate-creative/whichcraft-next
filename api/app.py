@@ -9,6 +9,7 @@ import jwt
 from functools import wraps
 from dotenv import load_dotenv
 import requests
+from flask_migrate import Migrate
 
 # Load environment variables
 load_dotenv()
@@ -20,6 +21,7 @@ CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 # JWT configuration
 JWT_SECRET = os.getenv("JWT_SECRET")

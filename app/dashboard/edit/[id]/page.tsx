@@ -1,16 +1,12 @@
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { serverBeverageApi } from "@/utils/server-api";
-import EditBeverageForm from "../edit-form";
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { serverBeverageApi } from '@/utils/server-api';
+import EditBeverageForm from '../edit-form';
 
-export default async function EditBeveragePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditBeveragePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   const supabase = await createClient();
@@ -23,11 +19,11 @@ export default async function EditBeveragePage({
 
   // Check for authentication errors or missing user
   if (error || !user) {
-    redirect("/sign-in");
+    redirect('/sign-in');
   }
 
   if (!id) {
-    redirect("/dashboard");
+    redirect('/dashboard');
   }
 
   // Fetch the beverage data
@@ -53,7 +49,7 @@ export default async function EditBeveragePage({
       </div>
     );
   } catch (error) {
-    console.error("Error fetching beverage:", error);
-    redirect("/dashboard");
+    console.error('Error fetching beverage:', error);
+    redirect('/dashboard');
   }
 }

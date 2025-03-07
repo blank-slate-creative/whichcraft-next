@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, {
   createContext,
@@ -8,8 +8,7 @@ import React, {
   ReactNode,
   Dispatch,
   SetStateAction,
-  useEffect,
-} from "react";
+} from 'react';
 
 // Define the Beverage interface
 export interface Beverage {
@@ -22,6 +21,7 @@ export interface Beverage {
   notes: string;
   created_at: string;
   abv?: number | string;
+  image_url?: string;
 }
 
 interface BeverageContextType {
@@ -39,14 +39,12 @@ interface BeverageContextType {
   };
 }
 
-const BeverageContext = createContext<BeverageContextType | undefined>(
-  undefined,
-);
+const BeverageContext = createContext<BeverageContextType | undefined>(undefined);
 
 export function useBeverages() {
   const context = useContext(BeverageContext);
   if (!context) {
-    throw new Error("useBeverages must be used within a BeverageProvider");
+    throw new Error('useBeverages must be used within a BeverageProvider');
   }
   return context;
 }
@@ -56,34 +54,26 @@ interface BeverageProviderProps {
   children: ReactNode;
 }
 
-export function BeverageProvider({
-  initialBeverages,
-  children,
-}: BeverageProviderProps) {
+export function BeverageProvider({ initialBeverages, children }: BeverageProviderProps) {
   const [beverages, setBeverages] = useState<Beverage[]>(initialBeverages);
-  const [allBeverages, setAllBeverages] =
-    useState<Beverage[]>(initialBeverages);
+  const [allBeverages, setAllBeverages] = useState<Beverage[]>(initialBeverages);
 
   // Calculate stats based on all beverages, not filtered ones
   const stats = {
-    beerCount: allBeverages.filter((b) => b.type === "Beer").length,
-    wineCount: allBeverages.filter((b) => b.type === "Wine").length,
+    beerCount: allBeverages.filter(b => b.type === 'Beer').length,
+    wineCount: allBeverages.filter(b => b.type === 'Wine').length,
     totalCount: allBeverages.length,
-    likedCount: allBeverages.filter((b) => b.liked).length,
-    dislikedCount: allBeverages.filter((b) => !b.liked).length,
+    likedCount: allBeverages.filter(b => b.liked).length,
+    dislikedCount: allBeverages.filter(b => !b.liked).length,
   };
 
   // Optimistically delete a beverage
   const deleteBeverage = useCallback((id: string | number) => {
-    setBeverages((prevBeverages) =>
-      prevBeverages.filter(
-        (beverage) => beverage.id.toString() !== id.toString(),
-      ),
+    setBeverages(prevBeverages =>
+      prevBeverages.filter(beverage => beverage.id.toString() !== id.toString())
     );
-    setAllBeverages((prevBeverages) =>
-      prevBeverages.filter(
-        (beverage) => beverage.id.toString() !== id.toString(),
-      ),
+    setAllBeverages(prevBeverages =>
+      prevBeverages.filter(beverage => beverage.id.toString() !== id.toString())
     );
   }, []);
 

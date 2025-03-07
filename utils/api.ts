@@ -1,6 +1,6 @@
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from '@/utils/supabase/client';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 /**
  * Get the authentication token from Supabase
@@ -16,27 +16,27 @@ async function getAuthToken() {
  */
 async function apiRequest(
   endpoint: string,
-  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
-  body?: any,
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
+  body?: any
 ) {
   const token = await getAuthToken();
 
   if (!token) {
-    throw new Error("Authentication required");
+    throw new Error('Authentication required');
   }
 
   const headers: HeadersInit = {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
   };
 
   const options: RequestInit = {
     method,
     headers,
-    credentials: "include",
+    credentials: 'include',
   };
 
-  if (body && (method === "POST" || method === "PUT")) {
+  if (body && (method === 'POST' || method === 'PUT')) {
     options.body = JSON.stringify(body);
   }
 
@@ -44,9 +44,7 @@ async function apiRequest(
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
-    throw new Error(
-      error.message || `API request failed with status ${response.status}`,
-    );
+    throw new Error(error.message || `API request failed with status ${response.status}`);
   }
 
   return response.json();
@@ -60,7 +58,7 @@ export const beverageApi = {
    * Get all beverages for the current user
    */
   getAll: async () => {
-    return apiRequest("/api/beverages");
+    return apiRequest('/api/beverages');
   },
 
   /**
@@ -74,21 +72,21 @@ export const beverageApi = {
    * Create a new beverage
    */
   create: async (beverage: any) => {
-    return apiRequest("/api/beverages", "POST", beverage);
+    return apiRequest('/api/beverages', 'POST', beverage);
   },
 
   /**
    * Update an existing beverage
    */
   update: async (id: string, beverage: any) => {
-    return apiRequest(`/api/beverages/${id}`, "PUT", beverage);
+    return apiRequest(`/api/beverages/${id}`, 'PUT', beverage);
   },
 
   /**
    * Delete a beverage
    */
   delete: async (id: string) => {
-    return apiRequest(`/api/beverages/${id}`, "DELETE");
+    return apiRequest(`/api/beverages/${id}`, 'DELETE');
   },
 };
 
@@ -100,7 +98,7 @@ export const userApi = {
    * Get the current user's profile
    */
   getProfile: async () => {
-    return apiRequest("/api/users/me");
+    return apiRequest('/api/users/me');
   },
 };
 

@@ -1,40 +1,34 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { signOutAction } from "@/app/actions";
-import { Laptop, Moon, Sun, User } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
+} from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { signOutAction } from '@/app/actions';
+import { Laptop, Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 
 function SignOutButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button
-      type="submit"
-      variant="ghost"
-      className="w-full justify-start"
-      disabled={pending}
-    >
-      {pending ? "Signing out..." : "Sign out"}
+    <Button type="submit" variant="ghost" className="w-full justify-start" disabled={pending}>
+      {pending ? 'Signing out...' : 'Sign out'}
     </Button>
   );
 }
 
-export default function UserMenu({ userName = "User" }: { userName?: string }) {
+export default function UserMenu({ userName = 'User' }: { userName?: string }) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const [_, formAction] = useActionState(signOutAction, null);
@@ -55,9 +49,9 @@ export default function UserMenu({ userName = "User" }: { userName?: string }) {
           <Avatar className="h-8 w-8">
             <AvatarFallback>
               {userName
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
+                .split(' ')
+                .map(n => n[0])
+                .join('')}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -75,7 +69,7 @@ export default function UserMenu({ userName = "User" }: { userName?: string }) {
   );
 }
 
-export function UserMenuItems({ userName = "User" }: { userName?: string }) {
+export function UserMenuItems({ userName = 'User' }: { userName?: string }) {
   const { theme, setTheme } = useTheme();
   const [_, formAction] = useActionState(signOutAction, null);
 

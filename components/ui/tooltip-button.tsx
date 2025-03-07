@@ -1,24 +1,13 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface TooltipButtonProps {
   tooltip: string;
-  variant?:
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | "link";
-  size?: "default" | "sm" | "lg" | "icon";
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  size?: 'default' | 'sm' | 'lg' | 'icon';
   className?: string;
   children: React.ReactNode;
   onClick?: () => void;
@@ -26,8 +15,8 @@ interface TooltipButtonProps {
 
 export function TooltipButton({
   tooltip,
-  variant = "default",
-  size = "default",
+  variant = 'default',
+  size = 'default',
   className,
   children,
   onClick,
@@ -36,12 +25,7 @@ export function TooltipButton({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            variant={variant}
-            size={size}
-            className={className}
-            onClick={onClick}
-          >
+          <Button variant={variant} size={size} className={className} onClick={onClick}>
             {children}
           </Button>
         </TooltipTrigger>
