@@ -8,6 +8,7 @@ import { Beverage } from '../../beverage-context';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { DeleteButton } from './delete-button';
 
 export default async function ViewBeveragePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -136,21 +137,10 @@ export default async function ViewBeveragePage({ params }: { params: Promise<{ i
                   </p>
                 </div>
               </div>
-
-              {beverage.image_url && (
-                <div>
-                  <div className="rounded-md overflow-hidden">
-                    <img
-                      src={beverage.image_url}
-                      alt={beverage.name}
-                      className="w-full h-auto object-cover"
-                    />
-                  </div>
-                </div>
-              )}
             </div>
 
-            <div className="mt-6 flex justify-end">
+            <div className="mt-6 flex justify-end gap-2">
+              <DeleteButton id={beverage.id} name={beverage.name} />
               <Button asChild>
                 <Link href={`/dashboard/edit/${beverage.id}`}>
                   <Edit className="h-4 w-4 mr-2" />

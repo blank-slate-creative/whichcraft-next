@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Trash } from 'lucide-react';
-import { TooltipButton } from '@/components/ui/tooltip-button';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -12,43 +11,39 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { deleteBeverageAction } from './actions';
-import { useBeverages } from './beverage-context';
+import { deleteBeverageAction } from '../../actions';
+import { useRouter } from 'next/navigation';
 
-interface DeleteBeverageButtonProps {
+interface DeleteButtonProps {
   id: string | number;
   name: string;
 }
 
-export function DeleteBeverageButton({ id, name }: DeleteBeverageButtonProps) {
+export function DeleteButton({ id, name }: DeleteButtonProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { deleteBeverage } = useBeverages();
 
   const handleDelete = async () => {
     setIsDeleting(true);
     setError(null);
 
-    // Optimistically update UI
-    deleteBeverage(id);
-
-    // Close the dialog immediately for better UX
-    setIsOpen(false);
-
     try {
-      // Actually perform the delete operation
+      // Perform the delete operation
       const result = await deleteBeverageAction(id.toString());
 
-      if (!result.success) {
-        // If the delete failed, we should show an error toast or notification
-        // For now, we'll just log to console
-        console.error('Delete failed:', result.message);
+      if (result.success) {
+        // Close the dialog
+        setIsOpen(false);
+        // Redirect to dashboard
+        router.push('/dashboard');
+      } else {
+        setError(result.message || 'Failed to delete beverage');
       }
     } catch (err) {
       console.error('Delete error:', err);
-      // In a real app, you might want to show a toast notification here
-      // and potentially revert the optimistic update
+      setError('An unexpected error occurred');
     } finally {
       setIsDeleting(false);
     }
@@ -56,15 +51,14 @@ export function DeleteBeverageButton({ id, name }: DeleteBeverageButtonProps) {
 
   return (
     <>
-      <TooltipButton
-        tooltip="Delete"
-        variant="ghost"
-        size="sm"
-        className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+      <Button
+        variant="destructive"
         onClick={() => setIsOpen(true)}
+        className="flex items-center gap-2"
       >
         <Trash className="h-4 w-4" />
-      </TooltipButton>
+        Delete
+      </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
