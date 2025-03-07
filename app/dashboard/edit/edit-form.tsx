@@ -202,7 +202,6 @@ export default function EditBeverageForm({ initialBeverage }: { initialBeverage:
           </div>
 
           <div className="space-y-1.5 sm:space-y-2">
-            <Label>Image</Label>
             <ImageUpload
               imageUrl={beverageData.image_url}
               onImageChange={imageUrl => setBeverageData({ ...beverageData, image_url: imageUrl })}

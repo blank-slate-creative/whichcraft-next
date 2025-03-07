@@ -103,8 +103,7 @@ function BeverageCardSkeleton() {
 }
 
 export function DashboardContent({ error }: DashboardContentProps) {
-  const { beverages, setBeverages, stats, allBeverages, setAllBeverages } = useBeverages();
-  const { beerCount, wineCount, totalCount, likedCount, dislikedCount } = stats;
+  const { beverages, setBeverages, setAllBeverages } = useBeverages();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
@@ -404,90 +403,94 @@ export function DashboardContent({ error }: DashboardContentProps) {
               </div>
             ) : (
               filteredBeverages.map((beverage: Beverage) => (
-                <Link key={beverage.id} href={`/dashboard/edit/${beverage.id}`} className="block">
-                  <div className="bg-card border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 active:bg-muted/50">
-                    <div className="p-4">
-                      <div className="flex justify-between items-start">
-                        {beverage.image_url ? (
-                          <div className="mr-3 flex-shrink-0 w-16 h-16 rounded-md overflow-hidden">
-                            <img
-                              src={beverage.image_url}
-                              alt={`${beverage.name} by ${beverage.producer}`}
-                              className="w-full h-full object-cover"
-                              onError={e => {
-                                // Replace with fallback icon when image fails to load
-                                e.currentTarget.style.display = 'none';
-                                const parent = e.currentTarget.parentElement;
-                                if (parent) {
-                                  parent.classList.add(
-                                    'flex',
-                                    'items-center',
-                                    'justify-center',
-                                    'bg-muted'
-                                  );
-                                  const icon = document.createElement('div');
-                                  icon.innerHTML =
-                                    beverage.type === 'Beer'
-                                      ? '<svg class="h-8 w-8 text-muted-foreground/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"></path><path d="M9 12v6"></path><path d="M13 12v6"></path><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5s2-.5 3-.5 2 .5 3 .5 1.44-.5 3-.5a2.5 2.5 0 0 1 0 5c-1.56 0-2-.5-3-.5Z"></path><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"></path></svg>'
-                                      : '<svg class="h-8 w-8 text-muted-foreground/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M7 10h10"></path><path d="M12 15v7"></path><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"></path></svg>';
-                                  parent.appendChild(icon);
-                                }
-                              }}
-                            />
-                          </div>
-                        ) : (
-                          <div className="mr-3 flex-shrink-0 w-16 h-16 bg-muted rounded-md flex items-center justify-center">
-                            {beverage.type === 'Beer' ? (
-                              <Beer className="h-8 w-8 text-muted-foreground/60" />
-                            ) : (
-                              <Wine className="h-8 w-8 text-muted-foreground/60" />
-                            )}
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-base line-clamp-1">{beverage.name}</h3>
-                          <p className="text-xs text-muted-foreground line-clamp-1">
-                            {beverage.producer}
-                          </p>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            <Badge
-                              variant="outline"
-                              className={`${
-                                beverage.type === 'Beer'
-                                  ? 'bg-amber-50 text-amber-700 border-amber-200'
-                                  : 'bg-rose-50 text-rose-700 border-rose-200'
-                              } flex items-center gap-1 text-xs`}
-                            >
-                              {beverage.type === 'Beer' ? (
-                                <Beer className="h-3 w-3" />
-                              ) : (
-                                <Wine className="h-3 w-3" />
-                              )}
-                              {beverage.type}
-                            </Badge>
-                            <Badge
-                              variant="outline"
-                              className={`${
-                                beverage.type === 'Beer'
-                                  ? 'bg-amber-50 text-amber-700 border-amber-200'
-                                  : 'bg-rose-50 text-rose-700 border-rose-200'
-                              } text-xs`}
-                            >
-                              {beverage.style}
-                            </Badge>
-                          </div>
+                <div
+                  key={beverage.id}
+                  className="bg-card border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+                >
+                  <Link
+                    href={`/dashboard/view/${beverage.id}`}
+                    className="block p-4 text-foreground hover:bg-accent/10 transition-colors"
+                  >
+                    <div className="flex justify-between items-start">
+                      {beverage.image_url ? (
+                        <div className="mr-3 flex-shrink-0 w-16 h-16 rounded-md overflow-hidden">
+                          <img
+                            src={beverage.image_url}
+                            alt={`${beverage.name} by ${beverage.producer}`}
+                            className="w-full h-full object-cover"
+                            onError={e => {
+                              // Replace with fallback icon when image fails to load
+                              e.currentTarget.style.display = 'none';
+                              const parent = e.currentTarget.parentElement;
+                              if (parent) {
+                                parent.classList.add(
+                                  'flex',
+                                  'items-center',
+                                  'justify-center',
+                                  'bg-muted'
+                                );
+                                const icon = document.createElement('div');
+                                icon.innerHTML =
+                                  beverage.type === 'Beer'
+                                    ? '<svg class="h-8 w-8 text-muted-foreground/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"></path><path d="M9 12v6"></path><path d="M13 12v6"></path><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5s2-.5 3-.5 2 .5 3 .5 1.44-.5 3-.5a2.5 2.5 0 0 1 0 5c-1.56 0-2-.5-3-.5Z"></path><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"></path></svg>'
+                                    : '<svg class="h-8 w-8 text-muted-foreground/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M7 10h10"></path><path d="M12 15v7"></path><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"></path></svg>';
+                                parent.appendChild(icon);
+                              }
+                            }}
+                          />
                         </div>
-                        <div className="ml-2 flex-shrink-0">
-                          {beverage.liked ? (
-                            <ThumbsUp className="h-4 w-4 text-green-500" />
+                      ) : (
+                        <div className="mr-3 flex-shrink-0 w-16 h-16 bg-muted rounded-md flex items-center justify-center">
+                          {beverage.type === 'Beer' ? (
+                            <Beer className="h-8 w-8 text-muted-foreground/60" />
                           ) : (
-                            <ThumbsDown className="h-4 w-4 text-red-500" />
+                            <Wine className="h-8 w-8 text-muted-foreground/60" />
                           )}
                         </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-base line-clamp-1">{beverage.name}</h3>
+                        <p className="text-xs text-muted-foreground line-clamp-1">
+                          {beverage.producer}
+                        </p>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          <Badge
+                            variant="outline"
+                            className={`${
+                              beverage.type === 'Beer'
+                                ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                : 'bg-rose-50 text-rose-700 border-rose-200'
+                            } flex items-center gap-1 text-xs`}
+                          >
+                            {beverage.type === 'Beer' ? (
+                              <Beer className="h-3 w-3" />
+                            ) : (
+                              <Wine className="h-3 w-3" />
+                            )}
+                            {beverage.type}
+                          </Badge>
+                          <Badge
+                            variant="outline"
+                            className={`${
+                              beverage.type === 'Beer'
+                                ? 'bg-amber-50 text-amber-700 border-amber-200'
+                                : 'bg-rose-50 text-rose-700 border-rose-200'
+                            } text-xs`}
+                          >
+                            {beverage.style}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="ml-2 flex-shrink-0">
+                        {beverage.liked ? (
+                          <ThumbsUp className="h-4 w-4 text-green-500" />
+                        ) : (
+                          <ThumbsDown className="h-4 w-4 text-red-500" />
+                        )}
                       </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               ))
             )}
           </div>
