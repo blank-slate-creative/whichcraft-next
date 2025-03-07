@@ -10,7 +10,8 @@ import { cn } from '@/lib/utils';
 import { useFormStatus } from 'react-dom';
 import { updateBeverageAction, redirectToDashboard } from './actions';
 import { Beverage } from '../beverage-context';
-import { Loader2, Upload, X } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { ImageUpload } from '@/components/ui/image-upload';
 
 // Custom Textarea component
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
@@ -202,57 +203,10 @@ export default function EditBeverageForm({ initialBeverage }: { initialBeverage:
 
           <div className="space-y-1.5 sm:space-y-2">
             <Label>Image</Label>
-            <div className="flex flex-col gap-2">
-              {beverageData.image_url ? (
-                <div className="relative w-full h-32 bg-muted rounded-md overflow-hidden">
-                  <img
-                    src={beverageData.image_url}
-                    alt={beverageData.name}
-                    className="w-full h-full object-contain"
-                  />
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="icon"
-                    className="absolute top-1 right-1 h-6 w-6"
-                    onClick={() => setBeverageData({ ...beverageData, image_url: '' })}
-                  >
-                    <X className="h-3 w-3" />
-                  </Button>
-                </div>
-              ) : (
-                <label
-                  htmlFor="image-upload"
-                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer bg-muted/50 hover:bg-muted"
-                >
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Upload className="w-8 h-8 mb-2 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">Click to upload image</p>
-                  </div>
-                  <input
-                    id="image-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={e => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        // Create a temporary URL for preview
-                        const imageUrl = URL.createObjectURL(file);
-                        setBeverageData({
-                          ...beverageData,
-                          image_url: imageUrl,
-                        });
-
-                        // TODO: In a real app, you would upload this to a storage service
-                        // and get back a permanent URL to store
-                      }
-                    }}
-                  />
-                </label>
-              )}
-              <div className="text-xs text-muted-foreground">Upload an image for this beverage</div>
-            </div>
+            <ImageUpload
+              imageUrl={beverageData.image_url}
+              onImageChange={imageUrl => setBeverageData({ ...beverageData, image_url: imageUrl })}
+            />
           </div>
         </div>
       </div>

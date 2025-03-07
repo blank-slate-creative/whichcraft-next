@@ -414,6 +414,25 @@ export function DashboardContent({ error }: DashboardContentProps) {
                               src={beverage.image_url}
                               alt={`${beverage.name} by ${beverage.producer}`}
                               className="w-full h-full object-cover"
+                              onError={e => {
+                                // Replace with fallback icon when image fails to load
+                                e.currentTarget.style.display = 'none';
+                                const parent = e.currentTarget.parentElement;
+                                if (parent) {
+                                  parent.classList.add(
+                                    'flex',
+                                    'items-center',
+                                    'justify-center',
+                                    'bg-muted'
+                                  );
+                                  const icon = document.createElement('div');
+                                  icon.innerHTML =
+                                    beverage.type === 'Beer'
+                                      ? '<svg class="h-8 w-8 text-muted-foreground/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"></path><path d="M9 12v6"></path><path d="M13 12v6"></path><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5s2-.5 3-.5 2 .5 3 .5 1.44-.5 3-.5a2.5 2.5 0 0 1 0 5c-1.56 0-2-.5-3-.5Z"></path><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"></path></svg>'
+                                      : '<svg class="h-8 w-8 text-muted-foreground/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M7 10h10"></path><path d="M12 15v7"></path><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"></path></svg>';
+                                  parent.appendChild(icon);
+                                }
+                              }}
                             />
                           </div>
                         ) : (

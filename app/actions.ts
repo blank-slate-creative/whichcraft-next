@@ -115,3 +115,57 @@ export const signOutAction = async () => {
   await supabase.auth.signOut();
   return { redirect: '/sign-in' };
 };
+
+export const uploadImageAction = async (formData: FormData) => {
+  const supabase = await createClient();
+  const file = formData.get('file') as File;
+
+  if (!file) {
+    return { error: 'No file provided' };
+  }
+
+  try {
+    // Get the current user session
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      return { error: 'Authentication required to upload images' };
+    }
+
+    // Generate a unique filename
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${crypto.randomUUID()}.${fileExt}`;
+
+    // Include user ID in the path for better organization and security
+    const userId = session.user.id;
+    const filePath = `${userId}/beverage-images/${fileName}`;
+
+    // Convert file to arrayBuffer for upload
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = new Uint8Array(arrayBuffer);
+
+    // Upload to Supabase Storage - ensure bucket name is consistent
+    const bucketName = 'user_images';
+    const { data, error } = await supabase.storage.from(bucketName).upload(filePath, buffer, {
+      contentType: file.type,
+      upsert: true, // Allow overwriting if file exists
+    });
+
+    if (error) {
+      console.error('Error uploading image:', error);
+      return { error: 'Failed to upload image: ' + error.message };
+    }
+
+    // Get the public URL from the same bucket
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from(bucketName).getPublicUrl(filePath);
+
+    return { success: true, imageUrl: publicUrl };
+  } catch (error) {
+    console.error('Unexpected error during image upload:', error);
+    return { error: 'An unexpected error occurred during upload' };
+  }
+};
