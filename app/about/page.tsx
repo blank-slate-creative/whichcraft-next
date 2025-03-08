@@ -7,7 +7,7 @@ export default function AboutPage() {
     <div className="flex flex-col items-center w-full">
       {/* Hero Section */}
       <section className="w-full py-12 md:py-24 flex flex-col items-center text-center">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">About WhichCraft</h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-6 hidden md:block">About WhichCraft</h1>
         <p className="text-xl text-muted-foreground max-w-[800px] mb-8">
           Your personal beverage journal for tracking and discovering craft beers and fine wines.
         </p>

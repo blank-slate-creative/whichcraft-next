@@ -40,7 +40,7 @@ export default function RootLayout({
           <Navbar />
           <main className="min-h-screen flex flex-col items-center pt-16">
             <div className="flex-1 w-full flex flex-col items-center pb-16 md:pb-0">
-              <div className="w-full flex flex-col max-w-5xl px-3 sm:px-4 md:px-5">{children}</div>
+              <div className="w-full flex flex-col max-w-5xl px-2 sm:px-3 md:px-4">{children}</div>
             </div>
             <BottomNav />
           </main>

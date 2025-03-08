@@ -37,7 +37,7 @@ export default async function ViewBeveragePage({ params }: { params: Promise<{ i
     return (
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center mb-4">
-          <Button variant="ghost" size="icon" className="mr-2" asChild>
+          <Button variant="ghost" size="icon" className="mr-2 hidden md:inline-flex" asChild>
             <Link
               href="/dashboard"
               className="text-muted-foreground hover:text-foreground transition-colors"
@@ -46,7 +46,7 @@ export default async function ViewBeveragePage({ params }: { params: Promise<{ i
               <span className="sr-only">Back to dashboard</span>
             </Link>
           </Button>
-          <h1 className="text-2xl font-bold tracking-tight">Beverage Details</h1>
+          <h1 className="text-2xl font-bold tracking-tight hidden md:block">Beverage Details</h1>
         </div>
 
         <Card className="border rounded-lg overflow-hidden shadow-sm">

@@ -31,7 +31,7 @@ export default async function AddBeveragePage() {
             <span className="sr-only">Back to dashboard</span>
           </Link>
         </Button>
-        <h1 className="text-2xl sm:text-3xl font-bold">Add New Beverage</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold hidden md:block">Add New Beverage</h1>
       </div>
 
       <AddBeverageForm />

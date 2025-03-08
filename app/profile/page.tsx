@@ -18,7 +18,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-6">Profile</h1>
+      <h1 className="text-2xl font-bold mb-6 md:flex hidden">Profile</h1>
 
       <div className="bg-card border rounded-lg p-6 mb-6">
         <div className="flex items-center gap-4 mb-6">

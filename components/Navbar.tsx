@@ -4,6 +4,7 @@ import AuthButton from './AuthButton';
 import { createClient } from '@/utils/supabase/server';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import MobileNavHeader from './MobileNavHeader';
 
 export default async function Navbar() {
   const supabase = await createClient();
@@ -13,11 +14,16 @@ export default async function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-background border-b border-b-foreground/10 h-16 z-10">
-      <div className="w-full max-w-5xl mx-auto flex justify-between items-center px-3 sm:px-4 md:px-5 h-full">
+      <div className="w-full max-w-5xl mx-auto flex justify-between items-center px-2 sm:px-3 md:px-4 h-full">
         <div className="flex items-center gap-4">
-          <Link href="/" className="font-bold text-xl" prefetch={true}>
+          <Link href="/" className="font-bold text-xl hidden md:block" prefetch={true}>
             WhichCraft
           </Link>
+
+          {/* Show mobile nav header (title and back button) on mobile */}
+          <div className="md:hidden">
+            <MobileNavHeader />
+          </div>
         </div>
         <div className="flex items-center gap-2">
           {session && (

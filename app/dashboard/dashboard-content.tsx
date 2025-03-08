@@ -267,9 +267,9 @@ export function DashboardContent({ error }: DashboardContentProps) {
     <div className="flex flex-col h-[calc(100vh-4rem)] relative">
       {/* Main Content Area with padding for bottom nav */}
       <div className="flex-1 overflow-auto">
-        <div className="container mx-auto px-4 py-4">
-          {/* Dashboard Header - Simplified for mobile */}
-          <div className="flex items-center justify-between mb-4">
+        <div className="container mx-auto px-2 py-3 sm:px-4 sm:py-4">
+          {/* Dashboard Header - Only visible on desktop */}
+          <div className="hidden md:flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold tracking-tight">Collection</h1>
             <div className="flex items-center gap-2">
               <Button
@@ -291,26 +291,39 @@ export function DashboardContent({ error }: DashboardContentProps) {
             </div>
           </div>
 
-          {/* Search Bar - Simplified */}
-          <div className="relative w-full mb-4">
-            <Input
-              type="text"
-              placeholder="Search beverages..."
-              className="pl-10"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-            />
-            <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-            {searchQuery && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6"
-                onClick={() => setSearchQuery('')}
-              >
-                <span className="sr-only">Clear search</span>×
-              </Button>
-            )}
+          {/* Search and Filter - Combined on one line for mobile */}
+          <div className="flex items-center gap-2 mb-4">
+            <div className="relative flex-grow">
+              <Input
+                type="text"
+                placeholder="Search beverages..."
+                className="pl-10"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+              />
+              <Search className="h-4 w-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+              {searchQuery && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6"
+                  onClick={() => setSearchQuery('')}
+                >
+                  <span className="sr-only">Clear search</span>×
+                </Button>
+              )}
+            </div>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setIsFilterDrawerOpen(true)}
+              className="relative flex-shrink-0"
+            >
+              <SlidersHorizontal className="h-4 w-4" />
+              {(currentType || currentLiked) && (
+                <span className="absolute -top-1 -right-1 h-2 w-2 bg-primary rounded-full" />
+              )}
+            </Button>
           </div>
 
           {/* Error Message */}

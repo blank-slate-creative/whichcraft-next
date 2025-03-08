@@ -71,16 +71,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
       {/* Header - More compact for mobile */}
       <div className="mb-4 sm:mb-6">
         <div className="flex items-center mb-2 sm:mb-4">
-          <Button variant="ghost" size="icon" className="mr-2 sm:mr-4" asChild>
-            <Link
-              href="/dashboard"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="h-5 w-5" />
-              <span className="sr-only">Back to dashboard</span>
-            </Link>
-          </Button>
-          <h1 className="text-2xl sm:text-3xl font-bold">Collection Statistics</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold hidden md:block">Collection Statistics</h1>
         </div>
         <p className="text-sm text-muted-foreground">
           Insights and analytics about your beverage collection.

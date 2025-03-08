@@ -33,7 +33,12 @@ export default async function EditBeveragePage({ params }: { params: Promise<{ i
     return (
       <div className="w-full max-w-3xl mx-auto px-2 sm:px-0 py-4 sm:py-8">
         <div className="flex items-center mb-4 sm:mb-8">
-          <Button variant="ghost" size="icon" className="mr-2 sm:mr-4" asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="mr-2 sm:mr-4 hidden md:inline-flex"
+            asChild
+          >
             <Link
               href="/dashboard"
               className="text-muted-foreground hover:text-foreground transition-colors"
@@ -42,7 +47,7 @@ export default async function EditBeveragePage({ params }: { params: Promise<{ i
               <span className="sr-only">Back to dashboard</span>
             </Link>
           </Button>
-          <h1 className="text-2xl sm:text-3xl font-bold">Edit Beverage</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold hidden md:block">Edit Beverage</h1>
         </div>
 
         <EditBeverageForm initialBeverage={beverage} />
