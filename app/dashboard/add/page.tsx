@@ -21,7 +21,7 @@ export default async function AddBeveragePage() {
 
   return (
     <div className="w-full max-w-3xl mx-auto px-2 sm:px-0 py-4 sm:py-8">
-      <div className="flex items-center mb-4 sm:mb-8">
+      <div className="items-center mb-4 sm:mb-8 hidden md:flex">
         <Button variant="ghost" size="icon" className="mr-2 sm:mr-4" asChild>
           <Link
             href="/dashboard"
@@ -31,7 +31,7 @@ export default async function AddBeveragePage() {
             <span className="sr-only">Back to dashboard</span>
           </Link>
         </Button>
-        <h1 className="text-2xl sm:text-3xl font-bold hidden md:block">Add New Beverage</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">Add New Beverage</h1>
       </div>
 
       <AddBeverageForm />
