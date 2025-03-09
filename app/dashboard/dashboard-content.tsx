@@ -480,17 +480,7 @@ export function DashboardContent({ error }: DashboardContentProps) {
                             ) : (
                               <Wine className="h-3 w-3" />
                             )}
-                            {beverage.type}
-                          </Badge>
-                          <Badge
-                            variant="outline"
-                            className={`${
-                              beverage.type === 'Beer'
-                                ? 'bg-amber-50 text-amber-700 border-amber-200'
-                                : 'bg-rose-50 text-rose-700 border-rose-200'
-                            } text-xs`}
-                          >
-                            {beverage.style}
+                            {beverage.style && beverage.style}
                           </Badge>
                         </div>
                       </div>

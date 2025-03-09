@@ -86,20 +86,8 @@ export default async function ViewBeveragePage({ params }: { params: Promise<{ i
                     ) : (
                       <Wine className="h-3 w-3" />
                     )}
-                    {beverage.type}
+                    {beverage.style && beverage.style}
                   </Badge>
-                  {beverage.style && (
-                    <Badge
-                      variant="outline"
-                      className={`${
-                        beverage.type === 'Beer'
-                          ? 'bg-amber-50 text-amber-700 border-amber-200'
-                          : 'bg-rose-50 text-rose-700 border-rose-200'
-                      } text-xs`}
-                    >
-                      {beverage.style}
-                    </Badge>
-                  )}
                 </div>
               </div>
               <div className="ml-2 flex-shrink-0">
