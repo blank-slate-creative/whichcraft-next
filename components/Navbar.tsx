@@ -28,7 +28,7 @@ export default async function Navbar() {
         <div className="flex items-center gap-2">
           {session && (
             <Button
-              className="bg-primary hover:bg-primary/90 hidden md:flex transition-colors duration-200"
+              className="bg-primary hover:bg-primary/90 transition-colors duration-200"
               size="sm"
               asChild
             >

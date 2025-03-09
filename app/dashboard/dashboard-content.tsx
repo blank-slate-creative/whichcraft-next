@@ -102,6 +102,21 @@ function BeverageCardSkeleton() {
   );
 }
 
+// Skeleton component for beverage items in iOS-style list format
+function BeverageListItemSkeleton() {
+  return (
+    <div className="py-3 px-4 flex items-center gap-3">
+      <Skeleton className="h-12 w-12 rounded-md flex-shrink-0" />
+      <div className="flex-1">
+        <Skeleton className="h-4 w-3/4 mb-1" />
+        <Skeleton className="h-3 w-1/2 mb-1" />
+        <Skeleton className="h-5 w-24" />
+      </div>
+      <Skeleton className="h-8 w-8 rounded-full" />
+    </div>
+  );
+}
+
 export function DashboardContent({ error }: DashboardContentProps) {
   const { beverages, setBeverages, setAllBeverages } = useBeverages();
   const router = useRouter();
@@ -382,13 +397,18 @@ export function DashboardContent({ error }: DashboardContentProps) {
             </div>
           )}
 
-          {/* Beverage Cards - Mobile optimized */}
-          <div className="space-y-3">
+          {/* iOS-style Beverage List */}
+          <div className="bg-card rounded-xl overflow-hidden shadow-sm mb-4">
             {isPending ? (
               // Show skeleton UI during loading
-              Array.from({ length: 3 }).map((_, index) => (
-                <BeverageCardSkeleton key={`skeleton-${index}`} />
-              ))
+              <>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <div key={`skeleton-container-${index}`}>
+                    <BeverageListItemSkeleton />
+                    {index < 4 && <div className="h-px bg-border mx-4" />}
+                  </div>
+                ))}
+              </>
             ) : filteredBeverages.length === 0 && !error ? (
               <div className="text-center py-8">
                 <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3">
@@ -415,18 +435,15 @@ export function DashboardContent({ error }: DashboardContentProps) {
                 )}
               </div>
             ) : (
-              filteredBeverages.map((beverage: Beverage) => (
-                <div
-                  key={beverage.id}
-                  className="bg-card border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
-                >
-                  <Link
-                    href={`/dashboard/view/${beverage.id}`}
-                    className="block p-4 text-foreground hover:bg-accent/10 transition-colors"
-                  >
-                    <div className="flex justify-between items-start">
+              <>
+                {filteredBeverages.map((beverage: Beverage, index) => (
+                  <div key={`item-container-${beverage.id}`}>
+                    <Link
+                      href={`/dashboard/view/${beverage.id}`}
+                      className="py-3 px-4 flex items-stretch gap-3 hover:bg-accent/10 transition-colors"
+                    >
                       {beverage.image_url ? (
-                        <div className="mr-3 flex-shrink-0 w-16 h-16 rounded-md overflow-hidden">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-md overflow-hidden">
                           <img
                             src={beverage.image_url}
                             alt={`${beverage.name} by ${beverage.producer}`}
@@ -445,56 +462,61 @@ export function DashboardContent({ error }: DashboardContentProps) {
                                 const icon = document.createElement('div');
                                 icon.innerHTML =
                                   beverage.type === 'Beer'
-                                    ? '<svg class="h-8 w-8 text-muted-foreground/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"></path><path d="M9 12v6"></path><path d="M13 12v6"></path><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5s2-.5 3-.5 2 .5 3 .5 1.44-.5 3-.5a2.5 2.5 0 0 1 0 5c-1.56 0-2-.5-3-.5Z"></path><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"></path></svg>'
-                                    : '<svg class="h-8 w-8 text-muted-foreground/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M7 10h10"></path><path d="M12 15v7"></path><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"></path></svg>';
+                                    ? '<svg class="h-5 w-5 text-muted-foreground/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"></path><path d="M9 12v6"></path><path d="M13 12v6"></path><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5s2-.5 3-.5 2 .5 3 .5 1.44-.5 3-.5a2.5 2.5 0 0 1 0 5c-1.56 0-2-.5-3-.5Z"></path><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"></path></svg>'
+                                    : '<svg class="h-5 w-5 text-muted-foreground/60" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"></path><path d="M7 10h10"></path><path d="M12 15v7"></path><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"></path></svg>';
                                 parent.appendChild(icon);
                               }
                             }}
                           />
                         </div>
                       ) : (
-                        <div className="mr-3 flex-shrink-0 w-16 h-16 bg-muted rounded-md flex items-center justify-center">
+                        <div className="flex-shrink-0 w-12 h-12 bg-muted rounded-md flex items-center justify-center">
                           {beverage.type === 'Beer' ? (
-                            <Beer className="h-8 w-8 text-muted-foreground/60" />
+                            <Beer className="h-5 w-5 text-muted-foreground/60" />
                           ) : (
-                            <Wine className="h-8 w-8 text-muted-foreground/60" />
+                            <Wine className="h-5 w-5 text-muted-foreground/60" />
                           )}
                         </div>
                       )}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-base line-clamp-1">{beverage.name}</h3>
-                        <p className="text-xs text-muted-foreground line-clamp-1">
-                          {beverage.producer}
-                        </p>
-                        <div className="flex flex-wrap gap-1 mt-1">
+
+                      <div className="flex-1 min-w-0 flex items-center">
+                        <div>
+                          <div className="font-medium text-sm line-clamp-1">{beverage.name}</div>
+                          <div className="text-xs text-muted-foreground mb-1">
+                            {beverage.producer}
+                          </div>
                           <Badge
                             variant="outline"
                             className={`${
                               beverage.type === 'Beer'
                                 ? 'bg-amber-50 text-amber-700 border-amber-200'
                                 : 'bg-rose-50 text-rose-700 border-rose-200'
-                            } flex items-center gap-1 text-xs`}
+                            } inline-flex items-center gap-1 text-xs max-w-full`}
                           >
                             {beverage.type === 'Beer' ? (
-                              <Beer className="h-3 w-3" />
+                              <Beer className="h-3.5 w-3.5 flex-shrink-0" />
                             ) : (
-                              <Wine className="h-3 w-3" />
+                              <Wine className="h-3.5 w-3.5 flex-shrink-0" />
                             )}
-                            {beverage.style && beverage.style}
+                            <span className="truncate">{beverage.style && beverage.style}</span>
                           </Badge>
                         </div>
                       </div>
-                      <div className="ml-2 flex-shrink-0">
+
+                      <div className="flex-shrink-0">
                         {beverage.liked ? (
                           <ThumbsUp className="h-4 w-4 text-green-500" />
                         ) : (
                           <ThumbsDown className="h-4 w-4 text-red-500" />
                         )}
                       </div>
-                    </div>
-                  </Link>
-                </div>
-              ))
+                    </Link>
+                    {index < filteredBeverages.length - 1 && (
+                      <div className="h-px bg-border mx-4" />
+                    )}
+                  </div>
+                ))}
+              </>
             )}
           </div>
         </div>
@@ -710,15 +732,6 @@ export function DashboardContent({ error }: DashboardContentProps) {
           </SheetContent>
         </Sheet>
       )}
-
-      {/* Floating Action Button for Mobile */}
-      <div className="md:hidden fixed bottom-20 right-4 z-10">
-        <Button size="icon" className="h-14 w-14 rounded-full shadow-lg" asChild>
-          <Link href="/dashboard/add">
-            <Plus className="h-6 w-6" />
-          </Link>
-        </Button>
-      </div>
     </div>
   );
 }
