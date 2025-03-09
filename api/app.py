@@ -200,6 +200,15 @@ def create_beverage(current_user):
     if not data.get("name") or not data.get("type"):
         return jsonify({"message": "Name and type are required"}), 400
 
+    # Handle empty strings for integer fields
+    untappd_beer_id = data.get("untappd_beer_id")
+    if untappd_beer_id == "":
+        untappd_beer_id = None
+
+    untappd_brewery_id = data.get("untappd_brewery_id")
+    if untappd_brewery_id == "":
+        untappd_brewery_id = None
+
     # Create new beverage
     new_beverage = Beverage(
         user_id=current_user.id,
@@ -212,8 +221,8 @@ def create_beverage(current_user):
         liked=bool(data.get("liked", False)),  # Convert to boolean
         notes=data.get("notes"),
         location=data.get("location"),
-        untappd_beer_id=data.get("untappd_beer_id"),
-        untappd_brewery_id=data.get("untappd_brewery_id"),
+        untappd_beer_id=untappd_beer_id,
+        untappd_brewery_id=untappd_brewery_id,
         image_url=data.get("image_url"),
     )
 
