@@ -64,7 +64,7 @@ const sortOptions: SortOption[] = [
 ];
 
 interface CollectionContentProps {
-  error?: string | null;
+  error: string | null;
 }
 
 // Skeleton component for beverage items in iOS-style list format

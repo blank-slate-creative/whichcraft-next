@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Beer, BarChart3, Home, Plus } from 'lucide-react';
+import { Beer, BarChart3, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function NavbarClient() {
