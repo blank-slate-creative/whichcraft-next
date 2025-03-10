@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "turbo run build",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./apps/web",
+  "outputDirectory": "apps/web/.next",
+  "framework": "nextjs",
+  "rewrites": [{ "source": "/(.*)", "destination": "/api/$1" }],
+  "regions": ["ord1"],
+  "installCommand": "npm install",
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  }
+}

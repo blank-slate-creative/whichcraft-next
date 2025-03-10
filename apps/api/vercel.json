@@ -1,0 +1,5 @@
+{
+  "buildCommand": "cd ../.. && turbo run build --filter=api",
+  "outputDirectory": "dist",
+  "devCommand": "cd ../.. && turbo run dev --filter=api"
+}

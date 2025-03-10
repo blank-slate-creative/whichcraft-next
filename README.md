@@ -152,3 +152,61 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is licensed under the MIT License - see the LICENSE file for
 details.
+
+# Whichcraft Next Monorepo
+
+This is a monorepo for the Whichcraft Next project, built with [Turborepo](https://turbo.build/repo).
+
+## What's inside?
+
+This monorepo uses [npm](https://www.npmjs.com/) as a package manager. It includes the following packages/apps:
+
+### Apps
+
+- `web`: a [Next.js](https://nextjs.org/) app
+- `api`: a [Flask](https://flask.palletsprojects.com/) app
+
+### Packages
+
+- `turbo`: [Turborepo](https://turbo.build/repo) for monorepo management
+
+## Setup
+
+### Install dependencies
+
+```
+npm install
+```
+
+### Development
+
+To develop all apps and packages, run the following command:
+
+```
+npm run dev
+```
+
+### Build
+
+To build all apps and packages, run the following command:
+
+```
+npm run build
+```
+
+### Deployment
+
+Each app can be deployed independently to its respective platform.
+
+#### Web App (Next.js)
+
+The web app can be deployed to Vercel.
+
+#### API (Flask)
+
+The API can be deployed to Fly.io using the deploy script.
+
+```
+cd apps/api
+./restart.sh
+```

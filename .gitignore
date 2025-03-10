@@ -14,7 +14,8 @@
 /coverage
 
 # next.js
-/.next/
+.turbo/
+.next/
 /out/
 
 # production
@@ -39,3 +40,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Old directories (prior to monorepo conversion)
+/components
+/app
+/utils
+/hooks
+/lib
+/supabase
+/migrations
+/.next
+/node_modules
