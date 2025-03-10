@@ -1,6 +1,4 @@
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Beer, Wine, BarChart3, ThumbsUp, ThumbsDown, ArrowLeft, PieChart } from 'lucide-react';
+import { Beer, Wine, BarChart3, ThumbsUp, ThumbsDown, PieChart } from 'lucide-react';
 
 // Define the Beverage interface
 interface Beverage {
@@ -254,16 +252,6 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
             <p className="text-xs sm:text-sm text-muted-foreground">No producers found</p>
           )}
         </div>
-      </div>
-
-      {/* Back link shown only on desktop */}
-      <div className="hidden sm:block">
-        <Button variant="outline" size="sm" asChild>
-          <Link href="/collection" className="flex items-center gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Return to Collection
-          </Link>
-        </Button>
       </div>
     </div>
   );

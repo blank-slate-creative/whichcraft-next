@@ -27,10 +27,7 @@ export default function NavbarClient() {
   }, [supabase]);
 
   const isActive = (path: string) => {
-    if (path === '/collection' && pathname === '/collection') {
-      return true;
-    }
-    if (path !== '/collection' && pathname.startsWith(path)) {
+    if (pathname.startsWith(path)) {
       return true;
     }
     return false;
@@ -43,29 +40,25 @@ export default function NavbarClient() {
       icon: <Beer className="h-4 w-4" />,
     },
     {
-      href: '/collection/stats',
+      href: '/stats',
       label: 'Stats',
       icon: <BarChart3 className="h-4 w-4" />,
     },
   ];
 
-  // Check if the current path is the collection page
-  const isCollectionPage = pathname === '/collection';
-
   return (
     <div className="flex items-center gap-4">
-      {isCollectionPage && (
-        <Button
-          className="bg-primary hover:bg-primary/90 transition-colors duration-200"
-          size="sm"
-          asChild
-        >
-          <Link href="/collection/add" prefetch={true}>
-            <Plus className="h-4 w-4 mr-1" />
-            Add Beverage
-          </Link>
-        </Button>
-      )}
+      <Button
+        className="bg-primary hover:bg-primary/90 transition-colors duration-200"
+        size="sm"
+        asChild
+      >
+        <Link href="/collection/add" prefetch={true}>
+          <Plus className="h-4 w-4 mr-1" />
+          Add Beverage
+        </Link>
+      </Button>
+
       <div className="hidden md:flex items-center gap-4">
         {navLinks.map(link => (
           <Link

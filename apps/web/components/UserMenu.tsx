@@ -14,7 +14,6 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { signOutAction } from '@/app/actions';
 import { Laptop, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 
@@ -29,19 +28,6 @@ function SignOutButton() {
 }
 
 export default function UserMenu({ userName = 'User' }: { userName?: string }) {
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const [_, formAction] = useActionState(signOutAction, null);
-
-  // useEffect only runs on the client, so now we can safely show the UI
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -63,13 +49,13 @@ export default function UserMenu({ userName = 'User' }: { userName?: string }) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <UserMenuItems userName={userName} />
+        <UserMenuItems />
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
-export function UserMenuItems({ userName = 'User' }: { userName?: string }) {
+export function UserMenuItems() {
   const { theme, setTheme } = useTheme();
   const [_, formAction] = useActionState(signOutAction, null);
 
