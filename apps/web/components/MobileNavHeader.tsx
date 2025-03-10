@@ -13,10 +13,10 @@ export default function MobileNavHeader() {
     // Don't show on main pages
     if (
       pathname === '/' ||
-      pathname === '/dashboard' ||
+      pathname === '/collection' ||
       pathname === '/profile' ||
       pathname === '/about' ||
-      pathname === '/dashboard/stats'
+      pathname === '/stats'
     ) {
       return false;
     }

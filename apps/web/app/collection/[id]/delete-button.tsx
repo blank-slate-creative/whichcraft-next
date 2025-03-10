@@ -11,7 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { deleteBeverageAction } from '../../actions';
+import { deleteBeverageAction } from '../actions';
 import { useRouter } from 'next/navigation';
 
 interface DeleteButtonProps {
@@ -36,8 +36,8 @@ export function DeleteButton({ id, name }: DeleteButtonProps) {
       if (result.success) {
         // Close the dialog
         setIsOpen(false);
-        // Redirect to dashboard
-        router.push('/dashboard');
+        // Redirect to collection
+        router.push('/collection');
       } else {
         setError(result.message || 'Failed to delete beverage');
       }

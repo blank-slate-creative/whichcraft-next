@@ -38,7 +38,7 @@ export const updateSession = async (request: NextRequest) => {
     const user = await supabase.auth.getSession();
 
     // Define protected routes without using a /protected prefix
-    const protectedPaths = ['/dashboard', '/reset-password'];
+    const protectedPaths = ['/collection', '/reset-password'];
 
     // Check if the current path is a protected path
     const isProtectedPath = protectedPaths.some(

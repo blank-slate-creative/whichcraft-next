@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Beer, BarChart3, Home, User } from 'lucide-react';
+import { Beer, BarChart3, User } from 'lucide-react';
 
 export default function BottomNav() {
   const pathname = usePathname();
@@ -14,10 +14,7 @@ export default function BottomNav() {
   }
 
   const isActive = (path: string) => {
-    if (path === '/dashboard' && pathname === '/dashboard') {
-      return true;
-    }
-    if (path !== '/dashboard' && pathname.startsWith(path)) {
+    if (pathname.startsWith(path)) {
       return true;
     }
     return false;
@@ -25,19 +22,14 @@ export default function BottomNav() {
 
   const navItems = [
     {
-      href: '/dashboard',
+      href: '/collection',
       label: 'Collection',
       icon: <Beer className="h-5 w-5" />,
     },
     {
-      href: '/dashboard/stats',
+      href: '/stats',
       label: 'Stats',
       icon: <BarChart3 className="h-5 w-5" />,
-    },
-    {
-      href: '/about',
-      label: 'About',
-      icon: <Home className="h-5 w-5" />,
     },
     {
       href: '/profile',
@@ -47,7 +39,7 @@ export default function BottomNav() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-background border-t shadow-lg z-10 md:hidden">
+    <div className="bg-background border-t shadow-lg z-10 md:hidden">
       <div className="flex items-center justify-around h-16">
         {navItems.map(item => (
           <Button

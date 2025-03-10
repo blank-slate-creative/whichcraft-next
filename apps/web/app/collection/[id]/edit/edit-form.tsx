@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { useEffect } from 'react';
-import { updateBeverageAction, redirectToDashboard } from './actions';
-import { Beverage } from '../beverage-context';
+import { updateBeverageAction, redirectToCollection } from './actions';
+import { Beverage } from '../../beverage-context';
 import BeverageForm, { BeverageData } from '@/components/BeverageForm';
 import { BeverageSearch } from '@/components/BeverageSearch';
 
@@ -44,10 +44,10 @@ export default function EditBeverageForm({ initialBeverage }: { initialBeverage:
     });
   };
 
-  // Redirect to dashboard when form submission is successful
+  // Redirect to collection when form submission is successful
   useEffect(() => {
     if (formState.status === 'success') {
-      redirectToDashboard();
+      redirectToCollection();
     }
   }, [formState.status]);
 

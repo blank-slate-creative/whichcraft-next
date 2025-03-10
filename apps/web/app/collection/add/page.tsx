@@ -20,18 +20,18 @@ export default async function AddBeveragePage() {
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-2 sm:px-0 py-4 sm:py-8">
-      <div className="items-center mb-4 sm:mb-8 hidden md:flex">
-        <Button variant="ghost" size="icon" className="mr-2 sm:mr-4" asChild>
+    <div className="container mx-auto px-3 py-4">
+      <div className="items-center mb-4 hidden md:flex">
+        <Button variant="ghost" size="icon" className="mr-2 inline-flex" asChild>
           <Link
-            href="/dashboard"
+            href="/collection"
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
-            <ArrowLeft className="h-5 w-5" />
-            <span className="sr-only">Back to dashboard</span>
+            <ArrowLeft className="h-4 w-4" />
+            <span className="sr-only">Back to collection</span>
           </Link>
         </Button>
-        <h1 className="text-2xl sm:text-3xl font-bold">Add New Beverage</h1>
+        <h1 className="text-2xl font-bold tracking-tight block">Add New Beverage</h1>
       </div>
 
       <AddBeverageForm />

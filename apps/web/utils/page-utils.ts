@@ -9,10 +9,10 @@ type PageTitleMap = {
 // Map routes to their respective titles
 const PAGE_TITLES: PageTitleMap = {
   '/': 'WhichCraft',
-  '/dashboard': 'Collection',
-  '/dashboard/stats': 'Stats',
-  '/dashboard/add': 'Add Beverage',
-  '/dashboard/edit': 'Edit Beverage',
+  '/collection': 'Collection',
+  '/stats': 'Stats',
+  '/collection/add': 'Add Beverage',
+  '/collection/edit': 'Edit Beverage',
   '/profile': 'Profile',
   '/about': 'About',
   '/auth/login': 'Login',
@@ -30,13 +30,13 @@ export function getPageTitle(path: string): string {
     return PAGE_TITLES[path];
   }
 
-  // Check for dashboard view page
-  if (path.match(/\/dashboard\/view\/[^/]+/)) {
+  // Check for collection view page
+  if (path.match(/\/collection\/view\/[^/]+/)) {
     return 'Beverage Details';
   }
 
-  // Check for dashboard edit page
-  if (path.match(/\/dashboard\/edit\/[^/]+/)) {
+  // Check for collection edit page
+  if (path.match(/\/collection\/edit\/[^/]+/)) {
     return 'Edit Beverage';
   }
 

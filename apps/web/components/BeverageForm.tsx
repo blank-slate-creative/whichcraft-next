@@ -74,21 +74,6 @@ export default function BeverageForm({
 
   return (
     <form action={formAction} className="space-y-6 sm:space-y-8">
-      {/* Hidden fields for form state */}
-      <input type="hidden" name="type" value={beverageData.type} />
-      <input
-        type="hidden"
-        name="liked"
-        value={beverageData.liked === null ? '' : String(beverageData.liked)}
-      />
-      <input type="hidden" name="untappd_beer_id" value={beverageData.untappd_beer_id || ''} />
-      <input
-        type="hidden"
-        name="untappd_brewery_id"
-        value={beverageData.untappd_brewery_id || ''}
-      />
-      <input type="hidden" name="image_url" value={beverageData.image_url || ''} />
-
       {/* Search Section (conditionally rendered) */}
       {showSearch && children}
 
@@ -234,6 +219,21 @@ export default function BeverageForm({
           {formState.message}
         </div>
       )}
+
+      {/* Hidden fields for form state */}
+      <input type="hidden" name="type" value={beverageData.type} />
+      <input
+        type="hidden"
+        name="liked"
+        value={beverageData.liked === null ? '' : String(beverageData.liked)}
+      />
+      <input type="hidden" name="untappd_beer_id" value={beverageData.untappd_beer_id || ''} />
+      <input
+        type="hidden"
+        name="untappd_brewery_id"
+        value={beverageData.untappd_brewery_id || ''}
+      />
+      <input type="hidden" name="image_url" value={beverageData.image_url || ''} />
 
       {/* Submit Button */}
       <div className="flex justify-center sm:justify-end">

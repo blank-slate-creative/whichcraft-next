@@ -1,5 +1,0 @@
-{
-  "buildCommand": "cd ../.. && turbo run build --filter=web",
-  "framework": "nextjs",
-  "outputDirectory": ".next"
-}

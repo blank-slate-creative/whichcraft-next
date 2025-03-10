@@ -1,7 +1,7 @@
 import { requireAuth } from '@/utils/auth';
 import { serverBeverageApi } from '@/utils/server-api';
 import { BeverageProvider } from './beverage-context';
-import { DashboardContent } from './dashboard-content';
+import { CollectionContent } from './collection-content';
 
 // Define the Beverage interface
 interface Beverage {
@@ -15,7 +15,7 @@ interface Beverage {
   created_at: string;
 }
 
-export default async function Dashboard({
+export default async function Collection({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -51,7 +51,7 @@ export default async function Dashboard({
 
   return (
     <BeverageProvider initialBeverages={beverages}>
-      <DashboardContent error={error} />
+      <CollectionContent error={error} />
     </BeverageProvider>
   );
 }

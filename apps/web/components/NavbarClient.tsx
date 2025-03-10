@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Beer, BarChart3, Home } from 'lucide-react';
+import { Beer, BarChart3, Home, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function NavbarClient() {
   const [userName, setUserName] = useState('User');
@@ -26,10 +27,10 @@ export default function NavbarClient() {
   }, [supabase]);
 
   const isActive = (path: string) => {
-    if (path === '/dashboard' && pathname === '/dashboard') {
+    if (path === '/collection' && pathname === '/collection') {
       return true;
     }
-    if (path !== '/dashboard' && pathname.startsWith(path)) {
+    if (path !== '/collection' && pathname.startsWith(path)) {
       return true;
     }
     return false;
@@ -37,24 +38,34 @@ export default function NavbarClient() {
 
   const navLinks = [
     {
-      href: '/dashboard',
+      href: '/collection',
       label: 'Collection',
       icon: <Beer className="h-4 w-4" />,
     },
     {
-      href: '/dashboard/stats',
+      href: '/collection/stats',
       label: 'Stats',
       icon: <BarChart3 className="h-4 w-4" />,
     },
-    {
-      href: '/about',
-      label: 'About',
-      icon: <Home className="h-4 w-4" />,
-    },
   ];
+
+  // Check if the current path is the collection page
+  const isCollectionPage = pathname === '/collection';
 
   return (
     <div className="flex items-center gap-4">
+      {isCollectionPage && (
+        <Button
+          className="bg-primary hover:bg-primary/90 transition-colors duration-200"
+          size="sm"
+          asChild
+        >
+          <Link href="/collection/add" prefetch={true}>
+            <Plus className="h-4 w-4 mr-1" />
+            Add Beverage
+          </Link>
+        </Button>
+      )}
       <div className="hidden md:flex items-center gap-4">
         {navLinks.map(link => (
           <Link

@@ -39,7 +39,7 @@ export async function checkAuth({
  */
 export async function redirectAuthenticatedToHome() {
   await checkAuth({
-    redirectTo: '/dashboard',
+    redirectTo: '/collection',
     redirectIfFound: true,
   });
 }

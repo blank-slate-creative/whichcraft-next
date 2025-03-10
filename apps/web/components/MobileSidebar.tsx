@@ -52,7 +52,7 @@ export default function MobileSidebar({ userName = 'User' }: { userName?: string
                 asChild
                 onClick={() => setOpen(false)}
               >
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/collection">Collection</Link>
               </Button>
               <Button
                 variant="ghost"

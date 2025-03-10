@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useEffect } from 'react';
-import { saveBeverageAction, redirectToDashboard } from './actions';
+import { saveBeverageAction, redirectToCollection } from './actions';
 import BeverageForm, { BeverageData } from '@/components/BeverageForm';
 import { BeverageSearch } from '@/components/BeverageSearch';
 
@@ -26,10 +26,10 @@ export default function AddBeverageForm() {
     setBeverageData(data);
   };
 
-  // Redirect to dashboard when form submission is successful
+  // Redirect to collection when form submission is successful
   useEffect(() => {
     if (formState.status === 'success') {
-      redirectToDashboard();
+      redirectToCollection();
     }
   }, [formState.status]);
 

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Edit, ThumbsUp, ThumbsDown, Beer, Wine } from 'lucide-react';
 import { serverBeverageApi } from '@/utils/server-api';
-import { Beverage } from '../../beverage-context';
+import { Beverage } from '../beverage-context';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -27,7 +27,7 @@ export default async function ViewBeveragePage({ params }: { params: Promise<{ i
   }
 
   if (!id) {
-    redirect('/dashboard');
+    redirect('/collection');
   }
 
   // Fetch the beverage data
@@ -35,18 +35,18 @@ export default async function ViewBeveragePage({ params }: { params: Promise<{ i
     const beverage: Beverage = await serverBeverageApi.getById(id);
 
     return (
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center mb-4">
-          <Button variant="ghost" size="icon" className="mr-2 hidden md:inline-flex" asChild>
+      <div className="container mx-auto px-3 py-4">
+        <div className="items-center mb-4 hidden md:flex">
+          <Button variant="ghost" size="icon" className="mr-2 inline-flex" asChild>
             <Link
-              href="/dashboard"
+              href="/collection"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
-              <span className="sr-only">Back to dashboard</span>
+              <span className="sr-only">Back to collection</span>
             </Link>
           </Button>
-          <h1 className="text-2xl font-bold tracking-tight hidden md:block">Beverage Details</h1>
+          <h1 className="text-2xl font-bold tracking-tight block">Beverage Details</h1>
         </div>
 
         <Card className="border rounded-lg overflow-hidden shadow-sm">
@@ -130,7 +130,7 @@ export default async function ViewBeveragePage({ params }: { params: Promise<{ i
             <div className="mt-6 flex justify-end gap-2">
               <DeleteButton id={beverage.id} name={beverage.name} />
               <Button asChild>
-                <Link href={`/dashboard/edit/${beverage.id}`}>
+                <Link href={`/collection/${id}/edit`}>
                   <Edit className="h-4 w-4 mr-2" />
                   Edit Beverage
                 </Link>
@@ -142,6 +142,6 @@ export default async function ViewBeveragePage({ params }: { params: Promise<{ i
     );
   } catch (error) {
     console.error('Error fetching beverage:', error);
-    redirect('/dashboard');
+    redirect('/collection');
   }
 }

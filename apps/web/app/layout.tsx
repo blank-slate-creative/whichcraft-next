@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={spaceGrotesk.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+      <body className="bg-background text-foreground flex flex-col h-screen overflow-hidden">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -38,12 +38,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <main className="min-h-screen flex flex-col items-center pt-16">
-            <div className="flex-1 w-full flex flex-col items-center pb-16 md:pb-0">
-              <div className="w-full flex flex-col max-w-5xl px-2 sm:px-3 md:px-4">{children}</div>
-            </div>
-            <BottomNav />
+          <main className="flex-1 overflow-y-auto">
+            <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-4 py-4">{children}</div>
           </main>
+          <BottomNav />
         </ThemeProvider>
       </body>
     </html>

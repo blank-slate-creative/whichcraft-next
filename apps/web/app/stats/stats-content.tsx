@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Beer, Wine, BarChart3, ThumbsUp, ThumbsDown, ArrowLeft, PieChart } from 'lucide-react';
@@ -69,9 +67,9 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
   return (
     <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
       {/* Header - More compact for mobile */}
-      <div className="mb-4 sm:mb-6">
+      <div className="mb-4 sm:mb-6 hidden md:block">
         <div className="flex items-center mb-2 sm:mb-4">
-          <h1 className="text-2xl sm:text-3xl font-bold hidden md:block">Collection Statistics</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">Collection Statistics</h1>
         </div>
         <p className="text-sm text-muted-foreground">
           Insights and analytics about your beverage collection.
@@ -258,12 +256,12 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
         </div>
       </div>
 
-      {/* Back to Dashboard Button - Hidden on mobile since we have the back button at the top */}
-      <div className="hidden sm:flex justify-center mt-6">
-        <Button asChild>
-          <Link href="/dashboard">
-            <ArrowLeft className="h-5 w-5 mr-2" />
-            Back to Dashboard
+      {/* Back link shown only on desktop */}
+      <div className="hidden sm:block">
+        <Button variant="outline" size="sm" asChild>
+          <Link href="/collection" className="flex items-center gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            Return to Collection
           </Link>
         </Button>
       </div>

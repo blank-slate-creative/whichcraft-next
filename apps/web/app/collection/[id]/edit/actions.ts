@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation';
 import { serverBeverageApi } from '@/utils/server-api';
+import { revalidatePath } from 'next/cache';
 
 interface FormState {
   status: 'idle' | 'submitting' | 'success' | 'error';
@@ -52,7 +53,8 @@ export async function updateBeverageAction(
   }
 }
 
-// Separate action for handling redirect after successful update
-export async function redirectToDashboard() {
-  redirect('/dashboard');
+// Separate action for handling redirect after successful save
+export async function redirectToCollection() {
+  revalidatePath('/collection');
+  redirect('/collection');
 }

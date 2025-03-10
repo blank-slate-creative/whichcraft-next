@@ -63,43 +63,8 @@ const sortOptions: SortOption[] = [
   { label: 'Producer', value: 'producer_asc', field: 'producer', order: 'asc' },
 ];
 
-interface DashboardContentProps {
-  error: string | null;
-}
-
-// Skeleton component for beverage cards
-function BeverageCardSkeleton() {
-  return (
-    <div className="bg-card border rounded-xl overflow-hidden shadow-sm flex flex-col">
-      <div className="p-4 flex-1 flex flex-col">
-        <div className="flex justify-between items-start mb-2">
-          <Skeleton className="h-16 w-16 rounded-md mr-3 flex-shrink-0" />
-          <div className="w-full">
-            <Skeleton className="h-5 w-3/4 mb-1" />
-            <Skeleton className="h-3 w-1/2 mb-1" />
-            <div className="flex gap-1 mt-1">
-              <Skeleton className="h-4 w-14" />
-              <Skeleton className="h-4 w-16" />
-            </div>
-          </div>
-        </div>
-
-        <div className="my-3 flex-1">
-          <Skeleton className="h-3 w-full mb-1" />
-          <Skeleton className="h-3 w-5/6" />
-        </div>
-
-        <div className="flex justify-between items-center mt-1">
-          <Skeleton className="h-4 w-4" />
-          <div className="flex items-center gap-1">
-            <Skeleton className="h-7 w-7 rounded-full" />
-            <Skeleton className="h-7 w-7 rounded-full" />
-            <Skeleton className="h-7 w-7 rounded-full" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+interface CollectionContentProps {
+  error?: string | null;
 }
 
 // Skeleton component for beverage items in iOS-style list format
@@ -117,7 +82,7 @@ function BeverageListItemSkeleton() {
   );
 }
 
-export function DashboardContent({ error }: DashboardContentProps) {
+export function CollectionContent({ error }: CollectionContentProps) {
   const { beverages, setBeverages, setAllBeverages } = useBeverages();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -204,7 +169,7 @@ export function DashboardContent({ error }: DashboardContentProps) {
       }
 
       // Update URL without full page refresh
-      router.push(`/dashboard?${params.toString()}`, { scroll: false });
+      router.push(`/collection?${params.toString()}`, { scroll: false });
 
       // Close filter drawer after applying
       setIsFilterDrawerOpen(false);
@@ -253,7 +218,7 @@ export function DashboardContent({ error }: DashboardContentProps) {
 
   // Clear all filters
   const clearFilters = useCallback(() => {
-    router.push('/dashboard', { scroll: false });
+    router.push('/collection', { scroll: false });
     setSearchQuery('');
     setIsFilterDrawerOpen(false);
 
@@ -279,11 +244,11 @@ export function DashboardContent({ error }: DashboardContentProps) {
   }, [router, setBeverages]);
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] relative">
+    <div className="flex flex-col relative">
       {/* Main Content Area with padding for bottom nav */}
       <div className="flex-1 overflow-auto">
         <div className="container mx-auto px-2 py-3 sm:px-4 sm:py-4">
-          {/* Dashboard Header - Only visible on desktop */}
+          {/* Collection Header - Only visible on desktop */}
           <div className="hidden md:flex items-center justify-between mb-4">
             <h1 className="text-2xl font-bold tracking-tight">Collection</h1>
             <div className="flex items-center gap-2">
@@ -299,7 +264,7 @@ export function DashboardContent({ error }: DashboardContentProps) {
                 )}
               </Button>
               <Button variant="outline" size="icon" asChild>
-                <Link href="/dashboard/stats">
+                <Link href="/collection/stats">
                   <BarChart3 className="h-4 w-4" />
                 </Link>
               </Button>
@@ -398,7 +363,7 @@ export function DashboardContent({ error }: DashboardContentProps) {
           )}
 
           {/* iOS-style Beverage List */}
-          <div className="bg-card rounded-xl overflow-hidden shadow-sm mb-4">
+          <div className="bg-card rounded-xl overflow-hidden shadow-sm mb-4 divide-y">
             {isPending ? (
               // Show skeleton UI during loading
               <>
@@ -422,7 +387,7 @@ export function DashboardContent({ error }: DashboardContentProps) {
                 </p>
                 {!searchQuery && (
                   <Button size="sm" asChild>
-                    <Link href="/dashboard/add">
+                    <Link href="/collection/add">
                       <Plus className="h-4 w-4 mr-1" />
                       Add Your First Beverage
                     </Link>
@@ -439,8 +404,8 @@ export function DashboardContent({ error }: DashboardContentProps) {
                 {filteredBeverages.map((beverage: Beverage, index) => (
                   <div key={`item-container-${beverage.id}`}>
                     <Link
-                      href={`/dashboard/view/${beverage.id}`}
-                      className="py-3 px-4 flex items-stretch gap-3 hover:bg-accent/10 transition-colors"
+                      href={`/collection/${beverage.id}`}
+                      className="py-3 flex items-stretch gap-3 hover:bg-accent/10 transition-colors"
                     >
                       {beverage.image_url ? (
                         <div className="flex-shrink-0 w-12 h-12 rounded-md overflow-hidden">
@@ -511,9 +476,6 @@ export function DashboardContent({ error }: DashboardContentProps) {
                         )}
                       </div>
                     </Link>
-                    {index < filteredBeverages.length - 1 && (
-                      <div className="h-px bg-border mx-4" />
-                    )}
                   </div>
                 ))}
               </>
