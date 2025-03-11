@@ -39,32 +39,75 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    beverages = db.relationship("Beverage", backref="user", lazy=True)
+    entries = db.relationship("Entry", backref="user", lazy=True)
 
     def __repr__(self):
         return f"<User {self.email}>"
+
+
+class Producer(db.Model):
+    __tablename__ = "producers"
+
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name = db.Column(db.String(255), nullable=False)
+    untappd_brewery_id = db.Column(db.Integer, unique=True, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    beverages = db.relationship("Beverage", backref="producer_obj", lazy=True)
+
+    def __repr__(self):
+        return f"<Producer {self.name}>"
+
+    def to_dict(self):
+        return {
+            "id": str(self.id),
+            "name": self.name,
+            "untappd_brewery_id": self.untappd_brewery_id,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
+
+
+class BeverageType(db.Model):
+    __tablename__ = "beverage_types"
+
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    name = db.Column(db.String(50), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    beverages = db.relationship("Beverage", backref="type_obj", lazy=True)
+
+    def __repr__(self):
+        return f"<BeverageType {self.name}>"
+
+    def to_dict(self):
+        return {
+            "id": str(self.id),
+            "name": self.name,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+        }
 
 
 class Beverage(db.Model):
     __tablename__ = "beverages"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("users.id"), nullable=False)
     name = db.Column(db.String(255), nullable=False)
-    type = db.Column(db.String(50), nullable=False)  # Beer, Wine, etc.
+    type_id = db.Column(
+        UUID(as_uuid=True), db.ForeignKey("beverage_types.id"), nullable=False
+    )
     style = db.Column(db.String(100))
-    producer = db.Column(db.String(255))
+    producer_id = db.Column(
+        UUID(as_uuid=True), db.ForeignKey("producers.id"), nullable=True
+    )
     abv = db.Column(db.Float)
     year = db.Column(db.String(50))
-    liked = db.Column(db.Boolean, nullable=False)  # True for liked, False for disliked
-    notes = db.Column(db.Text)
-    location = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Untappd specific data
-    untappd_beer_id = db.Column(db.Integer)
-    untappd_brewery_id = db.Column(db.Integer)
+    untappd_beer_id = db.Column(db.Integer, unique=True, nullable=True)
     image_url = db.Column(db.String(512))
+
+    entries = db.relationship("Entry", backref="beverage", lazy=True)
 
     def __repr__(self):
         return f"<Beverage {self.name}>"
@@ -73,18 +116,63 @@ class Beverage(db.Model):
         return {
             "id": str(self.id),
             "name": self.name,
-            "type": self.type,
+            "type": self.type_obj.name if self.type_obj else None,
+            "type_id": str(self.type_id) if self.type_id else None,
             "style": self.style,
-            "producer": self.producer,
+            "producer": self.producer_obj.name if self.producer_obj else None,
+            "producer_id": str(self.producer_id) if self.producer_id else None,
             "abv": self.abv,
             "year": self.year,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "untappd_beer_id": self.untappd_beer_id,
+            "image_url": self.image_url,
+        }
+
+
+class Entry(db.Model):
+    __tablename__ = "entries"
+
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey("users.id"), nullable=False)
+    beverage_id = db.Column(
+        UUID(as_uuid=True), db.ForeignKey("beverages.id"), nullable=False
+    )
+    liked = db.Column(db.Boolean, nullable=False)  # True for liked, False for disliked
+    notes = db.Column(db.Text)
+    location = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Entry {self.id} for Beverage {self.beverage_id}>"
+
+    def to_dict(self):
+        # Get the beverage data
+        beverage_data = self.beverage.to_dict() if self.beverage else None
+
+        # Create a backward compatible response that merges entry and beverage data
+        # This matches the expected format from the frontend
+        return {
+            "id": str(
+                self.id
+            ),  # Use entry ID as the primary ID for backward compatibility
+            "user_id": str(self.user_id),
+            "beverage_id": str(self.beverage_id),
+            "name": beverage_data.get("name") if beverage_data else None,
+            "type": beverage_data.get("type") if beverage_data else None,
+            "style": beverage_data.get("style") if beverage_data else None,
+            "producer": beverage_data.get("producer") if beverage_data else None,
+            "abv": beverage_data.get("abv") if beverage_data else None,
+            "year": beverage_data.get("year") if beverage_data else None,
             "liked": self.liked,
             "notes": self.notes,
             "location": self.location,
             "created_at": self.created_at.isoformat() if self.created_at else None,
-            "untappd_beer_id": self.untappd_beer_id,
-            "untappd_brewery_id": self.untappd_brewery_id,
-            "image_url": self.image_url,
+            "untappd_beer_id": beverage_data.get("untappd_beer_id")
+            if beverage_data
+            else None,
+            "image_url": beverage_data.get("image_url") if beverage_data else None,
+            # Include the original beverage object for new clients that might use it
+            "beverage": beverage_data,
         }
 
 
@@ -150,8 +238,8 @@ def health_check():
 @app.route("/api/beverages", methods=["GET"])
 @token_required
 def get_beverages(current_user):
-    # Start with base query filtered by user
-    query = Beverage.query.filter_by(user_id=current_user.id)
+    # This route now returns all user entries with their associated beverages
+    query = Entry.query.join(Beverage).filter(Entry.user_id == current_user.id)
 
     # Log request parameters
     print(f"GET /api/beverages - Request args: {request.args}")
@@ -160,7 +248,12 @@ def get_beverages(current_user):
     type_filter = request.args.get("type")
     if type_filter:
         print(f"Filtering by type: {type_filter}")
-        query = query.filter(Beverage.type == type_filter)
+        type_query = BeverageType.query.filter(BeverageType.name == type_filter).first()
+        if type_query:
+            query = query.filter(Beverage.type_id == type_query.id)
+        else:
+            # Fallback to legacy type field during migration
+            query = query.filter(Beverage.type == type_filter)
 
     # Apply liked filter if provided
     liked_filter = request.args.get("liked")
@@ -168,27 +261,47 @@ def get_beverages(current_user):
         # Convert string 'true'/'false' to boolean
         liked_bool = liked_filter.lower() == "true"
         print(f"Filtering by liked: {liked_bool}")
-        query = query.filter(Beverage.liked == liked_bool)
+        query = query.filter(Entry.liked == liked_bool)
 
     # Apply sorting if provided
     sort_by = request.args.get("sort_by", "created_at")  # Default sort by created_at
     sort_order = request.args.get("sort_order", "desc")  # Default descending
 
     # Validate sort_by parameter to prevent SQL injection
-    valid_sort_fields = ["name", "type", "producer", "created_at"]
-    if sort_by not in valid_sort_fields:
-        sort_by = "created_at"  # Default to created_at if invalid
+    valid_sort_fields = {
+        "name": Beverage.name,
+        "created_at": Entry.created_at,
+    }
 
-    # Apply sorting
-    if sort_order.lower() == "asc":
-        query = query.order_by(getattr(Beverage, sort_by).asc())
+    # If sorting by type or producer, we need to join accordingly
+    if sort_by == "type" and sort_order.lower() == "asc":
+        query = query.join(BeverageType, Beverage.type_id == BeverageType.id).order_by(
+            BeverageType.name.asc()
+        )
+    elif sort_by == "type" and sort_order.lower() != "asc":
+        query = query.join(BeverageType, Beverage.type_id == BeverageType.id).order_by(
+            BeverageType.name.desc()
+        )
+    elif sort_by == "producer" and sort_order.lower() == "asc":
+        query = query.join(Producer, Beverage.producer_id == Producer.id).order_by(
+            Producer.name.asc()
+        )
+    elif sort_by == "producer" and sort_order.lower() != "asc":
+        query = query.join(Producer, Beverage.producer_id == Producer.id).order_by(
+            Producer.name.desc()
+        )
     else:
-        query = query.order_by(getattr(Beverage, sort_by).desc())
+        # Apply standard sorting
+        sort_field = valid_sort_fields.get(sort_by, Entry.created_at)
+        if sort_order.lower() == "asc":
+            query = query.order_by(sort_field.asc())
+        else:
+            query = query.order_by(sort_field.desc())
 
     # Execute query and return results
-    beverages = query.all()
-    print(f"Found {len(beverages)} beverages matching filters")
-    return jsonify([beverage.to_dict() for beverage in beverages]), 200
+    entries = query.all()
+    print(f"Found {len(entries)} entries matching filters")
+    return jsonify([entry.to_dict() for entry in entries]), 200
 
 
 @app.route("/api/beverages", methods=["POST"])
@@ -200,104 +313,172 @@ def create_beverage(current_user):
     if not data.get("name") or not data.get("type"):
         return jsonify({"message": "Name and type are required"}), 400
 
-    # Handle empty strings for integer fields
+    # Process beverage type
+    beverage_type = None
+    type_name = data.get("type")
+    beverage_type = BeverageType.query.filter_by(name=type_name).first()
+    if not beverage_type:
+        # Create new beverage type
+        beverage_type = BeverageType(name=type_name)
+        db.session.add(beverage_type)
+        db.session.flush()  # Get the ID without committing
+
+    # Process producer
+    producer = None
+    producer_name = data.get("producer")
+    if producer_name:
+        producer = Producer.query.filter_by(name=producer_name).first()
+        if not producer:
+            producer = Producer(
+                name=producer_name,
+                untappd_brewery_id=data.get("untappd_brewery_id"),
+            )
+            db.session.add(producer)
+            db.session.flush()  # Get the ID without committing
+
+    # Check if the beverage already exists
     untappd_beer_id = data.get("untappd_beer_id")
-    if untappd_beer_id == "":
-        untappd_beer_id = None
+    existing_beverage = None
 
-    untappd_brewery_id = data.get("untappd_brewery_id")
-    if untappd_brewery_id == "":
-        untappd_brewery_id = None
+    if untappd_beer_id:
+        existing_beverage = Beverage.query.filter_by(
+            untappd_beer_id=untappd_beer_id
+        ).first()
 
-    # Create new beverage
-    new_beverage = Beverage(
+    if not existing_beverage:
+        # Create new beverage
+        new_beverage = Beverage(
+            name=data.get("name"),
+            type_id=beverage_type.id,
+            style=data.get("style"),
+            producer_id=producer.id if producer else None,
+            abv=data.get("abv"),
+            year=data.get("year"),
+            untappd_beer_id=untappd_beer_id,
+            image_url=data.get("image_url"),
+        )
+        db.session.add(new_beverage)
+        db.session.flush()  # Get the ID without committing
+    else:
+        new_beverage = existing_beverage
+
+    # Create new entry
+    new_entry = Entry(
         user_id=current_user.id,
-        name=data.get("name"),
-        type=data.get("type"),
-        style=data.get("style"),
-        producer=data.get("producer"),
-        abv=data.get("abv"),
-        year=data.get("year"),
-        liked=bool(data.get("liked", False)),  # Convert to boolean
+        beverage_id=new_beverage.id,
+        liked=bool(data.get("liked", False)),
         notes=data.get("notes"),
         location=data.get("location"),
-        untappd_beer_id=untappd_beer_id,
-        untappd_brewery_id=untappd_brewery_id,
-        image_url=data.get("image_url"),
     )
 
-    db.session.add(new_beverage)
+    db.session.add(new_entry)
     db.session.commit()
 
+    # Return the entry with beverage data
     return jsonify(
-        {"message": "Beverage created successfully", "id": str(new_beverage.id)}
+        {
+            "message": "Entry created successfully",
+            "id": str(new_entry.id),
+            "entry": new_entry.to_dict(),
+        }
     ), 201
 
 
-@app.route("/api/beverages/<uuid:beverage_id>", methods=["GET"])
+@app.route("/api/beverages/<uuid:entry_id>", methods=["GET"])
 @token_required
-def get_beverage(current_user, beverage_id):
-    beverage = Beverage.query.filter_by(id=beverage_id, user_id=current_user.id).first()
+def get_beverage(current_user, entry_id):
+    entry = Entry.query.filter_by(id=entry_id, user_id=current_user.id).first()
 
-    if not beverage:
-        return jsonify({"message": "Beverage not found"}), 404
+    if not entry:
+        return jsonify({"message": "Entry not found"}), 404
 
-    return jsonify(beverage.to_dict()), 200
+    return jsonify(entry.to_dict()), 200
 
 
-@app.route("/api/beverages/<uuid:beverage_id>", methods=["PUT"])
+@app.route("/api/beverages/<uuid:entry_id>", methods=["PUT"])
 @token_required
-def update_beverage(current_user, beverage_id):
-    beverage = Beverage.query.filter_by(id=beverage_id, user_id=current_user.id).first()
+def update_beverage(current_user, entry_id):
+    entry = Entry.query.filter_by(id=entry_id, user_id=current_user.id).first()
 
-    if not beverage:
-        return jsonify({"message": "Beverage not found"}), 404
+    if not entry:
+        return jsonify({"message": "Entry not found"}), 404
 
     data = request.get_json()
+    beverage = entry.beverage
 
-    # Update fields
-    if data.get("name"):
-        beverage.name = data.get("name")
-    if data.get("type"):
-        beverage.type = data.get("type")
-    if "style" in data:
-        beverage.style = data.get("style")
-    if "producer" in data:
-        beverage.producer = data.get("producer")
-    if "abv" in data:
-        beverage.abv = data.get("abv")
-    if "year" in data:
-        beverage.year = data.get("year")
+    # Handle beverage updates
+    if (
+        data.get("name")
+        or data.get("type")
+        or data.get("style")
+        or data.get("producer")
+        or data.get("abv")
+        or data.get("year")
+        or data.get("untappd_beer_id")
+        or data.get("image_url")
+    ):
+        # Check if we need to update the type
+        if data.get("type"):
+            type_name = data.get("type")
+            beverage_type = BeverageType.query.filter_by(name=type_name).first()
+            if not beverage_type:
+                beverage_type = BeverageType(name=type_name)
+                db.session.add(beverage_type)
+                db.session.flush()
+            beverage.type_id = beverage_type.id
+
+        # Check if we need to update the producer
+        if data.get("producer"):
+            producer_name = data.get("producer")
+            producer = Producer.query.filter_by(name=producer_name).first()
+            if not producer:
+                producer = Producer(
+                    name=producer_name,
+                    untappd_brewery_id=data.get("untappd_brewery_id"),
+                )
+                db.session.add(producer)
+                db.session.flush()
+            beverage.producer_id = producer.id
+
+        # Update other beverage fields
+        if data.get("name"):
+            beverage.name = data.get("name")
+        if "style" in data:
+            beverage.style = data.get("style")
+        if "abv" in data:
+            beverage.abv = data.get("abv")
+        if "year" in data:
+            beverage.year = data.get("year")
+        if "untappd_beer_id" in data:
+            beverage.untappd_beer_id = data.get("untappd_beer_id")
+        if "image_url" in data:
+            beverage.image_url = data.get("image_url")
+
+    # Update entry fields
     if "liked" in data:
-        beverage.liked = data.get("liked")
+        entry.liked = data.get("liked")
     if "notes" in data:
-        beverage.notes = data.get("notes")
+        entry.notes = data.get("notes")
     if "location" in data:
-        beverage.location = data.get("location")
-    if "untappd_beer_id" in data:
-        beverage.untappd_beer_id = data.get("untappd_beer_id")
-    if "untappd_brewery_id" in data:
-        beverage.untappd_brewery_id = data.get("untappd_brewery_id")
-    if "image_url" in data:
-        beverage.image_url = data.get("image_url")
+        entry.location = data.get("location")
 
     db.session.commit()
 
-    return jsonify(beverage.to_dict()), 200
+    return jsonify(entry.to_dict()), 200
 
 
-@app.route("/api/beverages/<uuid:beverage_id>", methods=["DELETE"])
+@app.route("/api/beverages/<uuid:entry_id>", methods=["DELETE"])
 @token_required
-def delete_beverage(current_user, beverage_id):
-    beverage = Beverage.query.filter_by(id=beverage_id, user_id=current_user.id).first()
+def delete_beverage(current_user, entry_id):
+    entry = Entry.query.filter_by(id=entry_id, user_id=current_user.id).first()
 
-    if not beverage:
-        return jsonify({"message": "Beverage not found"}), 404
+    if not entry:
+        return jsonify({"message": "Entry not found"}), 404
 
-    db.session.delete(beverage)
+    db.session.delete(entry)
     db.session.commit()
 
-    return jsonify({"message": "Beverage deleted"}), 200
+    return jsonify({"message": "Entry deleted"}), 200
 
 
 @app.route("/api/users/me", methods=["GET"])
