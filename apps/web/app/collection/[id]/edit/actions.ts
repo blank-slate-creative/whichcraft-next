@@ -27,6 +27,10 @@ export async function updateBeverageAction(
   }
 
   try {
+    // Get ABV value and convert empty string to null
+    const abvValue = formData.get('abv');
+    const abv = abvValue === '' || abvValue === null ? null : Number(abvValue);
+
     // Update beverage using the server API utility
     await serverBeverageApi.update(id, {
       name,
@@ -35,7 +39,7 @@ export async function updateBeverageAction(
       style: formData.get('style'),
       notes: formData.get('notes'),
       liked: liked === 'true',
-      abv: formData.get('abv'),
+      abv,
       image_url: formData.get('image_url'),
     });
 

@@ -352,7 +352,7 @@ def create_beverage(current_user):
             type_id=beverage_type.id,
             style=data.get("style"),
             producer_id=producer.id if producer else None,
-            abv=data.get("abv"),
+            abv=data.get("abv") if data.get("abv") else None,
             year=data.get("year"),
             untappd_beer_id=untappd_beer_id,
             image_url=data.get("image_url"),
