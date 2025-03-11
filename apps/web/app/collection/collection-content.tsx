@@ -313,7 +313,6 @@ export function CollectionContent({ error }: CollectionContentProps) {
                 {Array.from({ length: 5 }).map((_, index) => (
                   <div key={`skeleton-container-${index}`}>
                     <BeverageListItemSkeleton />
-                    {index < 4 && <div className="h-px bg-border mx-4" />}
                   </div>
                 ))}
               </>
