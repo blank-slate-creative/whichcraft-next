@@ -306,7 +306,7 @@ export function CollectionContent({ error }: CollectionContentProps) {
           )}
 
           {/* iOS-style Beverage List */}
-          <div className="bg-card rounded-xl overflow-hidden shadow-sm mb-4 divide-y">
+          <div className="divide-y">
             {isPending ? (
               // Show skeleton UI during loading
               <>
