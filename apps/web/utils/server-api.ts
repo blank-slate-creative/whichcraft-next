@@ -12,6 +12,43 @@ export async function getServerAuthToken() {
 }
 
 /**
+ * Make an authenticated API request with the provided token
+ */
+async function makeApiRequest(
+  endpoint: string,
+  token: string,
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET',
+  body?: any
+) {
+  if (!token) {
+    throw new Error('Authentication required');
+  }
+
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+
+  const requestOptions: RequestInit = {
+    method,
+    headers,
+  };
+
+  if (body && (method === 'POST' || method === 'PUT')) {
+    requestOptions.body = JSON.stringify(body);
+  }
+
+  const response = await fetch(`${API_URL}${endpoint}`, requestOptions);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(error.message || `API request failed with status ${response.status}`);
+  }
+
+  return response.json();
+}
+
+/**
  * Make an authenticated API request (server-side)
  */
 export async function serverApiRequest(
@@ -25,29 +62,7 @@ export async function serverApiRequest(
     throw new Error('Authentication required');
   }
 
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
-  };
-
-  const options: RequestInit = {
-    method,
-    headers,
-  };
-
-  if (body && (method === 'POST' || method === 'PUT')) {
-    options.body = JSON.stringify(body);
-  }
-
-  const response = await fetch(`${API_URL}${endpoint}`, options);
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    console.error('API error response:', error);
-    throw new Error(error.message || `API request failed with status ${response.status}`);
-  }
-
-  return response.json();
+  return makeApiRequest(endpoint, token, method, body);
 }
 
 /**
@@ -92,14 +107,14 @@ export const serverBeverageApi = {
       }
     }
 
-    return serverApiRequest(endpoint);
+    return serverApiRequest(endpoint, 'GET');
   },
 
   /**
    * Get a specific beverage by ID
    */
   getById: async (id: string) => {
-    return serverApiRequest(`/api/beverages/${id}`);
+    return serverApiRequest(`/api/beverages/${id}`, 'GET');
   },
 
   /**
