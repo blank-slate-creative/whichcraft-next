@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useEffect } from 'react';
+import { useFormStatus } from 'react-dom';
 import { updateBeverageAction, redirectToCollection } from './actions';
 import { Beverage } from '../../beverage-context';
 import { BeverageData } from '@/components/BeverageForm';
@@ -12,6 +13,17 @@ import { BeverageRatingForm } from '@/components/BeverageRatingForm';
 interface EditableBeverage extends Beverage {
   untappd_beer_id?: number;
   untappd_brewery_id?: number;
+}
+
+// Submit button component that uses useFormStatus
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? 'Saving...' : 'Save Changes'}
+    </Button>
+  );
 }
 
 // Main form component
@@ -76,9 +88,7 @@ export default function EditBeverageForm({ initialBeverage }: { initialBeverage:
           )}
 
           <div className="flex justify-end">
-            <Button type="submit">
-              {formState.status === 'submitting' ? 'Saving...' : 'Save Changes'}
-            </Button>
+            <SubmitButton />
           </div>
         </BeverageRatingForm>
       </div>

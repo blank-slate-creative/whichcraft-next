@@ -2,20 +2,29 @@
 
 import * as React from 'react';
 import { useEffect } from 'react';
+import { useFormStatus } from 'react-dom';
 import { saveBeverageAction, redirectToCollection } from './actions';
 import { BeverageData } from '@/components/BeverageForm';
 import { BeverageSearch } from '@/components/BeverageSearch';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { ChevronRight, Edit } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BeverageDisplay } from '@/components/BeverageDisplay';
+import { ChevronRight, Edit, Search } from 'lucide-react';
 import { BeverageRatingForm } from '@/components/BeverageRatingForm';
+
+// Submit button component that uses useFormStatus
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? 'Saving...' : 'Save Beer'}
+    </Button>
+  );
+}
 
 // Steps in the form flow
 enum FormStep {
   Search,
-  ReviewOrEdit,
   Preferences,
 }
 
@@ -39,14 +48,15 @@ export default function AddBeverageForm() {
 
   const handleSelectBeverage = (data: BeverageData) => {
     setBeverageData(data);
-    // Move to the review step after selection
-    setCurrentStep(FormStep.ReviewOrEdit);
+    // Move directly to the preferences step after selection
+    setCurrentStep(FormStep.Preferences);
   };
 
   // Proceed to manual entry mode
   const handleManualEntry = () => {
     setIsSearchMode(false);
-    setCurrentStep(FormStep.ReviewOrEdit);
+    // Stay on the same step but switch to manual entry mode
+    // The user will fill out the form and then click continue
   };
 
   // Handle beverage data changes
@@ -68,135 +78,101 @@ export default function AddBeverageForm() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-semibold">Search for Beer</h2>
-              <p className="text-muted-foreground">Search for a beer to add to your collection</p>
+              <h2 className="text-2xl font-semibold">Add Beer to Collection</h2>
+              <p className="text-muted-foreground">Search for a beer or add details manually</p>
             </div>
-            <div className="space-y-4">
-              <BeverageSearch onSelect={handleSelectBeverage} defaultSearchType="beer" />
-            </div>
-            <div className="flex justify-end">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleManualEntry}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <Edit className="h-4 w-4 mr-2" />
-                Add manually instead
-              </Button>
-            </div>
-          </div>
-        );
 
-      case FormStep.ReviewOrEdit:
-        return (
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-semibold">
-                {isSearchMode ? 'Review Selected Beer' : 'Enter Beer Details'}
-              </h2>
-              <p className="text-muted-foreground">
-                {isSearchMode
-                  ? 'Confirm the details of the selected beer or edit if needed'
-                  : 'Enter the details of the beer you want to add'}
-              </p>
-            </div>
-            <div className="space-y-4">
-              <Tabs defaultValue={isSearchMode ? 'review' : 'edit'}>
-                <TabsList className="mb-4">
-                  <TabsTrigger value="review">Review</TabsTrigger>
-                  <TabsTrigger value="edit">Edit</TabsTrigger>
-                </TabsList>
+            {isSearchMode ? (
+              <div className="space-y-4">
+                <BeverageSearch onSelect={handleSelectBeverage} defaultSearchType="beer" />
 
-                <TabsContent value="review" className="space-y-4">
-                  <BeverageDisplay
-                    beverage={{
-                      id: 'new',
-                      name: beverageData.name,
-                      producer: beverageData.producer || '',
-                      type: beverageData.type || 'Beer',
-                      style: beverageData.style || '',
-                      liked: beverageData.liked === null ? false : beverageData.liked,
-                      notes: beverageData.notes || '',
-                      created_at: new Date().toISOString(),
-                      abv: beverageData.abv ?? undefined,
-                      image_url: beverageData.image_url,
-                      untappd_beer_id: beverageData.untappd_beer_id,
-                      untappd_brewery_id: beverageData.untappd_brewery_id,
-                    }}
-                    variant="card"
-                    imageSize="md"
-                    showLiked={beverageData.liked !== null}
-                    linkToDetail={false}
-                    showAbv={true}
-                  />
-                </TabsContent>
-
-                <TabsContent value="edit">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="name">Name*</Label>
-                      <input
-                        id="name"
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        value={beverageData.name}
-                        onChange={e =>
-                          handleBeverageDataChange({ ...beverageData, name: e.target.value })
-                        }
-                        required
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="producer">Producer</Label>
-                      <input
-                        id="producer"
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        value={beverageData.producer || ''}
-                        onChange={e =>
-                          handleBeverageDataChange({ ...beverageData, producer: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="style">Style</Label>
-                      <input
-                        id="style"
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        value={beverageData.style || ''}
-                        onChange={e =>
-                          handleBeverageDataChange({ ...beverageData, style: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="abv">ABV (%)</Label>
-                      <input
-                        id="abv"
-                        type="number"
-                        step="0.1"
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        value={beverageData.abv === null ? '' : (beverageData.abv ?? '')}
-                        onChange={e => {
-                          const value = e.target.value;
-                          handleBeverageDataChange({
-                            ...beverageData,
-                            abv: value === '' ? null : parseFloat(value),
-                          });
-                        }}
-                      />
-                    </div>
+                <div className="flex justify-end">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleManualEntry}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Edit className="h-4 w-4 mr-2" />
+                    Add manually instead
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="name">Name*</Label>
+                    <input
+                      id="name"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      value={beverageData.name}
+                      onChange={e =>
+                        handleBeverageDataChange({ ...beverageData, name: e.target.value })
+                      }
+                      required
+                    />
                   </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-            <div className="flex justify-between">
-              <Button variant="outline" onClick={() => setCurrentStep(FormStep.Search)}>
-                Back
-              </Button>
-              <Button onClick={() => setCurrentStep(FormStep.Preferences)}>
-                Continue <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="producer">Producer</Label>
+                    <input
+                      id="producer"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      value={beverageData.producer || ''}
+                      onChange={e =>
+                        handleBeverageDataChange({ ...beverageData, producer: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="style">Style</Label>
+                    <input
+                      id="style"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      value={beverageData.style || ''}
+                      onChange={e =>
+                        handleBeverageDataChange({ ...beverageData, style: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="abv">ABV (%)</Label>
+                    <input
+                      id="abv"
+                      type="number"
+                      step="0.1"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      value={beverageData.abv === null ? '' : (beverageData.abv ?? '')}
+                      onChange={e => {
+                        const value = e.target.value;
+                        handleBeverageDataChange({
+                          ...beverageData,
+                          abv: value === '' ? null : parseFloat(value),
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-between">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsSearchMode(true)}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <Search className="h-4 w-4 mr-2" />
+                    Search instead
+                  </Button>
+                  <Button
+                    onClick={() => setCurrentStep(FormStep.Preferences)}
+                    disabled={!beverageData.name}
+                  >
+                    Continue <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         );
 
@@ -225,13 +201,11 @@ export default function AddBeverageForm() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setCurrentStep(FormStep.ReviewOrEdit)}
+                  onClick={() => setCurrentStep(FormStep.Search)}
                 >
                   Back
                 </Button>
-                <Button type="submit">
-                  {formState.status === 'submitting' ? 'Saving...' : 'Save Beer'}
-                </Button>
+                <SubmitButton />
               </div>
             </BeverageRatingForm>
           </form>

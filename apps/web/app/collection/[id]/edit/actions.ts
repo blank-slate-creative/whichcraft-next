@@ -43,7 +43,10 @@ export async function updateBeverageAction(
       image_url: formData.get('image_url'),
     });
 
-    // Return success state before redirecting
+    // Revalidate the collection path to update the cache
+    revalidatePath('/collection');
+
+    // Return success state instead of redirecting here
     return {
       status: 'success',
       message: 'Beverage updated successfully!',
@@ -57,7 +60,7 @@ export async function updateBeverageAction(
   }
 }
 
-// Separate action for handling redirect after successful save
+// Keep the redirectToCollection function for client-side use
 export async function redirectToCollection() {
   revalidatePath('/collection');
   redirect('/collection');
