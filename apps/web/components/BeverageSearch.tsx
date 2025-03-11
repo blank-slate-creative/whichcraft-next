@@ -20,14 +20,26 @@ interface Beer {
   brewery_id: number;
 }
 
-export function BeverageSearch({ onSelect }: { onSelect: (data: BeverageData) => void }) {
+export interface BeverageSearchProps {
+  onSelect: (data: BeverageData) => void;
+  defaultSearchType?: string;
+}
+
+export function BeverageSearch({ onSelect, defaultSearchType = 'beer' }: BeverageSearchProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchType, setSearchType] = useState('beer');
+  const [searchType, setSearchType] = useState(defaultSearchType);
   const [searchResults, setSearchResults] = useState<Beer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Update search type if defaultSearchType changes
+  useEffect(() => {
+    if (defaultSearchType) {
+      setSearchType(defaultSearchType);
+    }
+  }, [defaultSearchType]);
 
   const handleSearch = async () => {
     if (!searchTerm) {
@@ -66,6 +78,21 @@ export function BeverageSearch({ onSelect }: { onSelect: (data: BeverageData) =>
             abv: 0,
           },
         ]);
+      } else {
+        // For other beverage types
+        setSearchResults([
+          {
+            id: 0,
+            name: 'Search for other beverages coming soon',
+            type_name: 'Coming soon',
+            brewery_name: 'Search for other beverage types will be available in a future update',
+            brewery_id: 0,
+            rating: 0,
+            rating_count: 0,
+            image_url: '',
+            abv: 0,
+          },
+        ]);
       }
     } catch (error) {
       console.error('Error searching for beverages:', error);
@@ -79,7 +106,7 @@ export function BeverageSearch({ onSelect }: { onSelect: (data: BeverageData) =>
     onSelect({
       name: beer.name,
       producer: beer.brewery_name || 'Unknown Brewery',
-      type: 'Beer',
+      type: searchType === 'beer' ? 'Beer' : searchType === 'wine' ? 'Wine' : 'Other',
       style: beer.type_name,
       liked: null,
       abv: beer.abv || '',
@@ -115,7 +142,7 @@ export function BeverageSearch({ onSelect }: { onSelect: (data: BeverageData) =>
         <div className="relative">
           <Input
             ref={searchInputRef}
-            placeholder="Search for a beer or wine..."
+            placeholder={`Search for a ${searchType}...`}
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
             onKeyDown={e => {
@@ -228,6 +255,12 @@ export function BeverageSearch({ onSelect }: { onSelect: (data: BeverageData) =>
               <RadioGroupItem id="type-wine" value="wine" />
               <Label htmlFor="type-wine" className="font-normal">
                 Wine
+              </Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem id="type-other" value="other" />
+              <Label htmlFor="type-other" className="font-normal">
+                Other
               </Label>
             </div>
           </RadioGroup>
