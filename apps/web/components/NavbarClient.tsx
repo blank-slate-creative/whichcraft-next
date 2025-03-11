@@ -8,8 +8,13 @@ import { usePathname } from 'next/navigation';
 import { Beer, BarChart3, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default function NavbarClient() {
+interface NavbarClientProps {
+  initialEmail?: string;
+}
+
+export default function NavbarClient({ initialEmail = '' }: NavbarClientProps) {
   const [userName, setUserName] = useState('User');
+  const [email, setEmail] = useState(initialEmail);
   const supabase = createClient();
   const pathname = usePathname();
 
@@ -19,6 +24,7 @@ export default function NavbarClient() {
         data: { session },
       } = await supabase.auth.getSession();
       if (session?.user?.email) {
+        setEmail(session.user.email);
         setUserName(session.user.email.split('@')[0]);
       }
     };
@@ -48,17 +54,6 @@ export default function NavbarClient() {
 
   return (
     <div className="flex items-center gap-4">
-      <Button
-        className="bg-primary hover:bg-primary/90 transition-colors duration-200"
-        size="sm"
-        asChild
-      >
-        <Link href="/collection/add" prefetch={true}>
-          <Plus className="h-4 w-4 mr-1" />
-          Add Beverage
-        </Link>
-      </Button>
-
       <div className="hidden md:flex items-center gap-4">
         {navLinks.map(link => (
           <Link
@@ -76,8 +71,20 @@ export default function NavbarClient() {
           </Link>
         ))}
       </div>
+
+      <Button
+        className="bg-primary hover:bg-primary/90 transition-colors duration-200"
+        size="sm"
+        asChild
+      >
+        <Link href="/collection/add" prefetch={true}>
+          <Plus className="h-4 w-4 mr-1" />
+          Add Beverage
+        </Link>
+      </Button>
+
       <div className="hidden sm:block">
-        <UserMenu userName={userName} />
+        <UserMenu userName={userName} email={email} />
       </div>
     </div>
   );

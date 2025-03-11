@@ -10,6 +10,8 @@ export default async function Navbar() {
     data: { session },
   } = await supabase.auth.getSession();
 
+  const email = session?.user?.email || '';
+
   return (
     <nav className="bg-background border-b border-b-foreground/10 h-16 z-10">
       <div className="w-full max-w-5xl mx-auto flex justify-between items-center px-2 sm:px-3 md:px-4 h-full">
@@ -24,7 +26,7 @@ export default async function Navbar() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {session && <NavbarClient />}
+          {session && <NavbarClient initialEmail={email} />}
           <AuthButton />
         </div>
       </div>
