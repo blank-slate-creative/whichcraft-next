@@ -7,29 +7,46 @@ remember your favorites and avoid repeating mistakes.
 
 ## Features
 
-- **Track Your Tastings**: Log beers and wines you've tried
-- **Rate & Review**: Record your impressions and ratings
-- **Search & Filter**: Easily find beverages by name, type, or rating
-- **User Authentication**: Secure login via Supabase
-- **Responsive Design**: Works on desktop and mobile devices
-- **Modern UI Components**: Built with Shadcn UI and Radix UI
-- **Simplified Authentication Flow**: Streamlined login, registration, and
-  password reset
-- **Dynamic Route Protection**: Intelligent middleware for secure access control
-- **Intuitive Dashboard**: Redesigned with improved statistics and beverage
-  management
+- **Beverage Collection Management**: Easily add, edit, and delete beers and
+  wines you've tried
+- **Like/Dislike Rating System**: Simple thumbs up/thumbs down approach to
+  rating beverages
+- **Detailed Beverage Information**: Track producer, style, ABV, and year for
+  each beverage
+- **Personal Notes**: Add your own tasting notes and location information
+- **Advanced Filtering & Sorting**: Filter by beverage type, rating, and sort by
+  various criteria
+- **Beverage Search**: Quickly find beverages in your collection
+- **Visual Statistics**: View insights about your collection with charts and
+  statistics
+- **Responsive Design**: Optimized for both desktop and mobile devices
+- **Dark/Light Mode**: Choose your preferred theme
+- **Secure Authentication**: Powered by Supabase authentication
+- **User Profiles**: Manage your account information
 
 ## Tech Stack
 
-- **Frontend**: React with Next.js, TypeScript, and TailwindCSS
-- **UI Components**: Shadcn UI and Radix UI
-- **Icons**: Lucide React
-- **Typography**: Space Grotesk font
-- **Backend API**: Python with Flask and SQLAlchemy
-- **Database**: PostgreSQL managed by Supabase
-- **Authentication**: Supabase Auth
-- **Deployment**: Docker container on Fly.io
-- **Development**: Turbopack for faster development experience
+- **Frontend**:
+
+  - Next.js 14 with App Router
+  - TypeScript
+  - TailwindCSS for styling
+  - Shadcn UI components
+  - Lucide React icons
+  - Space Grotesk typography
+
+- **Backend**:
+
+  - Flask API with SQLAlchemy
+  - PostgreSQL database (via Supabase)
+  - JWT authentication
+  - Flask-Migrate for database migrations
+
+- **Infrastructure**:
+  - Supabase for authentication and database
+  - Fly.io for API deployment
+  - Vercel for frontend deployment
+  - Turborepo for monorepo management
 
 ## Getting Started
 
@@ -37,13 +54,11 @@ remember your favorites and avoid repeating mistakes.
 
 - Node.js (v18 or newer)
 - Python 3.9+
-- Docker
+- Docker (optional, for containerized deployment)
 - Supabase account
-- Fly.io account
+- Fly.io account (optional, for deployment)
 
 ### Local Development
-
-#### Frontend Setup
 
 1. Clone the repository:
 
@@ -58,7 +73,8 @@ remember your favorites and avoid repeating mistakes.
    npm install
    ```
 
-3. Create a `.env.local` file based on `.env.example`:
+3. Create a `.env` file based on `.env.example` for the frontend in the
+   `apps/web` directory:
 
    ```
    NEXT_PUBLIC_SUPABASE_URL=your-project-url
@@ -66,83 +82,60 @@ remember your favorites and avoid repeating mistakes.
    NEXT_PUBLIC_API_URL=http://localhost:5000
    ```
 
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-#### Backend Setup
-
-1. Navigate to the API directory:
-
-   ```bash
-   cd api
-   ```
-
-2. Create a virtual environment and activate it:
-
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. Install dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Create a `.env` file:
+   and for the backend in the `apps/api` directory:
 
    ```
    DATABASE_URL=your-supabase-postgres-connection-string
    JWT_SECRET=your-jwt-secret
    ```
 
-5. Run the Flask development server:
+4. Start the development servers:
    ```bash
-   flask run
+   npm run dev
    ```
 
-### Docker Deployment
+### Build and Deploy
 
-1. Build the Docker image:
+1. Build the application:
 
    ```bash
-   docker build -t whichcraft .
+   npm run build
    ```
 
-2. Test the Docker image locally:
+2. Deploy the frontend to Vercel:
 
    ```bash
-   docker run -p 8080:8080 whichcraft
+   cd apps/web
+   vercel
    ```
 
-3. Deploy to Fly.io:
+3. Deploy the API to Fly.io:
    ```bash
-   fly launch
-   fly deploy
+   cd apps/api
+   ./deploy-api.sh
    ```
 
 ## Database Schema
 
 The application uses the following main tables:
 
-- **Users**: User accounts and profiles
-- **Beverages**: Beer and wine entries with details
-- **Ratings**: User ratings and reviews for beverages
+- **Users**: User accounts and authentication information
+- **Producers**: Breweries and wineries that make beverages
+- **BeverageTypes**: Categories like Beer, Wine, etc.
+- **Beverages**: Detailed beverage information including name, style, ABV, etc.
+- **Entries**: User ratings and notes for beverages they've tried
 
 ## API Endpoints
 
 The backend provides the following main endpoints:
 
-- `GET /api/beverages`: List all beverages
-- `POST /api/beverages`: Create a new beverage
-- `GET /api/beverages/{id}`: Get a specific beverage
-- `PUT /api/beverages/{id}`: Update a beverage
-- `DELETE /api/beverages/{id}`: Delete a beverage
-- `POST /api/ratings`: Add a rating to a beverage
-- `GET /api/users/me/ratings`: Get all ratings by the current user
+- `GET /api/beverages`: List all beverages in user's collection
+- `POST /api/beverages`: Add a new beverage to collection
+- `GET /api/beverages/:id`: Get details for a specific beverage
+- `PUT /api/beverages/:id`: Update a beverage entry
+- `DELETE /api/beverages/:id`: Remove a beverage from collection
+- `GET /api/users/me`: Get current user information
+- `GET /api/search/beer`: Search for beers to add to collection
 
 ## Contributing
 
@@ -155,11 +148,13 @@ details.
 
 # Whichcraft Next Monorepo
 
-This is a monorepo for the Whichcraft Next project, built with [Turborepo](https://turbo.build/repo).
+This is a monorepo for the Whichcraft Next project, built with
+[Turborepo](https://turbo.build/repo).
 
 ## What's inside?
 
-This monorepo uses [npm](https://www.npmjs.com/) as a package manager. It includes the following packages/apps:
+This monorepo uses [npm](https://www.npmjs.com/) as a package manager. It
+includes the following packages/apps:
 
 ### Apps
 
@@ -205,8 +200,3 @@ The web app can be deployed to Vercel.
 #### API (Flask)
 
 The API can be deployed to Fly.io using the deploy script.
-
-```
-cd apps/api
-./restart.sh
-```
