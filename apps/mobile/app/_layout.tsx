@@ -2,21 +2,37 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useColorScheme, View } from "react-native";
 import "react-native-reanimated";
 import "../global.css";
 import { AuthProvider, useAuth } from "../context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 // Root layout must be exported as default
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
+  const systemColorScheme = useColorScheme();
+  const [theme, setTheme] = useState<string | null>(null);
+  const [loaded, setFontsLoaded] = useFonts({
     SpaceGrotesk: require("../assets/fonts/SpaceGrotesk[wght].ttf"),
   });
+
+  // Load theme preference
+  useEffect(() => {
+    const loadTheme = async () => {
+      try {
+        const savedTheme = await AsyncStorage.getItem("theme");
+        setTheme(savedTheme);
+      } catch (error) {
+        console.error("Failed to load theme preference", error);
+      }
+    };
+
+    loadTheme();
+  }, []);
 
   useEffect(() => {
     if (loaded) {
@@ -28,10 +44,16 @@ export default function RootLayout() {
     return null;
   }
 
+  // Determine which color scheme to use
+  let colorScheme = systemColorScheme;
+  if (theme === "light") {
+    colorScheme = "light";
+  } else if (theme === "dark") {
+    colorScheme = "dark";
+  }
+
   return (
-    <View
-      className={`${colorScheme === "dark" ? "dark" : ""} font-sans h-full`}
-    >
+    <View className={`${colorScheme === "dark" ? "dark" : ""} h-full`}>
       <AuthProvider>
         <RootLayoutNav />
       </AuthProvider>
@@ -72,9 +94,25 @@ function RootLayoutNav() {
   }
 
   return (
-    <Stack>
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "systemBackground",
+        },
+        headerTitleStyle: {
+          fontFamily: "SpaceGrotesk",
+          color: "systemForeground",
+        },
+      }}
+    >
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="profile" options={{ title: "Profile" }} />
+      <Stack.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+        }}
+      />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   );
 }

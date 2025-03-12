@@ -27,7 +27,7 @@ export default function HomeScreen() {
           </Text>
         </View>
 
-        <View className="space-y-4">
+        <View className="gap-4">
           <TouchableOpacity className="w-full h-14 bg-gray-100 dark:bg-gray-800 rounded-lg flex-row items-center px-4">
             <View className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/50 items-center justify-center mr-4">
               <Text className="text-amber-600 dark:text-amber-300 text-lg">

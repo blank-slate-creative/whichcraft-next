@@ -76,7 +76,7 @@ export default function SignUpScreen() {
           Create an Account
         </Text>
 
-        <View className="space-y-4">
+        <View className="gap-4">
           <View>
             <Text className="text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
               Email
