@@ -1,60 +1,82 @@
-import { Image, Platform } from "react-native";
-
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
+import { Link } from "expo-router";
+import React from "react";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { useAuth } from "../../context/AuthContext";
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          className="absolute bottom-0 left-0 h-[178px] w-[290px]"
-        />
-      }
-    >
-      <ThemedView className="flex-row items-center gap-2">
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
+  const { user } = useAuth();
 
-      <ThemedView className="gap-2 mb-2">
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit{" "}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{" "}
-          to see changes. Press{" "}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: "cmd + d",
-              android: "cmd + m",
-              web: "F12",
-            })}
-          </ThemedText>{" "}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView className="gap-2 mb-2">
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this
-          starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView className="gap-2 mb-2">
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{" "}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText>{" "}
-          to get a fresh <ThemedText type="defaultSemiBold">app</ThemedText>{" "}
-          directory. This will move the current{" "}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{" "}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <ScrollView className="flex-1 bg-white dark:bg-gray-900">
+      <View className="p-6">
+        <View className="items-center py-8">
+          <Text className="text-3xl font-bold text-gray-900 dark:text-white">
+            WhichCraft
+          </Text>
+          <Text className="text-base text-gray-600 dark:text-gray-400 mt-2 text-center">
+            Track your favorite beers and wines
+          </Text>
+        </View>
+
+        <View className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4 mb-6">
+          <Text className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            Welcome, {user?.email?.split("@")[0] || "User"}!
+          </Text>
+          <Text className="text-gray-600 dark:text-gray-400">
+            Start tracking your beverage collection and discover new favorites.
+          </Text>
+        </View>
+
+        <View className="gap-4">
+          <TouchableOpacity className="w-full h-14 bg-gray-100 dark:bg-gray-800 rounded-lg flex-row items-center px-4">
+            <View className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/50 items-center justify-center mr-4">
+              <Text className="text-amber-600 dark:text-amber-300 text-lg">
+                🍺
+              </Text>
+            </View>
+            <View>
+              <Text className="text-base font-medium text-gray-900 dark:text-white">
+                My Beers
+              </Text>
+              <Text className="text-sm text-gray-500 dark:text-gray-400">
+                View your beer collection
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity className="w-full h-14 bg-gray-100 dark:bg-gray-800 rounded-lg flex-row items-center px-4">
+            <View className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/50 items-center justify-center mr-4">
+              <Text className="text-red-600 dark:text-red-300 text-lg">🍷</Text>
+            </View>
+            <View>
+              <Text className="text-base font-medium text-gray-900 dark:text-white">
+                My Wines
+              </Text>
+              <Text className="text-sm text-gray-500 dark:text-gray-400">
+                View your wine collection
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          <Link href="/(tabs)/profile" asChild>
+            <TouchableOpacity className="w-full h-14 bg-gray-100 dark:bg-gray-800 rounded-lg flex-row items-center px-4">
+              <View className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 items-center justify-center mr-4">
+                <Text className="text-blue-600 dark:text-blue-300 text-lg">
+                  👤
+                </Text>
+              </View>
+              <View>
+                <Text className="text-base font-medium text-gray-900 dark:text-white">
+                  My Profile
+                </Text>
+                <Text className="text-sm text-gray-500 dark:text-gray-400">
+                  View and edit your profile
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </Link>
+        </View>
+      </View>
+    </ScrollView>
   );
 }

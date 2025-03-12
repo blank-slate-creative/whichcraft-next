@@ -3,13 +3,12 @@ import { TouchableOpacity, AppState } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from "expo-router";
 import { useColorScheme } from "nativewind";
 
 type ThemeType = "light" | "dark" | "system";
 
 export function ThemeSwitcher() {
-  const { colorScheme, setColorScheme } = useColorScheme();
+  const { setColorScheme } = useColorScheme();
   const [theme, setTheme] = useState<ThemeType>("system");
 
   // Load saved theme preference on mount
@@ -94,7 +93,7 @@ export function ThemeSwitcher() {
             : "text-gray-900 dark:text-white"
           }`}
         >
-          System ({colorScheme === "dark" ? "Dark" : "Light"})
+          System
         </ThemedText>
       </TouchableOpacity>
     </ThemedView>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
-import { useAuth } from "../context/AuthContext";
-import { ThemeSwitcher } from "../components/ThemeSwitcher";
-import ProfileActions from "../components/ProfileActions";
-import { ThemedText } from "../components/ThemedText";
-import { ThemedView } from "../components/ThemedView";
-import { getGravatarUrl } from "../utils/gravatar";
+import { useAuth } from "../../context/AuthContext";
+import { ThemeSwitcher } from "../../components/ThemeSwitcher";
+import ProfileActions from "../../components/ProfileActions";
+import { ThemedText } from "../../components/ThemedText";
+import { ThemedView } from "../../components/ThemedView";
+import { getGravatarUrl } from "../../utils/gravatar";
 import { Image } from "react-native";
 
 export default function ProfileScreen() {
@@ -23,7 +23,7 @@ export default function ProfileScreen() {
   return (
     <ScrollView className="flex-1 bg-background">
       <ThemedView className="container px-4 py-6">
-        <ThemedText type="title" className="mb-8 hidden md:flex">
+        <ThemedText type="title" className="mb-8 mt-12">
           Profile
         </ThemedText>
 
