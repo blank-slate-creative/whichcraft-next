@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
 import { saveBeverageAction, redirectToCollection } from './actions';
-import { BeverageData } from '@/components/BeverageForm';
+import { Beverage } from '@whichcraft/api-client';
 import { BeverageSearch } from '@/components/BeverageSearch';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -36,17 +36,22 @@ export default function AddBeverageForm() {
 
   const [currentStep, setCurrentStep] = React.useState<FormStep>(FormStep.Search);
   const [isSearchMode, setIsSearchMode] = React.useState<boolean>(true);
-  const [beverageData, setBeverageData] = React.useState<BeverageData>({
+  const [beverageData, setBeverageData] = React.useState<Beverage>({
     name: '',
     producer: '',
     type: 'Beer',
     style: '',
     notes: '',
-    liked: null,
+    liked: true,
     abv: null,
+    id: '',
+    image_url: null,
+    created_at: '',
+    untappd_beer_id: null,
+    untappd_brewery_id: null,
   });
 
-  const handleSelectBeverage = (data: BeverageData) => {
+  const handleSelectBeverage = (data: Beverage) => {
     setBeverageData(data);
     // Move directly to the preferences step after selection
     setCurrentStep(FormStep.Preferences);
@@ -60,8 +65,8 @@ export default function AddBeverageForm() {
   };
 
   // Handle beverage data changes
-  const handleBeverageDataChange = (data: BeverageData) => {
-    setBeverageData(data);
+  const handleBeverageDataChange = (data: Partial<Beverage>) => {
+    setBeverageData(prev => ({ ...prev, ...data }));
   };
 
   // Redirect to collection when form submission is successful

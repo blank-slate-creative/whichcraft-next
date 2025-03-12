@@ -29,15 +29,15 @@ export async function saveBeverageAction(
     // Create beverage using the server API utility
     await serverBeverageApi.create({
       name,
-      producer: formData.get('producer'),
+      producer: formData.get('producer') as string,
       type,
-      style: formData.get('style'),
-      notes: formData.get('notes'),
+      style: formData.get('style') as string,
+      notes: formData.get('notes') as string,
       liked: liked === 'true',
-      abv: formData.get('abv'),
-      untappd_beer_id: formData.get('untappd_beer_id'),
-      untappd_brewery_id: formData.get('untappd_brewery_id'),
-      image_url: formData.get('image_url'),
+      abv: parseFloat(formData.get('abv') as string),
+      untappd_beer_id: parseInt(formData.get('untappd_beer_id') as string),
+      untappd_brewery_id: parseInt(formData.get('untappd_brewery_id') as string),
+      image_url: formData.get('image_url') as string,
     });
 
     // Revalidate the collection path to update the cache

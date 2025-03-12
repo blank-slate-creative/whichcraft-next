@@ -9,21 +9,7 @@ import React, {
   Dispatch,
   SetStateAction,
 } from 'react';
-
-// Define the Beverage interface
-export interface Beverage {
-  id: number | string;
-  name: string;
-  type: string;
-  style: string;
-  producer: string;
-  liked: boolean;
-  notes: string;
-  created_at: string;
-  abv?: number | string;
-  image_url?: string;
-}
-
+import { Beverage } from '@whichcraft/api-client';
 interface BeverageContextType {
   beverages: Beverage[];
   setBeverages: Dispatch<SetStateAction<Beverage[]>>;

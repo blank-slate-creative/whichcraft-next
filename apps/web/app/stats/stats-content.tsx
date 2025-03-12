@@ -1,16 +1,5 @@
+import { Beverage } from '@whichcraft/api-client';
 import { Beer, Wine, BarChart3, ThumbsUp, ThumbsDown, PieChart } from 'lucide-react';
-
-// Define the Beverage interface
-interface Beverage {
-  id: number | string;
-  name: string;
-  type: string;
-  style: string;
-  producer: string;
-  liked: boolean;
-  notes: string;
-  created_at: string;
-}
 
 interface StatsContentProps {
   beverages: Beverage[];
@@ -37,7 +26,7 @@ export function StatsContent({ beverages, error }: StatsContentProps) {
   // Calculate most common styles
   const styleCount = beverages.reduce(
     (acc, beverage) => {
-      const style = beverage.style;
+      const style = beverage.style || 'Unknown';
       acc[style] = (acc[style] || 0) + 1;
       return acc;
     },

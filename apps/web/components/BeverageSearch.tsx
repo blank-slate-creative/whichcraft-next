@@ -4,29 +4,17 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
-import { BeverageData } from './BeverageForm';
-import { BeverageDisplay, Beverage as ExtendedBeverage } from './BeverageDisplay';
-
-interface Beer {
-  id: number;
-  name: string;
-  type_name: string;
-  rating: number;
-  rating_count: number;
-  image_url?: string;
-  abv: number;
-  brewery_name: string;
-  brewery_id: number;
-}
+import { BeverageDisplay } from './BeverageDisplay';
+import { BeerSearchResult, Beverage } from '@whichcraft/api-client';
 
 export interface BeverageSearchProps {
-  onSelect: (data: BeverageData) => void;
+  onSelect: (data: Beverage) => void;
   defaultSearchType?: string;
 }
 
 export function BeverageSearch({ onSelect }: BeverageSearchProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<Beer[]>([]);
+  const [searchResults, setSearchResults] = useState<BeerSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -59,17 +47,20 @@ export function BeverageSearch({ onSelect }: BeverageSearchProps) {
     }
   };
 
-  const handleBeerSelect = (beer: Beer) => {
+  const handleBeerSelect = (beer: BeerSearchResult) => {
     onSelect({
+      id: '',
       name: beer.name,
       producer: beer.brewery_name || 'Unknown Brewery',
       type: 'Beer',
       style: beer.type_name || '',
-      liked: null,
       abv: typeof beer.abv === 'number' ? beer.abv : null,
       untappd_beer_id: beer.id,
       untappd_brewery_id: beer.brewery_id,
-      image_url: beer.image_url,
+      image_url: beer.image_url || null,
+      liked: true,
+      created_at: new Date().toISOString(),
+      notes: '',
     });
     setIsOpen(false);
   };
@@ -155,22 +146,20 @@ export function BeverageSearch({ onSelect }: BeverageSearchProps) {
                     onClick={() => handleBeerSelect(result)}
                   >
                     <BeverageDisplay
-                      beverage={
-                        {
-                          id: result.id,
-                          name: result.name,
-                          producer: result.brewery_name || 'Unknown Brewery',
-                          type: 'Beer',
-                          style: result.type_name || '',
-                          liked: false,
-                          notes: '',
-                          created_at: new Date().toISOString(),
-                          abv: typeof result.abv === 'number' ? result.abv : undefined,
-                          image_url: result.image_url,
-                          untappd_beer_id: result.id,
-                          untappd_brewery_id: result.brewery_id,
-                        } as ExtendedBeverage
-                      }
+                      beverage={{
+                        id: result.id.toString(),
+                        name: result.name,
+                        producer: result.brewery_name || 'Unknown Brewery',
+                        type: 'Beer',
+                        style: result.type_name || '',
+                        liked: true,
+                        notes: '',
+                        created_at: new Date().toISOString(),
+                        abv: typeof result.abv === 'number' ? result.abv : null,
+                        image_url: result.image_url || null,
+                        untappd_beer_id: result.id,
+                        untappd_brewery_id: result.brewery_id,
+                      }}
                       variant="compact"
                       imageSize="sm"
                       showLiked={false}

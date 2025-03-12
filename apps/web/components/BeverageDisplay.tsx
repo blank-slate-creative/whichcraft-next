@@ -5,15 +5,7 @@ import { Beer, Wine, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-
-// Using the Beverage interface from the context
-import { Beverage as BaseBeverage } from '../app/collection/beverage-context';
-
-// Extend the Beverage interface to include untappd IDs
-export interface Beverage extends BaseBeverage {
-  untappd_beer_id?: number;
-  untappd_brewery_id?: number;
-}
+import { Beverage } from '@whichcraft/api-client';
 
 export type BeverageDisplayVariant = 'list' | 'card' | 'detail' | 'compact';
 
@@ -202,7 +194,7 @@ export function BeverageDisplay({
   const content = (
     <div className={cn('flex items-start w-full', className)}>
       <BeverageImage
-        imageUrl={beverage.image_url}
+        imageUrl={beverage.image_url || undefined}
         name={beverage.name}
         producer={beverage.producer}
         isBeer={isBeer}

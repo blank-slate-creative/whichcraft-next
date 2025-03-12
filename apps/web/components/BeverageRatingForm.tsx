@@ -5,11 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { ThumbsUp, ThumbsDown } from 'lucide-react';
 import { BeverageDisplay } from '@/components/BeverageDisplay';
-import { BeverageData } from './BeverageForm';
+import { Beverage } from '@whichcraft/api-client';
 
 interface BeverageRatingFormProps {
-  beverageData: BeverageData;
-  onBeverageDataChange: (data: Partial<BeverageData>) => void;
+  beverageData: Beverage;
+  onBeverageDataChange: (data: Partial<Beverage>) => void;
   showPreview?: boolean;
   children?: React.ReactNode;
 }
@@ -33,10 +33,10 @@ export function BeverageRatingForm({
             liked: beverageData.liked === null ? false : beverageData.liked,
             notes: beverageData.notes || '',
             created_at: new Date().toISOString(),
-            abv: beverageData.abv ?? undefined,
-            image_url: beverageData.image_url,
-            untappd_beer_id: beverageData.untappd_beer_id,
-            untappd_brewery_id: beverageData.untappd_brewery_id,
+            abv: beverageData.abv ?? null,
+            image_url: beverageData.image_url ?? null,
+            untappd_beer_id: beverageData.untappd_beer_id ?? null,
+            untappd_brewery_id: beverageData.untappd_brewery_id ?? null,
           }}
           variant="card"
           imageSize="md"

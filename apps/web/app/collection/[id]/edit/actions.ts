@@ -34,13 +34,13 @@ export async function updateBeverageAction(
     // Update beverage using the server API utility
     await serverBeverageApi.update(id, {
       name,
-      producer: formData.get('producer'),
+      producer: formData.get('producer') as string,
       type,
-      style: formData.get('style'),
-      notes: formData.get('notes'),
+      style: formData.get('style') as string,
+      notes: formData.get('notes') as string,
       liked: liked === 'true',
       abv,
-      image_url: formData.get('image_url'),
+      image_url: formData.get('image_url') as string,
     });
 
     // Revalidate the collection path to update the cache

@@ -4,16 +4,9 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
 import { updateBeverageAction, redirectToCollection } from './actions';
-import { Beverage } from '../../beverage-context';
-import { BeverageData } from '@/components/BeverageForm';
+import { Beverage } from '@whichcraft/api-client';
 import { Button } from '@/components/ui/button';
 import { BeverageRatingForm } from '@/components/BeverageRatingForm';
-
-// Extend the Beverage type with optional Untappd IDs
-interface EditableBeverage extends Beverage {
-  untappd_beer_id?: number;
-  untappd_brewery_id?: number;
-}
 
 // Submit button component that uses useFormStatus
 function SubmitButton() {
@@ -40,7 +33,9 @@ export default function EditBeverageForm({ initialBeverage }: { initialBeverage:
     status: 'idle',
   });
 
-  const [beverageData, setBeverageData] = React.useState<BeverageData>({
+  const [beverageData, setBeverageData] = React.useState<Beverage>({
+    id: initialBeverage.id,
+    created_at: initialBeverage.created_at,
     name: initialBeverage.name || '',
     producer: initialBeverage.producer || '',
     type: initialBeverage.type || 'Beer',
@@ -52,12 +47,12 @@ export default function EditBeverageForm({ initialBeverage }: { initialBeverage:
         ? parseFloat(initialBeverage.abv)
         : initialBeverage.abv,
     image_url: initialBeverage.image_url || '',
-    untappd_beer_id: (initialBeverage as EditableBeverage).untappd_beer_id,
-    untappd_brewery_id: (initialBeverage as EditableBeverage).untappd_brewery_id,
+    untappd_beer_id: initialBeverage.untappd_beer_id || null,
+    untappd_brewery_id: initialBeverage.untappd_brewery_id || null,
   });
 
   // Handle beverage data changes
-  const handleBeverageDataChange = (data: Partial<BeverageData>) => {
+  const handleBeverageDataChange = (data: Partial<Beverage>) => {
     setBeverageData(prev => ({ ...prev, ...data }));
   };
 

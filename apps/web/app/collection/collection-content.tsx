@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Plus, Search, ThumbsUp, ThumbsDown, SlidersHorizontal } from 'lucide-react';
-import { useBeverages, Beverage } from './beverage-context';
+import { useBeverages } from './beverage-context';
 import { useState, useEffect, useCallback } from 'react';
 import { fetchBeveragesAction } from './actions';
 import { useTransition } from 'react';
@@ -27,7 +27,7 @@ import {
 } from '@/components/ui/dialog';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { BeverageDisplay } from '@/components/BeverageDisplay';
-
+import { Beverage } from '@whichcraft/api-client';
 // Define sort options
 interface SortOption {
   label: string;
@@ -108,9 +108,9 @@ export function CollectionContent({ error }: CollectionContentProps) {
         beverages.filter(
           beverage =>
             beverage.name.toLowerCase().includes(query) ||
-            beverage.producer.toLowerCase().includes(query) ||
-            beverage.style.toLowerCase().includes(query) ||
-            beverage.notes.toLowerCase().includes(query)
+            beverage.producer?.toLowerCase().includes(query) ||
+            beverage.style?.toLowerCase().includes(query) ||
+            beverage.notes?.toLowerCase().includes(query)
         )
       );
     }

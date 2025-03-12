@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Edit } from 'lucide-react';
 import { serverBeverageApi } from '@/utils/server-api';
-import { Beverage } from '../beverage-context';
+import { Beverage } from '@whichcraft/api-client';
 import { DeleteButton } from './delete-button';
 import { BeverageDisplay } from '@/components/BeverageDisplay';
 

@@ -1,18 +1,7 @@
 import { requireAuth } from '@/utils/auth';
 import { serverBeverageApi } from '@/utils/server-api';
 import { StatsContent } from './stats-content';
-
-// Define the Beverage interface
-interface Beverage {
-  id: number | string;
-  name: string;
-  type: string;
-  style: string;
-  producer: string;
-  liked: boolean;
-  notes: string;
-  created_at: string;
-}
+import { Beverage } from '@whichcraft/api-client';
 
 export default async function StatsPage() {
   // Ensure user is authenticated
