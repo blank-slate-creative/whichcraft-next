@@ -4,7 +4,6 @@ import { HelloWave } from "@/components/HelloWave";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { ExampleComponent } from "@/components/ExampleComponent";
 
 export default function HomeScreen() {
   return (
@@ -20,12 +19,6 @@ export default function HomeScreen() {
       <ThemedView className="flex-row items-center gap-2">
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
-      </ThemedView>
-
-      {/* NativeWind Example */}
-      <ThemedView className="gap-2 mb-2">
-        <ThemedText type="subtitle">NativeWind Example</ThemedText>
-        <ExampleComponent />
       </ThemedView>
 
       <ThemedView className="gap-2 mb-2">
