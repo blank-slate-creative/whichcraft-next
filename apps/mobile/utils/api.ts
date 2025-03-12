@@ -12,7 +12,7 @@ export async function getMobileAuthToken() {
 /**
  * Mobile API functions for beverages
  */
-export const mobileBeverageApi = createBeverageApi(getMobileAuthToken);
+export const mobileBeverageApi = createBeverageApi(getMobileAuthToken, process.env.EXPO_PUBLIC_API_URL);
 
 export default {
   mobileBeverageApi,

@@ -1,7 +1,42 @@
-# WhichCraft Mobile App 🍺🍷
+# Mobile App
 
-This is the mobile companion app for WhichCraft, built with
-[Expo](https://expo.dev) and React Native.
+This is the mobile app for the Whichcraft project.
+
+## React Resolution in Monorepo
+
+This project is configured to use the local version of React (18.3.1) instead of
+the monorepo root version (19.0.0). This is achieved through several
+configuration files:
+
+1. **metro.config.js**: Configured to resolve React from the local node_modules
+   directory.
+2. **tsconfig.json**: Updated with paths to resolve React from local
+   node_modules.
+
+## Scripts
+
+- `npm start`: Start the Expo development server.
+- `npm run reset-modules`: Reset node_modules and Metro cache to ensure local
+  React resolution.
+- `npm run reset-project`: Reset the project to a blank state.
+- `npm run android`: Start the app on an Android device/emulator.
+- `npm run ios`: Start the app on an iOS device/simulator.
+- `npm run web`: Start the app in a web browser.
+
+## Troubleshooting
+
+If you encounter issues with React version conflicts:
+
+1. Run `npm run reset-modules` to clear node_modules and Metro cache.
+2. Restart the development server with `npm start`.
+
+## Development
+
+This project uses:
+
+- Expo for React Native development
+- NativeWind for styling (Tailwind CSS for React Native)
+- TypeScript for type safety
 
 ## About WhichCraft
 

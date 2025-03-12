@@ -23,7 +23,7 @@ export default function ProfileScreen() {
   return (
     <ScrollView className="flex-1 bg-background">
       <ThemedView className="container px-4 py-6">
-        <ThemedText type="title" className="mb-8 mt-12">
+        <ThemedText type="title" className="mb-8 mt-16">
           Profile
         </ThemedText>
 

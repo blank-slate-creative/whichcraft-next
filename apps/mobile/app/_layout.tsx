@@ -1,24 +1,17 @@
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
+import { Slot, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { useColorScheme, View } from "react-native";
+import { View } from "react-native";
 import "react-native-reanimated";
 import "../global.css";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import { useColorScheme } from "nativewind";
 
 // Root layout must be exported as default
 export default function RootLayout() {
-  const systemColorScheme = useColorScheme();
+  const {colorScheme: systemColorScheme} = useColorScheme();
   const [theme, setTheme] = useState<string | null>(null);
-  const [loaded, setFontsLoaded] = useFonts({
-    SpaceGrotesk: require("../assets/fonts/SpaceGrotesk[wght].ttf"),
-  });
 
   // Load theme preference
   useEffect(() => {
@@ -32,17 +25,7 @@ export default function RootLayout() {
     };
 
     loadTheme();
-  }, []);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
+  });
 
   // Determine which color scheme to use
   let colorScheme = systemColorScheme;
@@ -94,18 +77,6 @@ function RootLayoutNav() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "systemBackground",
-        },
-        headerTitleStyle: {
-          fontFamily: "SpaceGrotesk",
-          color: "systemForeground",
-        },
-      }}
-    >
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-    </Stack>
+    <Slot />
   );
 }

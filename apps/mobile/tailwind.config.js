@@ -19,9 +19,6 @@ module.exports = {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ['SpaceGrotesk'],
-      },
       colors: {
         border: 'rgb(var(--border) / <alpha-value>)',
         input: 'rgb(var(--input) / <alpha-value>)',
