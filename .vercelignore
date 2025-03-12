@@ -1,4 +1,5 @@
-api/
+apps/api/
+apps/mobile/
 .git/
 .github/
 fly.toml
