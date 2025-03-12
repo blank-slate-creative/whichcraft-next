@@ -8,11 +8,9 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { useColorScheme, View } from "react-native";
 import "react-native-reanimated";
 import "../global.css";
-
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { View } from "react-native";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
