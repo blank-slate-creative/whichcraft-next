@@ -5,6 +5,7 @@ import { ThemedView } from "./ThemedView";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColorScheme } from "nativewind";
 import * as Haptics from "expo-haptics";
+import { Platform } from "react-native";
 
 type ThemeType = "light" | "dark" | "system";
 
@@ -20,36 +21,24 @@ const themeOptions: ThemeOption[] = [
 ];
 
 export function ThemeSwitcher() {
-  const { setColorScheme } = useColorScheme();
-  const [theme, setTheme] = useState<ThemeType>("system");
-
-  // Load saved theme preference on mount
-  useEffect(() => {
-    const loadTheme = async () => {
-      try {
-        const savedTheme = await AsyncStorage.getItem("theme");
-        if (savedTheme) {
-          setTheme(savedTheme as ThemeType);
-        }
-      } catch (error) {
-        console.error("Failed to load theme preference", error);
-      }
-    };
-
-    loadTheme();
-  }, []);
+  const { setColorScheme, colorScheme } = useColorScheme();
+  const [theme, setTheme] = useState<ThemeType>(colorScheme ?? "system");
 
   const handleThemeChange = async (newTheme: ThemeType) => {
     try {
       // Add haptic feedback when changing theme
-      if (process.env.EXPO_OS === "ios") {
+      if (Platform.OS === "ios") {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       }
 
-      // Save the new theme preference
-      await AsyncStorage.setItem("theme", newTheme);
+      // Update state first to avoid flash of previous theme
       setTheme(newTheme);
+
+      // Apply the theme change
       setColorScheme(newTheme);
+
+      // Save the theme preference after applying it
+      await AsyncStorage.setItem("theme", newTheme);
     } catch (error) {
       console.error("Failed to save theme preference", error);
     }

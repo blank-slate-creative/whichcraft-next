@@ -7,17 +7,24 @@ import "../global.css";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColorScheme } from "nativewind";
+import { BeverageProvider } from "@whichcraft/beverage-context";
 
 // Root layout must be exported as default
 export default function RootLayout() {
   const { colorScheme: systemColorScheme } = useColorScheme();
-  const [theme, setTheme] = useState<string | null>(null);
+  const [theme, setTheme] = useState<string | null>(
+    systemColorScheme ?? "system"
+  );
 
   // Load theme preference
   useEffect(() => {
     const loadTheme = async () => {
       try {
-        const savedTheme = await AsyncStorage.getItem("theme");
+        let savedTheme = await AsyncStorage.getItem("theme");
+        if (!savedTheme) {
+          savedTheme = systemColorScheme ?? "system";
+          await AsyncStorage.setItem("theme", savedTheme);
+        }
         setTheme(savedTheme);
       } catch (error) {
         console.error("Failed to load theme preference", error);
@@ -38,7 +45,9 @@ export default function RootLayout() {
   return (
     <View className={`${colorScheme === "dark" ? "dark" : ""} h-full`}>
       <AuthProvider>
-        <RootLayoutNav />
+        <BeverageProvider>
+          <RootLayoutNav />
+        </BeverageProvider>
       </AuthProvider>
       <StatusBar style="auto" />
     </View>
@@ -86,7 +95,6 @@ function RootLayoutNav() {
       }}
     >
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="beverage" />
     </Stack>
   );
 }
