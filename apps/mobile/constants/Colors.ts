@@ -1,26 +1,56 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Below are the colors that are used in the app based on the tailwind theme in global.css.
+ * This file provides hex color values derived from the RGB values in the tailwind theme.
+ * The app uses NativeWind for styling as recommended.
  */
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+// Light theme colors from tailwind theme
+const lightColors = {
+  background: "#FFFFFF", // --background: 255, 255, 255
+  foreground: "#0A0A0A", // --foreground: 10, 10, 10
+  primary: "#0A0A0A", // --primary: 10, 10, 10
+  primaryForeground: "#FAFAFA", // --primary-foreground: 250, 250, 250
+  secondary: "#F5F5F5", // --secondary: 245, 245, 245
+  secondaryForeground: "#0A0A0A", // --secondary-foreground: 10, 10, 10
+  muted: "#F5F5F5", // --muted: 245, 245, 245
+  mutedForeground: "#737373", // --muted-foreground: 115, 115, 115
+  accent: "#F5F5F5", // --accent: 245, 245, 245
+  accentForeground: "#0A0A0A", // --accent-foreground: 10, 10, 10
+  destructive: "#EF4444", // --destructive: 239, 68, 68
+  border: "#E6E6E6", // --border: 230, 230, 230
+};
+
+// Dark theme colors from tailwind theme
+const darkColors = {
+  background: "#0A0A0A", // --background: 10, 10, 10
+  foreground: "#FAFAFA", // --foreground: 250, 250, 250
+  primary: "#FAFAFA", // --primary: 250, 250, 250
+  primaryForeground: "#0A0A0A", // --primary-foreground: 10, 10, 10
+  secondary: "#262626", // --secondary: 38, 38, 38
+  secondaryForeground: "#FAFAFA", // --secondary-foreground: 250, 250, 250
+  muted: "#262626", // --muted: 38, 38, 38
+  mutedForeground: "#A3A3A3", // --muted-foreground: 163, 163, 163
+  accent: "#262626", // --accent: 38, 38, 38
+  accentForeground: "#FAFAFA", // --accent-foreground: 250, 250, 250
+  destructive: "#7F1D1D", // --destructive: 127, 29, 29
+  border: "#262626", // --border: 38, 38, 38
+};
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: lightColors.foreground,
+    background: lightColors.background,
+    tint: lightColors.primary,
+    icon: lightColors.mutedForeground,
+    tabIconDefault: lightColors.mutedForeground,
+    tabIconSelected: lightColors.primary,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: darkColors.foreground,
+    background: darkColors.background,
+    tint: darkColors.primary,
+    icon: darkColors.mutedForeground,
+    tabIconDefault: darkColors.mutedForeground,
+    tabIconSelected: darkColors.primary,
   },
 };

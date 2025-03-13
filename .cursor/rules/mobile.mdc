@@ -6,3 +6,4 @@ alwaysApply: false
 - Use NativeWind for styling
 - Use Expo
 - Keep code clean, DRY, and well organized
+- Use Lucide icons for React Native

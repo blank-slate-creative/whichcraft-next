@@ -18,12 +18,10 @@ export default function ProfileActions() {
 
   return (
     <TouchableOpacity
-      className="h-10 bg-destructive rounded-lg items-center justify-center px-4"
+      className="h-10 border-primary border rounded-lg items-center justify-center px-4"
       onPress={handleSignOut}
     >
-      <ThemedText className="text-destructive-foreground font-medium">
-        Sign Out
-      </ThemedText>
+      <ThemedText className="text-primary font-medium">Sign Out</ThemedText>
     </TouchableOpacity>
   );
 }

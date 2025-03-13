@@ -42,17 +42,15 @@ export function ThemeSwitcher() {
     <ThemedView className="gap-2">
       <TouchableOpacity
         className={`w-full h-12 rounded-lg items-center justify-center ${
-          theme === "light" ?
-            "bg-primary dark:bg-primary"
-          : "bg-gray-100 dark:bg-gray-800"
+          theme === "light" ? "bg-primary" : "bg-secondary"
         }`}
         onPress={() => handleThemeChange("light")}
       >
         <ThemedText
           className={`font-medium ${
             theme === "light" ?
-              "text-primary-foreground dark:text-primary-foreground"
-            : "text-gray-900 dark:text-white"
+              "text-primary-foreground"
+            : "text-secondary-foreground"
           }`}
         >
           Light
@@ -61,17 +59,15 @@ export function ThemeSwitcher() {
 
       <TouchableOpacity
         className={`w-full h-12 rounded-lg items-center justify-center ${
-          theme === "dark" ?
-            "bg-primary dark:bg-primary"
-          : "bg-gray-100 dark:bg-gray-800"
+          theme === "dark" ? "bg-primary" : "bg-secondary"
         }`}
         onPress={() => handleThemeChange("dark")}
       >
         <ThemedText
           className={`font-medium ${
             theme === "dark" ?
-              "text-primary-foreground dark:text-primary-foreground"
-            : "text-gray-900 dark:text-white"
+              "text-primary-foreground"
+            : "text-secondary-foreground"
           }`}
         >
           Dark
@@ -80,17 +76,15 @@ export function ThemeSwitcher() {
 
       <TouchableOpacity
         className={`w-full h-12 rounded-lg items-center justify-center ${
-          theme === "system" ?
-            "bg-primary dark:bg-primary"
-          : "bg-gray-100 dark:bg-gray-800"
+          theme === "system" ? "bg-primary" : "bg-secondary"
         }`}
         onPress={() => handleThemeChange("system")}
       >
         <ThemedText
           className={`font-medium ${
             theme === "system" ?
-              "text-primary-foreground dark:text-primary-foreground"
-            : "text-gray-900 dark:text-white"
+              "text-primary-foreground"
+            : "text-secondary-foreground"
           }`}
         >
           System
