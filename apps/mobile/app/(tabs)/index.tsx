@@ -8,7 +8,6 @@ import {
   TextInput,
   ActivityIndicator,
   RefreshControl,
-  Image,
   StatusBar,
 } from "react-native";
 import { useAuth } from "../../context/AuthContext";
@@ -34,6 +33,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Badge } from "../../components/Badge";
+import BeverageItem from "../../components/BeverageItem";
 
 // Define sort options
 interface SortOption {
@@ -66,64 +66,6 @@ const sortOptions: SortOption[] = [
 const beverageApi = new BeverageApiClient({
   apiUrl: process.env.EXPO_PUBLIC_API_URL || "https://api.whichcraft.app",
 });
-
-// Beverage Item Component
-const BeverageItem = ({
-  beverage,
-  onPress,
-}: {
-  beverage: Beverage;
-  onPress: () => void;
-}) => {
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
-
-  // Theme colors
-  const primaryColor = isDark ? "rgb(250, 250, 250)" : "rgb(10, 10, 10)";
-  const mutedForegroundColor =
-    isDark ? "rgb(163, 163, 163)" : "rgb(115, 115, 115)";
-  const destructiveColor = isDark ? "rgb(239, 68, 68)" : "rgb(239, 68, 68)";
-
-  return (
-    <TouchableOpacity
-      className="py-3 px-4 flex-row items-center gap-3 border-b border-border"
-      onPress={onPress}
-    >
-      <View className="h-12 w-12 rounded-md bg-secondary items-center justify-center">
-        {beverage.image_url ?
-          <Image
-            source={{ uri: beverage.image_url }}
-            className="h-12 w-12 rounded-md"
-          />
-        : <Text className="text-lg">
-            {beverage.type === "Beer" ? "🍺" : "🍷"}
-          </Text>
-        }
-      </View>
-      <View className="flex-1">
-        <Text
-          className="text-base font-medium text-foreground"
-          numberOfLines={1}
-        >
-          {beverage.name}
-        </Text>
-        <Text className="text-sm text-muted-foreground" numberOfLines={1}>
-          {beverage.producer}
-        </Text>
-        <Text className="text-xs text-muted-foreground">
-          {beverage.style || beverage.type}
-        </Text>
-      </View>
-      <View className="h-8 w-8 rounded-full items-center justify-center">
-        {beverage.liked ?
-          <ThumbsUp size={18} color={primaryColor} />
-        : beverage.liked === false ?
-          <ThumbsDown size={18} color={destructiveColor} />
-        : <MoreHorizontal size={18} color={mutedForegroundColor} />}
-      </View>
-    </TouchableOpacity>
-  );
-};
 
 // Filter Sheet Component
 const FilterSheet = ({
