@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity, AppState } from "react-native";
+import { TouchableOpacity, View, Text } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColorScheme } from "nativewind";
+import * as Haptics from "expo-haptics";
 
 type ThemeType = "light" | "dark" | "system";
+
+interface ThemeOption {
+  value: ThemeType;
+  label: string;
+}
+
+const themeOptions: ThemeOption[] = [
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+  { value: "system", label: "System" },
+];
 
 export function ThemeSwitcher() {
   const { setColorScheme } = useColorScheme();
@@ -29,6 +41,11 @@ export function ThemeSwitcher() {
 
   const handleThemeChange = async (newTheme: ThemeType) => {
     try {
+      // Add haptic feedback when changing theme
+      if (process.env.EXPO_OS === "ios") {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      }
+
       // Save the new theme preference
       await AsyncStorage.setItem("theme", newTheme);
       setTheme(newTheme);
@@ -39,57 +56,28 @@ export function ThemeSwitcher() {
   };
 
   return (
-    <ThemedView className="gap-2">
-      <TouchableOpacity
-        className={`w-full h-12 rounded-lg items-center justify-center ${
-          theme === "light" ? "bg-primary" : "bg-secondary"
-        }`}
-        onPress={() => handleThemeChange("light")}
-      >
-        <ThemedText
-          className={`font-medium ${
-            theme === "light" ?
-              "text-primary-foreground"
-            : "text-secondary-foreground"
-          }`}
-        >
-          Light
-        </ThemedText>
-      </TouchableOpacity>
+    <View>
+      <Text className="text-sm font-medium px-1 mb-1">Theme</Text>
 
-      <TouchableOpacity
-        className={`w-full h-12 rounded-lg items-center justify-center ${
-          theme === "dark" ? "bg-primary" : "bg-secondary"
-        }`}
-        onPress={() => handleThemeChange("dark")}
-      >
-        <ThemedText
-          className={`font-medium ${
-            theme === "dark" ?
-              "text-primary-foreground"
-            : "text-secondary-foreground"
-          }`}
-        >
-          Dark
-        </ThemedText>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        className={`w-full h-12 rounded-lg items-center justify-center ${
-          theme === "system" ? "bg-primary" : "bg-secondary"
-        }`}
-        onPress={() => handleThemeChange("system")}
-      >
-        <ThemedText
-          className={`font-medium ${
-            theme === "system" ?
-              "text-primary-foreground"
-            : "text-secondary-foreground"
-          }`}
-        >
-          System
-        </ThemedText>
-      </TouchableOpacity>
-    </ThemedView>
+      <ThemedView className="rounded-lg overflow-hidden border border-border">
+        {themeOptions.map((option, index) => (
+          <React.Fragment key={option.value}>
+            {index > 0 && <View className="h-[1px] bg-border" />}
+            <TouchableOpacity
+              className={`py-3 px-4 flex-row justify-between items-center ${
+                theme === option.value ? "bg-secondary/50" : ""
+              }`}
+              onPress={() => handleThemeChange(option.value)}
+              activeOpacity={0.7}
+            >
+              <ThemedText className="font-medium">{option.label}</ThemedText>
+              {theme === option.value && (
+                <View className="h-3 w-3 rounded-full bg-primary" />
+              )}
+            </TouchableOpacity>
+          </React.Fragment>
+        ))}
+      </ThemedView>
+    </View>
   );
 }

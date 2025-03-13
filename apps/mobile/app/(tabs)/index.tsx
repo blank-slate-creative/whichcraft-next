@@ -492,13 +492,20 @@ export default function HomeScreen() {
           headerBorderStyle,
         ]}
       >
-        <View className="flex-1 justify-center px-4">
+        <View className="flex-1 flex-row justify-between items-center px-4">
           <Animated.Text
             style={[headerAnimatedStyle]}
             className="text-foreground font-bold text-lg"
           >
             Collection
           </Animated.Text>
+          <TouchableOpacity
+            onPress={() => router.push("/")}
+            className="flex-row items-center justify-center gap-1"
+          >
+            <Plus size={18} color={primaryColor} />
+            <Text className="text-foreground font-semibold text-md">Add</Text>
+          </TouchableOpacity>
         </View>
       </Animated.View>
 
@@ -547,11 +554,11 @@ export default function HomeScreen() {
             {/* Filter Button and Active Filters */}
             <View className="px-4 mb-2 flex-row items-center ">
               <TouchableOpacity
-                className="bg-secondary py-2 px-4 rounded-lg flex-row items-center relative"
+                className="bg-secondary py-2 px-3 rounded-full flex-row items-center relative"
                 onPress={() => setIsFilterSheetVisible(true)}
               >
                 <SlidersHorizontal
-                  size={16}
+                  size={12}
                   color={mutedForegroundColor}
                   style={{ marginRight: 6 }}
                 />
@@ -570,15 +577,15 @@ export default function HomeScreen() {
                   className="flex-1 ml-3"
                 >
                   <View className="flex-row items-center">
-                    <View className="bg-secondary rounded-full py-2 px-4 flex-row items-center">
+                    <View className="bg-secondary rounded-full py-2 px-3 flex-row items-center">
                       {currentLiked ?
                         <ThumbsUp
-                          size={14}
+                          size={12}
                           color={primaryColor}
                           style={{ marginRight: 6 }}
                         />
                       : <ThumbsDown
-                          size={14}
+                          size={12}
                           color={destructiveColor}
                           style={{ marginRight: 6 }}
                         />
@@ -679,14 +686,6 @@ export default function HomeScreen() {
             </View>
         }
       />
-
-      {/* Add Button */}
-      <TouchableOpacity
-        className="absolute bottom-32 right-6 bg-primary w-14 h-14 rounded-full items-center justify-center shadow-lg"
-        onPress={() => router.push("/")}
-      >
-        <Plus size={24} color={primaryForegroundColor} />
-      </TouchableOpacity>
 
       {/* Filter Sheet */}
       <FilterSheet
