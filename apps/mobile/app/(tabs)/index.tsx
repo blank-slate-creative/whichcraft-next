@@ -33,6 +33,7 @@ import Animated, {
   Extrapolation,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Badge } from "../../components/Badge";
 
 // Define sort options
 interface SortOption {
@@ -175,54 +176,46 @@ const FilterSheet = ({
             Rating
           </Text>
           <View className="flex-row flex-wrap gap-2">
-            <TouchableOpacity
-              className={`py-1 px-3 rounded-full ${!currentLiked ? "bg-primary" : "bg-secondary"}`}
+            <Badge
+              selected={!currentLiked}
               onPress={() => onApplyFilter({ liked: undefined })}
             >
-              <Text
-                className={`text-sm ${!currentLiked ? "text-primary-foreground" : "text-foreground"}`}
-              >
-                All Ratings
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className={`py-1 px-3 rounded-full flex-row items-center ${currentLiked === "true" ? "bg-primary" : "bg-secondary"}`}
+              All Ratings
+            </Badge>
+            <Badge
+              selected={currentLiked === "true"}
               onPress={() => onApplyFilter({ liked: "true" })}
+              icon={
+                <ThumbsUp
+                  size={14}
+                  color={
+                    currentLiked === "true" ?
+                      primaryForegroundColor
+                    : mutedForegroundColor
+                  }
+                  style={{ marginRight: 4 }}
+                />
+              }
             >
-              <ThumbsUp
-                size={14}
-                color={
-                  currentLiked === "true" ?
-                    primaryForegroundColor
-                  : mutedForegroundColor
-                }
-                style={{ marginRight: 4 }}
-              />
-              <Text
-                className={`text-sm ${currentLiked === "true" ? "text-primary-foreground" : "text-foreground"}`}
-              >
-                Liked
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className={`py-1 px-3 rounded-full flex-row items-center ${currentLiked === "false" ? "bg-primary" : "bg-secondary"}`}
+              Liked
+            </Badge>
+            <Badge
+              selected={currentLiked === "false"}
               onPress={() => onApplyFilter({ liked: "false" })}
+              icon={
+                <ThumbsDown
+                  size={14}
+                  color={
+                    currentLiked === "false" ?
+                      primaryForegroundColor
+                    : mutedForegroundColor
+                  }
+                  style={{ marginRight: 4 }}
+                />
+              }
             >
-              <ThumbsDown
-                size={14}
-                color={
-                  currentLiked === "false" ?
-                    primaryForegroundColor
-                  : mutedForegroundColor
-                }
-                style={{ marginRight: 4 }}
-              />
-              <Text
-                className={`text-sm ${currentLiked === "false" ? "text-primary-foreground" : "text-foreground"}`}
-              >
-                Disliked
-              </Text>
-            </TouchableOpacity>
+              Disliked
+            </Badge>
           </View>
         </View>
 
@@ -232,9 +225,9 @@ const FilterSheet = ({
           </Text>
           <View className="gap-2">
             {sortOptions.map((option) => (
-              <TouchableOpacity
+              <Badge
                 key={option.value}
-                className={`py-2 px-3 rounded-md ${currentSortOption.value === option.value ? "bg-primary" : "bg-secondary"}`}
+                selected={currentSortOption.value === option.value}
                 onPress={() =>
                   onApplyFilter({
                     liked: currentLiked || undefined,
@@ -242,13 +235,11 @@ const FilterSheet = ({
                     sortOrder: option.order,
                   })
                 }
+                size="lg"
+                className="rounded-md w-full"
               >
-                <Text
-                  className={`text-sm ${currentSortOption.value === option.value ? "text-primary-foreground" : "text-foreground"}`}
-                >
-                  {option.label}
-                </Text>
-              </TouchableOpacity>
+                {option.label}
+              </Badge>
             ))}
           </View>
         </View>
@@ -577,32 +568,29 @@ export default function HomeScreen() {
                   className="flex-1 ml-3"
                 >
                   <View className="flex-row items-center">
-                    <View className="bg-secondary rounded-full py-2 px-3 flex-row items-center">
-                      {currentLiked ?
-                        <ThumbsUp
-                          size={12}
-                          color={primaryColor}
-                          style={{ marginRight: 6 }}
-                        />
-                      : <ThumbsDown
-                          size={12}
-                          color={destructiveColor}
-                          style={{ marginRight: 6 }}
-                        />
+                    <Badge
+                      variant="secondary"
+                      icon={
+                        currentLiked ?
+                          <ThumbsUp
+                            size={12}
+                            color={primaryColor}
+                            style={{ marginRight: 6 }}
+                          />
+                        : <ThumbsDown
+                            size={12}
+                            color={destructiveColor}
+                            style={{ marginRight: 6 }}
+                          />
                       }
-                      <Text className="text-sm text-foreground mr-2">
-                        {currentLiked ? "Liked" : "Disliked"}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() =>
-                          router.setParams({
-                            liked: undefined,
-                          })
-                        }
-                      >
-                        <X size={16} color={mutedForegroundColor} />
-                      </TouchableOpacity>
-                    </View>
+                      onRemove={() =>
+                        router.setParams({
+                          liked: undefined,
+                        })
+                      }
+                    >
+                      {currentLiked ? "Liked" : "Disliked"}
+                    </Badge>
                   </View>
                 </ScrollView>
               )}
