@@ -200,12 +200,12 @@ export default function BeverageDetailScreen() {
                 {beverage.producer}
               </Text>
               <View className="flex-row items-center gap-2 mt-2">
-                {beverage.style && (
+                {beverage.style ?
                   <Badge variant="secondary">{beverage.style}</Badge>
-                )}
-                {beverage.abv && (
-                  <Badge variant="secondary">{beverage.abv || "0"}% ABV</Badge>
-                )}
+                : null}
+                {beverage.abv !== null ?
+                  <Badge variant="secondary">{beverage.abv}% ABV</Badge>
+                : null}
               </View>
             </View>
 
