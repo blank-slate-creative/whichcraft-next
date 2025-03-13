@@ -1,5 +1,5 @@
-import { Link, useRouter, useLocalSearchParams } from "expo-router";
-import React, { useState, useEffect, useCallback } from "react";
+import { useRouter, useLocalSearchParams } from "expo-router";
+import { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,9 @@ import {
   ScrollView,
   TextInput,
   ActivityIndicator,
-  FlatList,
   RefreshControl,
   Image,
   StatusBar,
-  Platform,
 } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { BeverageApiClient } from "@whichcraft/api-client";
@@ -28,7 +26,6 @@ import {
 } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 import Animated, {
-  useAnimatedRef,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -138,21 +135,23 @@ const FilterSheet = ({
 }: {
   isVisible: boolean;
   onClose: () => void;
-  currentLiked: string | null;
+  currentLiked?: string;
   currentSortOption: SortOption;
-  onApplyFilter: (liked?: string, sortBy?: string, sortOrder?: string) => void;
+  onApplyFilter: (params: {
+    liked?: string;
+    sortBy?: BeverageFilters["sort_by"];
+    sortOrder?: BeverageFilters["sort_order"];
+  }) => void;
   onClearFilters: () => void;
 }) => {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
 
   // Theme colors
-  const primaryColor = isDark ? "rgb(250, 250, 250)" : "rgb(10, 10, 10)";
   const primaryForegroundColor =
     isDark ? "rgb(10, 10, 10)" : "rgb(250, 250, 250)";
   const mutedForegroundColor =
     isDark ? "rgb(163, 163, 163)" : "rgb(115, 115, 115)";
-  const destructiveColor = isDark ? "rgb(239, 68, 68)" : "rgb(239, 68, 68)";
 
   if (!isVisible) return null;
 
@@ -178,7 +177,7 @@ const FilterSheet = ({
           <View className="flex-row flex-wrap gap-2">
             <TouchableOpacity
               className={`py-1 px-3 rounded-full ${!currentLiked ? "bg-primary" : "bg-secondary"}`}
-              onPress={() => onApplyFilter(undefined)}
+              onPress={() => onApplyFilter({ liked: undefined })}
             >
               <Text
                 className={`text-sm ${!currentLiked ? "text-primary-foreground" : "text-foreground"}`}
@@ -188,7 +187,7 @@ const FilterSheet = ({
             </TouchableOpacity>
             <TouchableOpacity
               className={`py-1 px-3 rounded-full flex-row items-center ${currentLiked === "true" ? "bg-primary" : "bg-secondary"}`}
-              onPress={() => onApplyFilter("true")}
+              onPress={() => onApplyFilter({ liked: "true" })}
             >
               <ThumbsUp
                 size={14}
@@ -207,7 +206,7 @@ const FilterSheet = ({
             </TouchableOpacity>
             <TouchableOpacity
               className={`py-1 px-3 rounded-full flex-row items-center ${currentLiked === "false" ? "bg-primary" : "bg-secondary"}`}
-              onPress={() => onApplyFilter("false")}
+              onPress={() => onApplyFilter({ liked: "false" })}
             >
               <ThumbsDown
                 size={14}
@@ -237,11 +236,11 @@ const FilterSheet = ({
                 key={option.value}
                 className={`py-2 px-3 rounded-md ${currentSortOption.value === option.value ? "bg-primary" : "bg-secondary"}`}
                 onPress={() =>
-                  onApplyFilter(
-                    currentLiked || undefined,
-                    option.field,
-                    option.order
-                  )
+                  onApplyFilter({
+                    liked: currentLiked || undefined,
+                    sortBy: option.field,
+                    sortOrder: option.order,
+                  })
                 }
               >
                 <Text
@@ -274,9 +273,13 @@ const FilterSheet = ({
 };
 
 export default function HomeScreen() {
-  const { user, session } = useAuth();
+  const { session } = useAuth();
   const router = useRouter();
-  const params = useLocalSearchParams();
+  const { liked, sort_by, sort_order } = useLocalSearchParams<{
+    liked?: string;
+    sort_by?: BeverageFilters["sort_by"] | "undefined";
+    sort_order?: BeverageFilters["sort_order"] | "undefined";
+  }>();
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
   const insets = useSafeAreaInsets();
@@ -288,7 +291,7 @@ export default function HomeScreen() {
   const mutedForegroundColor =
     isDark ? "rgb(163, 163, 163)" : "rgb(115, 115, 115)";
   const destructiveColor = isDark ? "rgb(239, 68, 68)" : "rgb(239, 68, 68)";
-  const backgroundColor = isDark ? "rgb(10, 10, 10)" : "rgb(250, 250, 250)";
+  const backgroundColor = isDark ? "rgb(10, 10, 10)" : "rgb(255, 255, 255)";
 
   // Animation values
   const scrollY = useSharedValue(0);
@@ -344,9 +347,14 @@ export default function HomeScreen() {
   const contentPaddingTop = HEADER_HEIGHT + insets.top;
 
   // Get current filter values from URL params
-  const currentLiked = params.liked as string | null;
-  const currentSortBy = (params.sort_by as string) || "created_at";
-  const currentSortOrder = (params.sort_order as string) || "desc";
+  const currentLiked =
+    liked === "undefined" || liked === undefined ? undefined : liked === "true";
+  const currentSortBy =
+    sort_by === "undefined" || sort_by === undefined ? "created_at" : sort_by;
+  const currentSortOrder =
+    sort_order === "undefined" || sort_order === undefined ?
+      "desc"
+    : sort_order;
 
   // Find the current sort option
   const currentSortOption =
@@ -388,19 +396,12 @@ export default function HomeScreen() {
   // Initial fetch
   useEffect(() => {
     if (session?.access_token) {
-      console.log("URL params changed:", {
-        currentLiked,
-        currentSortBy,
-        currentSortOrder,
-      });
-
-      const likedBoolean = currentLiked ? currentLiked === "true" : undefined;
-
       fetchBeverages({
-        liked: likedBoolean,
-        sort_by: currentSortBy as any,
-        sort_order: currentSortOrder as any,
+        liked: currentLiked,
+        sort_by: currentSortBy,
+        sort_order: currentSortOrder,
       });
+      setIsRefreshing(false);
     }
   }, [fetchBeverages, session, currentLiked, currentSortBy, currentSortOrder]);
 
@@ -425,53 +426,33 @@ export default function HomeScreen() {
   // Handle refresh
   const handleRefresh = () => {
     setIsRefreshing(true);
-    const likedBoolean = currentLiked ? currentLiked === "true" : undefined;
-
     fetchBeverages({
-      liked: likedBoolean,
-      sort_by: currentSortBy as any,
-      sort_order: currentSortOrder as any,
+      liked: currentLiked,
+      sort_by: currentSortBy,
+      sort_order: currentSortOrder,
     });
   };
 
   // Apply filter
   const applyFilter = useCallback(
-    (liked?: string, sort_by?: string, sort_order?: string) => {
-      const params = new URLSearchParams();
-
-      if (liked !== undefined) {
-        params.append("liked", liked);
-      }
-
-      if (sort_by) {
-        params.append("sort_by", sort_by);
-      } else if (currentSortBy) {
-        params.append("sort_by", currentSortBy);
-      }
-
-      if (sort_order) {
-        params.append("sort_order", sort_order);
-      } else if (currentSortOrder) {
-        params.append("sort_order", currentSortOrder);
-      }
-
-      // Update URL
-      const queryString = params.toString();
-      router.setParams(Object.fromEntries(params));
-
-      // Close filter sheet
-      setIsFilterSheetVisible(false);
-
-      // Fetch filtered data
-      const likedBoolean = liked !== undefined ? liked === "true" : undefined;
-
-      fetchBeverages({
-        liked: likedBoolean,
-        sort_by: (sort_by || currentSortBy) as any,
-        sort_order: (sort_order || currentSortOrder) as any,
+    ({
+      liked,
+      sortBy,
+      sortOrder,
+    }: {
+      liked?: string;
+      sortBy?: BeverageFilters["sort_by"];
+      sortOrder?: BeverageFilters["sort_order"];
+    }) => {
+      router.setParams({
+        liked,
+        sort_by: sortBy,
+        sort_order: sortOrder,
       });
+
+      setIsFilterSheetVisible(false);
     },
-    [router, fetchBeverages, currentSortBy, currentSortOrder]
+    [router]
   );
 
   // Clear all filters
@@ -484,14 +465,7 @@ export default function HomeScreen() {
 
     setSearchQuery("");
     setIsFilterSheetVisible(false);
-
-    // Explicitly fetch with default parameters, ignoring URL params
-    fetchBeverages({
-      liked: undefined,
-      sort_by: "created_at",
-      sort_order: "desc",
-    });
-  }, [router, fetchBeverages]);
+  }, [router]);
 
   // Navigate to beverage detail
   const navigateToBeverageDetail = (id: string) => {
@@ -533,7 +507,7 @@ export default function HomeScreen() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{
           paddingTop: contentPaddingTop, // Add extra padding for the static header
-          paddingBottom: 100,
+          paddingBottom: 80,
         }}
         onScroll={scrollHandler}
         scrollEventThrottle={16}
@@ -589,7 +563,7 @@ export default function HomeScreen() {
                 )}
               </TouchableOpacity>
 
-              {currentLiked && (
+              {currentLiked !== undefined && (
                 <ScrollView
                   horizontal
                   showsHorizontalScrollIndicator={false}
@@ -597,7 +571,7 @@ export default function HomeScreen() {
                 >
                   <View className="flex-row items-center">
                     <View className="bg-secondary rounded-full py-2 px-4 flex-row items-center">
-                      {currentLiked === "true" ?
+                      {currentLiked ?
                         <ThumbsUp
                           size={14}
                           color={primaryColor}
@@ -610,9 +584,15 @@ export default function HomeScreen() {
                         />
                       }
                       <Text className="text-sm text-foreground mr-2">
-                        {currentLiked === "true" ? "Liked" : "Disliked"}
+                        {currentLiked ? "Liked" : "Disliked"}
                       </Text>
-                      <TouchableOpacity onPress={() => applyFilter(undefined)}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          router.setParams({
+                            liked: undefined,
+                          })
+                        }
+                      >
                         <X size={16} color={mutedForegroundColor} />
                       </TouchableOpacity>
                     </View>
@@ -712,7 +692,7 @@ export default function HomeScreen() {
       <FilterSheet
         isVisible={isFilterSheetVisible}
         onClose={() => setIsFilterSheetVisible(false)}
-        currentLiked={currentLiked}
+        currentLiked={currentLiked ? currentLiked.toString() : undefined}
         currentSortOption={currentSortOption}
         onApplyFilter={applyFilter}
         onClearFilters={clearFilters}
