@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   View,
   Text,
@@ -13,12 +13,12 @@ import {
 } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { BeverageApiClient, Beverage } from "@whichcraft/api-client";
-import { ThumbsUp, ThumbsDown, Trash2, Save, Edit } from "lucide-react-native";
+import { ThumbsUp, ThumbsDown, Trash2 } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Badge } from "../../components/Badge";
-import BeverageItem from "../../components/BeverageItem";
 import { BackButton } from "../../components/BackButton";
+import { debounce } from "../../utils/functions";
 
 // Create API client instance
 const beverageApi = new BeverageApiClient({
@@ -45,8 +45,8 @@ export default function BeverageDetailScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [isEditingNotes, setIsEditingNotes] = useState(false);
   const [notes, setNotes] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   // Fetch beverage details
   useEffect(() => {
@@ -70,6 +70,35 @@ export default function BeverageDetailScreen() {
     fetchBeverage();
   }, [session, id]);
 
+  // Handle notes update with debounce
+  const debouncedUpdate = useCallback(
+    debounce(async (newNotes: string) => {
+      if (!session?.access_token || !beverage) return;
+
+      try {
+        setIsSaving(true);
+        const updatedBeverage = await beverageApi.update(
+          session.access_token,
+          beverage.id,
+          { notes: newNotes }
+        );
+        setBeverage(updatedBeverage);
+      } catch (err) {
+        console.error("Error updating notes:", err);
+        Alert.alert("Error", "Failed to update notes");
+      } finally {
+        setIsSaving(false);
+      }
+    }, 1000),
+    [session, beverage]
+  );
+
+  // Handle notes change
+  const handleNotesChange = (newNotes: string) => {
+    setNotes(newNotes);
+    debouncedUpdate(newNotes);
+  };
+
   // Handle rating update
   const handleRatingUpdate = async (liked: boolean) => {
     if (!session?.access_token || !beverage) return;
@@ -85,27 +114,6 @@ export default function BeverageDetailScreen() {
     } catch (err) {
       console.error("Error updating rating:", err);
       Alert.alert("Error", "Failed to update rating");
-    } finally {
-      setIsUpdating(false);
-    }
-  };
-
-  // Handle notes update
-  const handleNotesUpdate = async () => {
-    if (!session?.access_token || !beverage) return;
-
-    try {
-      setIsUpdating(true);
-      const updatedBeverage = await beverageApi.update(
-        session.access_token,
-        beverage.id,
-        { notes }
-      );
-      setBeverage(updatedBeverage);
-      setIsEditingNotes(false);
-    } catch (err) {
-      console.error("Error updating notes:", err);
-      Alert.alert("Error", "Failed to update notes");
     } finally {
       setIsUpdating(false);
     }
@@ -139,34 +147,6 @@ export default function BeverageDetailScreen() {
     );
   };
 
-  // Header right component
-  const HeaderRight = () => {
-    if (!beverage) return null;
-
-    return (
-      <View className="flex-row items-center gap-4">
-        <TouchableOpacity
-          className="flex-row items-center gap-1"
-          onPress={
-            isEditingNotes ? handleNotesUpdate : () => setIsEditingNotes(true)
-          }
-          disabled={isUpdating}
-        >
-          {isEditingNotes ?
-            <>
-              <Save size={20} color={primaryColor} />
-              <Text className="text-base text-primary">Save</Text>
-            </>
-          : <>
-              <Edit size={20} color={primaryColor} />
-              <Text className="text-base text-primary">Edit</Text>
-            </>
-          }
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
   return (
     <>
       <StatusBar
@@ -177,7 +157,6 @@ export default function BeverageDetailScreen() {
         options={{
           headerShown: true,
           headerLeft: () => <BackButton />,
-          headerRight: () => <HeaderRight />,
           title: beverage?.name || "Beverage Details",
           animation: "slide_from_right",
           presentation: "card",
@@ -284,25 +263,22 @@ export default function BeverageDetailScreen() {
             {/* Notes */}
             <View className="mb-6">
               <Text className="text-sm font-medium text-foreground mb-2">
-                Notes
-              </Text>
-              {isEditingNotes ?
-                <TextInput
-                  className="bg-secondary text-foreground p-3 rounded-md min-h-[100]"
-                  multiline
-                  numberOfLines={4}
-                  value={notes}
-                  onChangeText={setNotes}
-                  placeholder="Add notes about this beverage..."
-                  placeholderTextColor={mutedForegroundColor}
-                  autoFocus
-                />
-              : <View className="bg-secondary p-3 rounded-md min-h-[100]">
-                  <Text className="text-foreground">
-                    {beverage.notes || "No notes yet"}
+                Notes{" "}
+                {isSaving && (
+                  <Text className="text-xs text-muted-foreground">
+                    Saving...
                   </Text>
-                </View>
-              }
+                )}
+              </Text>
+              <TextInput
+                className="bg-secondary text-foreground p-3 rounded-md min-h-[100]"
+                multiline
+                numberOfLines={4}
+                value={notes}
+                onChangeText={handleNotesChange}
+                placeholder="Add notes about this beverage..."
+                placeholderTextColor={mutedForegroundColor}
+              />
             </View>
 
             {/* Date Added */}
