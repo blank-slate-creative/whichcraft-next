@@ -210,8 +210,14 @@ const FilterSheet = ({
 export default function HomeScreen() {
   const { session } = useAuth();
   const router = useRouter();
-  const { beverages, setBeverages, setAllBeverages, stats, deleteBeverage } =
-    useBeverages();
+  const {
+    beverages,
+    setBeverages,
+    setAllBeverages,
+    stats,
+    deleteBeverage,
+    allBeverages,
+  } = useBeverages();
   const { liked, sort_by, sort_order, refresh } = useLocalSearchParams<{
     liked?: string;
     sort_by?: BeverageFilters["sort_by"] | "undefined";
@@ -304,10 +310,51 @@ export default function HomeScreen() {
   // State
   const [filteredBeverages, setFilteredBeverages] = useState<Beverage[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFilterSheetVisible, setIsFilterSheetVisible] = useState(false);
+  const [hasInitialData, setHasInitialData] = useState(false);
+
+  // Check if we have data in context that matches our filters
+  useEffect(() => {
+    // If we already have beverages in the context, use them
+    if (allBeverages.length > 0) {
+      // Apply filters to the existing data
+      let filtered = [...allBeverages];
+
+      if (currentLiked !== undefined) {
+        filtered = filtered.filter((b) => b.liked === currentLiked);
+      }
+
+      // Apply sorting
+      filtered.sort((a, b) => {
+        if (currentSortBy === "created_at") {
+          const dateA = new Date(a.created_at).getTime();
+          const dateB = new Date(b.created_at).getTime();
+          return currentSortOrder === "asc" ? dateA - dateB : dateB - dateA;
+        } else if (currentSortBy === "name") {
+          return currentSortOrder === "asc" ?
+              a.name.localeCompare(b.name)
+            : b.name.localeCompare(a.name);
+        } else if (currentSortBy === "type" && a.type && b.type) {
+          return currentSortOrder === "asc" ?
+              a.type.localeCompare(b.type)
+            : b.type.localeCompare(a.type);
+        } else if (currentSortBy === "producer" && a.producer && b.producer) {
+          return currentSortOrder === "asc" ?
+              a.producer.localeCompare(b.producer)
+            : b.producer.localeCompare(a.producer);
+        }
+        return 0;
+      });
+
+      setBeverages(filtered);
+      setHasInitialData(true);
+    } else {
+      setIsLoading(true);
+    }
+  }, [allBeverages, currentLiked, currentSortBy, currentSortOrder]);
 
   // Fetch beverages
   const fetchBeverages = useCallback(
@@ -315,11 +362,16 @@ export default function HomeScreen() {
       if (!session?.access_token) return;
 
       try {
-        setIsLoading(true);
+        // Only set loading if we don't have initial data
+        if (!hasInitialData && !isRefreshing) {
+          setIsLoading(true);
+        }
+
         const data = await beverageApi.getAll(session.access_token, filters);
         setBeverages(data);
         setAllBeverages(data);
         setError(null);
+        setHasInitialData(true);
       } catch (err) {
         console.error("Error fetching beverages:", err);
         setError("Failed to load beverages");
@@ -328,32 +380,46 @@ export default function HomeScreen() {
         setIsRefreshing(false);
       }
     },
-    [session, setBeverages, setAllBeverages]
+    [session, setBeverages, setAllBeverages, hasInitialData, isRefreshing]
   );
 
-  // Initial fetch
+  // Initial fetch - only if we don't have data or if refresh is requested
   useEffect(() => {
-    if (session?.access_token) {
+    if (session?.access_token && (!hasInitialData || refresh === "true")) {
       fetchBeverages({
         liked: currentLiked,
         sort_by: currentSortBy,
         sort_order: currentSortOrder,
       });
-      setIsRefreshing(false);
     }
-  }, [fetchBeverages, session, currentLiked, currentSortBy, currentSortOrder]);
+  }, [
+    fetchBeverages,
+    session,
+    currentLiked,
+    currentSortBy,
+    currentSortOrder,
+    hasInitialData,
+    refresh,
+  ]);
 
-  // Refresh when screen comes into focus
+  // Refresh when screen comes into focus - but only if we need fresh data
   useFocusEffect(
     useCallback(() => {
-      if (session?.access_token) {
+      if (session?.access_token && refresh === "true") {
         fetchBeverages({
           liked: currentLiked,
           sort_by: currentSortBy,
           sort_order: currentSortOrder,
         });
       }
-    }, [fetchBeverages, session, currentLiked, currentSortBy, currentSortOrder])
+    }, [
+      fetchBeverages,
+      session,
+      currentLiked,
+      currentSortBy,
+      currentSortOrder,
+      refresh,
+    ])
   );
 
   // Apply search filter locally
@@ -374,7 +440,7 @@ export default function HomeScreen() {
     }
   }, [searchQuery, beverages]);
 
-  // Handle refresh
+  // Handle refresh - always fetch fresh data when manually refreshing
   const handleRefresh = () => {
     setIsRefreshing(true);
     fetchBeverages({
@@ -420,6 +486,10 @@ export default function HomeScreen() {
 
   // Navigate to beverage detail
   const navigateToBeverageDetail = (id: string) => {
+    // Find the beverage in our local state to pass along
+    const beverage = beverages.find((b) => b.id === id);
+
+    // Navigate to the detail page
     router.push(`/beverage/${id}`);
   };
 

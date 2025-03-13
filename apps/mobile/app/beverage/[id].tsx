@@ -33,7 +33,8 @@ export default function BeverageDetailScreen() {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
   const insets = useSafeAreaInsets();
-  const { deleteBeverage, setBeverages, setAllBeverages } = useBeverages();
+  const { deleteBeverage, setBeverages, setAllBeverages, beverages } =
+    useBeverages();
 
   // Theme colors
   const primaryColor = isDark ? "rgb(250, 250, 250)" : "rgb(10, 10, 10)";
@@ -44,19 +45,34 @@ export default function BeverageDetailScreen() {
 
   // State
   const [beverage, setBeverage] = useState<Beverage | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [notes, setNotes] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
-  // Fetch beverage details
+  // Find cached beverage from context
+  useEffect(() => {
+    if (id) {
+      // Try to get the beverage from context first
+      const cachedBeverage = beverages.find((b) => b.id === id);
+      if (cachedBeverage) {
+        setBeverage(cachedBeverage);
+        setNotes(cachedBeverage.notes || "");
+        setIsLoading(false);
+      } else {
+        // If not in context, we'll need to fetch it
+        setIsLoading(true);
+      }
+    }
+  }, [id, beverages]);
+
+  // Fetch beverage details if not in context
   useEffect(() => {
     const fetchBeverage = async () => {
-      if (!session?.access_token || !id) return;
+      if (!session?.access_token || !id || !isLoading) return;
 
       try {
-        setIsLoading(true);
         const data = await beverageApi.getById(session.access_token, id);
         setBeverage(data);
         setNotes(data.notes || "");
@@ -70,23 +86,42 @@ export default function BeverageDetailScreen() {
     };
 
     fetchBeverage();
-  }, [session, id]);
+  }, [session, id, isLoading]);
 
   // Handle notes update with debounce
   const debouncedUpdate = useCallback(
     debounce(async (newNotes: string) => {
       if (!session?.access_token || !beverage) return;
 
+      // Store the previous state for rollback if needed
+      const previousBeverage = { ...beverage };
+
+      // Create optimistic update
+      const optimisticBeverage = { ...beverage, notes: newNotes };
+
+      // We don't update the local beverage state here since we already
+      // updated the notes input field for immediate feedback
+
       try {
         setIsSaving(true);
+
+        // Optimistically update the context
+        setBeverages((prev) =>
+          prev.map((b) => (b.id === beverage.id ? optimisticBeverage : b))
+        );
+        setAllBeverages((prev) =>
+          prev.map((b) => (b.id === beverage.id ? optimisticBeverage : b))
+        );
+
+        // Make the API call
         const updatedBeverage = await beverageApi.update(
           session.access_token,
           beverage.id,
           { notes: newNotes }
         );
-        setBeverage(updatedBeverage);
 
-        // Update the beverage in the context
+        // Update with the server response
+        setBeverage(updatedBeverage);
         setBeverages((prev) =>
           prev.map((b) => (b.id === updatedBeverage.id ? updatedBeverage : b))
         );
@@ -96,6 +131,15 @@ export default function BeverageDetailScreen() {
       } catch (err) {
         console.error("Error updating notes:", err);
         Alert.alert("Error", "Failed to update notes");
+
+        // Rollback to previous state on error
+        setBeverage(previousBeverage);
+        setBeverages((prev) =>
+          prev.map((b) => (b.id === beverage.id ? previousBeverage : b))
+        );
+        setAllBeverages((prev) =>
+          prev.map((b) => (b.id === beverage.id ? previousBeverage : b))
+        );
       } finally {
         setIsSaving(false);
       }
@@ -109,20 +153,36 @@ export default function BeverageDetailScreen() {
     debouncedUpdate(newNotes);
   };
 
-  // Handle rating update
+  // Handle rating update with optimistic updates
   const handleRatingUpdate = async (liked: boolean) => {
     if (!session?.access_token || !beverage) return;
 
+    // Store the previous state for rollback if needed
+    const previousBeverage = { ...beverage };
+
+    // Optimistically update the UI
+    const optimisticBeverage = { ...beverage, liked };
+    setBeverage(optimisticBeverage);
+
+    // Optimistically update the context
+    setBeverages((prev) =>
+      prev.map((b) => (b.id === beverage.id ? optimisticBeverage : b))
+    );
+    setAllBeverages((prev) =>
+      prev.map((b) => (b.id === beverage.id ? optimisticBeverage : b))
+    );
+
     try {
       setIsUpdating(true);
+      // Make the API call
       const updatedBeverage = await beverageApi.update(
         session.access_token,
         beverage.id,
         { liked }
       );
-      setBeverage(updatedBeverage);
 
-      // Update the beverage in the context
+      // Update with the server response
+      setBeverage(updatedBeverage);
       setBeverages((prev) =>
         prev.map((b) => (b.id === updatedBeverage.id ? updatedBeverage : b))
       );
@@ -132,6 +192,15 @@ export default function BeverageDetailScreen() {
     } catch (err) {
       console.error("Error updating rating:", err);
       Alert.alert("Error", "Failed to update rating");
+
+      // Rollback to previous state on error
+      setBeverage(previousBeverage);
+      setBeverages((prev) =>
+        prev.map((b) => (b.id === beverage.id ? previousBeverage : b))
+      );
+      setAllBeverages((prev) =>
+        prev.map((b) => (b.id === beverage.id ? previousBeverage : b))
+      );
     } finally {
       setIsUpdating(false);
     }
@@ -152,16 +221,21 @@ export default function BeverageDetailScreen() {
           onPress: async () => {
             try {
               setIsUpdating(true);
-              await beverageApi.delete(session.access_token, beverage.id);
 
               // Optimistically delete from context
               deleteBeverage(beverage.id);
 
+              // Navigate back immediately for better UX
               router.back();
+
+              // Then perform the actual API call
+              await beverageApi.delete(session.access_token, beverage.id);
             } catch (err) {
               console.error("Error deleting beverage:", err);
-              Alert.alert("Error", "Failed to delete beverage");
-              setIsUpdating(false);
+
+              // We've already navigated away, so just log the error
+              // In a production app, you might want to show a toast or notification
+              // that appears on the collection screen
             }
           },
         },
