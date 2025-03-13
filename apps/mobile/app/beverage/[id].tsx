@@ -9,20 +9,16 @@ import {
   ActivityIndicator,
   StatusBar,
   Alert,
+  TextInput,
 } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { BeverageApiClient, Beverage } from "@whichcraft/api-client";
-import {
-  ArrowLeft,
-  ThumbsUp,
-  ThumbsDown,
-  Edit,
-  Trash2,
-} from "lucide-react-native";
+import { ThumbsUp, ThumbsDown, Trash2, Save, Edit } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Badge } from "../../components/Badge";
 import BeverageItem from "../../components/BeverageItem";
+import { BackButton } from "../../components/BackButton";
 
 // Create API client instance
 const beverageApi = new BeverageApiClient({
@@ -49,6 +45,8 @@ export default function BeverageDetailScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isEditingNotes, setIsEditingNotes] = useState(false);
+  const [notes, setNotes] = useState("");
 
   // Fetch beverage details
   useEffect(() => {
@@ -59,6 +57,7 @@ export default function BeverageDetailScreen() {
         setIsLoading(true);
         const data = await beverageApi.getById(session.access_token, id);
         setBeverage(data);
+        setNotes(data.notes || "");
         setError(null);
       } catch (err) {
         console.error("Error fetching beverage:", err);
@@ -86,6 +85,27 @@ export default function BeverageDetailScreen() {
     } catch (err) {
       console.error("Error updating rating:", err);
       Alert.alert("Error", "Failed to update rating");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // Handle notes update
+  const handleNotesUpdate = async () => {
+    if (!session?.access_token || !beverage) return;
+
+    try {
+      setIsUpdating(true);
+      const updatedBeverage = await beverageApi.update(
+        session.access_token,
+        beverage.id,
+        { notes }
+      );
+      setBeverage(updatedBeverage);
+      setIsEditingNotes(false);
+    } catch (err) {
+      console.error("Error updating notes:", err);
+      Alert.alert("Error", "Failed to update notes");
     } finally {
       setIsUpdating(false);
     }
@@ -119,131 +139,139 @@ export default function BeverageDetailScreen() {
     );
   };
 
-  // Format date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+  // Header right component
+  const HeaderRight = () => {
+    if (!beverage) return null;
+
+    return (
+      <View className="flex-row items-center gap-4">
+        <TouchableOpacity
+          className="flex-row items-center gap-1"
+          onPress={
+            isEditingNotes ? handleNotesUpdate : () => setIsEditingNotes(true)
+          }
+          disabled={isUpdating}
+        >
+          {isEditingNotes ?
+            <>
+              <Save size={20} color={primaryColor} />
+              <Text className="text-base text-primary">Save</Text>
+            </>
+          : <>
+              <Edit size={20} color={primaryColor} />
+              <Text className="text-base text-primary">Edit</Text>
+            </>
+          }
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   return (
-    <View className="flex-1 bg-background">
-      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
-
+    <>
+      <StatusBar
+        barStyle={isDark ? "light-content" : "dark-content"}
+        backgroundColor={backgroundColor}
+      />
       <Stack.Screen
         options={{
-          title: beverage?.name || "Beverage Details",
           headerShown: true,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => router.back()} className="ml-4">
-              <ArrowLeft size={24} color={primaryColor} />
-            </TouchableOpacity>
-          ),
+          headerLeft: () => <BackButton />,
+          headerRight: () => <HeaderRight />,
+          title: beverage?.name || "Beverage Details",
+          animation: "slide_from_right",
+          presentation: "card",
+          animationDuration: 200,
         }}
       />
 
       {isLoading ?
-        <View className="flex-1 items-center justify-center">
+        <View className="flex-1 items-center justify-center bg-background">
           <ActivityIndicator size="large" color={primaryColor} />
         </View>
-      : error ?
-        <View className="flex-1 items-center justify-center p-4">
-          <Text className="text-destructive text-lg mb-4">{error}</Text>
-          <TouchableOpacity
-            className="bg-primary px-4 py-2 rounded-md"
-            onPress={() => router.back()}
-          >
-            <Text className="text-primary-foreground">Go Back</Text>
-          </TouchableOpacity>
+      : error || !beverage ?
+        <View className="flex-1 items-center justify-center bg-background">
+          <Text className="text-foreground">
+            {error || "Beverage not found"}
+          </Text>
         </View>
-      : beverage ?
-        <ScrollView
-          className="flex-1"
-          contentContainerStyle={{ paddingBottom: 40 }}
+      : <ScrollView
+          className="flex-1 bg-background"
+          contentContainerStyle={{ paddingBottom: insets.bottom }}
         >
-          {/* Use BeverageItem for basic info */}
-          <View className="py-4">
-            <BeverageItem
-              beverage={beverage}
-              showRating={false}
-              hideBottomBorder={true}
-              disabled={true}
-              titleStyle={{ fontSize: 20, fontWeight: "bold" }}
-              subtitleStyle={{ fontSize: 16 }}
-            />
-          </View>
-
-          {/* Content */}
-          <View className="px-4">
-            {/* Type and Style */}
-            <View className="flex-row flex-wrap gap-2 mb-6">
-              <Badge variant="secondary">{beverage.type}</Badge>
-              {beverage.style && (
-                <Badge variant="secondary">{beverage.style}</Badge>
-              )}
-              {beverage.abv && (
-                <Badge variant="secondary">{beverage.abv}% ABV</Badge>
-              )}
+          <View className="p-4">
+            {/* Beverage Image */}
+            <View className="items-center mb-6">
+              <View className="h-32 w-32 rounded-lg bg-secondary items-center justify-center mb-4">
+                {beverage.image_url ?
+                  <Image
+                    source={{ uri: beverage.image_url }}
+                    className="h-32 w-32 rounded-lg"
+                    resizeMode="cover"
+                  />
+                : <Text className="text-3xl">
+                    {beverage.type === "Beer" ? "🍺" : "🍷"}
+                  </Text>
+                }
+              </View>
+              <Text className="text-2xl font-bold text-foreground">
+                {beverage.name}
+              </Text>
+              <Text className="text-base text-muted-foreground">
+                {beverage.producer}
+              </Text>
+              <View className="flex-row items-center gap-2 mt-2">
+                {beverage.style && (
+                  <Badge variant="secondary">{beverage.style}</Badge>
+                )}
+                {beverage.abv && (
+                  <Badge variant="secondary">{beverage.abv || "0"}% ABV</Badge>
+                )}
+              </View>
             </View>
 
             {/* Rating */}
             <View className="mb-6">
-              <Text className="text-sm font-medium text-foreground mb-3">
-                Your Rating
+              <Text className="text-sm font-medium text-foreground mb-2">
+                Rating
               </Text>
-              <View className="flex-row gap-3">
+              <View className="flex-row gap-4">
                 <TouchableOpacity
-                  className={`flex-1 py-3 rounded-md flex-row items-center justify-center gap-2 ${
+                  className={`flex-1 flex-row items-center justify-center gap-2 p-3 rounded-md ${
                     beverage.liked === true ? "bg-primary" : "bg-secondary"
                   }`}
                   onPress={() => handleRatingUpdate(true)}
                   disabled={isUpdating}
                 >
                   <ThumbsUp
-                    size={18}
-                    color={
-                      beverage.liked === true ?
-                        isDark ?
-                          "rgb(10, 10, 10)"
-                        : "rgb(250, 250, 250)"
-                      : primaryColor
-                    }
+                    size={20}
+                    color={beverage.liked === true ? "white" : primaryColor}
                   />
                   <Text
-                    className={`font-medium ${
-                      beverage.liked === true ?
-                        "text-primary-foreground"
-                      : "text-foreground"
+                    className={`text-base ${
+                      beverage.liked === true ? "text-white" : "text-foreground"
                     }`}
                   >
                     Like
                   </Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity
-                  className={`flex-1 py-3 rounded-md flex-row items-center justify-center gap-2 ${
+                  className={`flex-1 flex-row items-center justify-center gap-2 p-3 rounded-md ${
                     beverage.liked === false ? "bg-destructive" : "bg-secondary"
                   }`}
                   onPress={() => handleRatingUpdate(false)}
                   disabled={isUpdating}
                 >
                   <ThumbsDown
-                    size={18}
+                    size={20}
                     color={
-                      beverage.liked === false ?
-                        isDark ?
-                          "rgb(10, 10, 10)"
-                        : "rgb(250, 250, 250)"
-                      : destructiveColor
+                      beverage.liked === false ? "white" : destructiveColor
                     }
                   />
                   <Text
-                    className={`font-medium ${
+                    className={`text-base ${
                       beverage.liked === false ?
-                        "text-destructive-foreground"
+                        "text-white"
                       : "text-foreground"
                     }`}
                   >
@@ -254,53 +282,51 @@ export default function BeverageDetailScreen() {
             </View>
 
             {/* Notes */}
-            {beverage.notes && (
-              <View className="mb-6">
-                <Text className="text-sm font-medium text-foreground mb-2">
-                  Notes
-                </Text>
-                <View className="bg-secondary p-3 rounded-md">
-                  <Text className="text-foreground">{beverage.notes}</Text>
+            <View className="mb-6">
+              <Text className="text-sm font-medium text-foreground mb-2">
+                Notes
+              </Text>
+              {isEditingNotes ?
+                <TextInput
+                  className="bg-secondary text-foreground p-3 rounded-md min-h-[100]"
+                  multiline
+                  numberOfLines={4}
+                  value={notes}
+                  onChangeText={setNotes}
+                  placeholder="Add notes about this beverage..."
+                  placeholderTextColor={mutedForegroundColor}
+                  autoFocus
+                />
+              : <View className="bg-secondary p-3 rounded-md min-h-[100]">
+                  <Text className="text-foreground">
+                    {beverage.notes || "No notes yet"}
+                  </Text>
                 </View>
-              </View>
-            )}
+              }
+            </View>
 
             {/* Date Added */}
             <View className="mb-6">
               <Text className="text-sm font-medium text-foreground mb-2">
-                Added On
+                Date Added
               </Text>
-              <Text className="text-muted-foreground">
-                {formatDate(beverage.created_at)}
+              <Text className="text-base text-muted-foreground">
+                {new Date(beverage.created_at).toLocaleDateString()}
               </Text>
             </View>
 
-            {/* Action Buttons */}
-            <View className="flex-row gap-3 mt-4">
-              <TouchableOpacity
-                className="flex-1 py-3 bg-primary rounded-md flex-row items-center justify-center gap-2"
-                onPress={() => router.push(`/beverage/edit/${beverage.id}`)}
-              >
-                <Edit
-                  size={18}
-                  color={isDark ? "rgb(10, 10, 10)" : "rgb(250, 250, 250)"}
-                />
-                <Text className="text-primary-foreground font-medium">
-                  Edit
-                </Text>
-              </TouchableOpacity>
-            </View>
-
+            {/* Delete Button */}
             <TouchableOpacity
-              className="mt-3 py-3 border border-destructive rounded-md flex-row items-center justify-center gap-2"
+              className="flex-row items-center justify-center gap-2 p-3 rounded-md bg-destructive"
               onPress={handleDelete}
+              disabled={isUpdating}
             >
-              <Trash2 size={18} color={destructiveColor} />
-              <Text className="text-destructive font-medium">Delete</Text>
+              <Trash2 size={20} color="white" />
+              <Text className="text-base text-white">Delete Beverage</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
-      : null}
-    </View>
+      }
+    </>
   );
 }
