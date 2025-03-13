@@ -45,7 +45,7 @@ export default function RootLayout() {
   return (
     <View className={`${colorScheme === "dark" ? "dark" : ""} h-full`}>
       <AuthProvider>
-        <BeverageProvider>
+        <BeverageProvider initialBeverages={[]}>
           <RootLayoutNav />
         </BeverageProvider>
       </AuthProvider>

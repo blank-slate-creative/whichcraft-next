@@ -35,6 +35,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import { Badge } from "../../components/Badge";
 import BeverageItem from "../../components/BeverageItem";
+import { useBeverages } from "@whichcraft/beverage-context";
 
 // Define sort options
 interface SortOption {
@@ -209,6 +210,8 @@ const FilterSheet = ({
 export default function HomeScreen() {
   const { session } = useAuth();
   const router = useRouter();
+  const { beverages, setBeverages, setAllBeverages, stats, deleteBeverage } =
+    useBeverages();
   const { liked, sort_by, sort_order, refresh } = useLocalSearchParams<{
     liked?: string;
     sort_by?: BeverageFilters["sort_by"] | "undefined";
@@ -299,7 +302,6 @@ export default function HomeScreen() {
     ) || sortOptions[0];
 
   // State
-  const [beverages, setBeverages] = useState<Beverage[]>([]);
   const [filteredBeverages, setFilteredBeverages] = useState<Beverage[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -316,6 +318,7 @@ export default function HomeScreen() {
         setIsLoading(true);
         const data = await beverageApi.getAll(session.access_token, filters);
         setBeverages(data);
+        setAllBeverages(data);
         setError(null);
       } catch (err) {
         console.error("Error fetching beverages:", err);
@@ -325,7 +328,7 @@ export default function HomeScreen() {
         setIsRefreshing(false);
       }
     },
-    [session]
+    [session, setBeverages, setAllBeverages]
   );
 
   // Initial fetch
@@ -473,6 +476,11 @@ export default function HomeScreen() {
               <Text className="text-4xl font-bold text-foreground">
                 Collection
               </Text>
+              {!isLoading && (
+                <Text className="text-muted-foreground mt-1">
+                  {stats.totalCount} beverages • {stats.likedCount} liked
+                </Text>
+              )}
             </View>
 
             {/* Search and Filter */}

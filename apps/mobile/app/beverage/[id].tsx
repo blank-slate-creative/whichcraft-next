@@ -19,6 +19,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Badge } from "../../components/Badge";
 import { BackButton } from "../../components/BackButton";
 import { debounce } from "../../utils/functions";
+import { useBeverages } from "@whichcraft/beverage-context";
 
 // Create API client instance
 const beverageApi = new BeverageApiClient({
@@ -32,6 +33,7 @@ export default function BeverageDetailScreen() {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
   const insets = useSafeAreaInsets();
+  const { deleteBeverage, setBeverages, setAllBeverages } = useBeverages();
 
   // Theme colors
   const primaryColor = isDark ? "rgb(250, 250, 250)" : "rgb(10, 10, 10)";
@@ -83,6 +85,14 @@ export default function BeverageDetailScreen() {
           { notes: newNotes }
         );
         setBeverage(updatedBeverage);
+
+        // Update the beverage in the context
+        setBeverages((prev) =>
+          prev.map((b) => (b.id === updatedBeverage.id ? updatedBeverage : b))
+        );
+        setAllBeverages((prev) =>
+          prev.map((b) => (b.id === updatedBeverage.id ? updatedBeverage : b))
+        );
       } catch (err) {
         console.error("Error updating notes:", err);
         Alert.alert("Error", "Failed to update notes");
@@ -90,7 +100,7 @@ export default function BeverageDetailScreen() {
         setIsSaving(false);
       }
     }, 1000),
-    [session, beverage]
+    [session, beverage, setBeverages, setAllBeverages]
   );
 
   // Handle notes change
@@ -111,6 +121,14 @@ export default function BeverageDetailScreen() {
         { liked }
       );
       setBeverage(updatedBeverage);
+
+      // Update the beverage in the context
+      setBeverages((prev) =>
+        prev.map((b) => (b.id === updatedBeverage.id ? updatedBeverage : b))
+      );
+      setAllBeverages((prev) =>
+        prev.map((b) => (b.id === updatedBeverage.id ? updatedBeverage : b))
+      );
     } catch (err) {
       console.error("Error updating rating:", err);
       Alert.alert("Error", "Failed to update rating");
@@ -135,6 +153,10 @@ export default function BeverageDetailScreen() {
             try {
               setIsUpdating(true);
               await beverageApi.delete(session.access_token, beverage.id);
+
+              // Optimistically delete from context
+              deleteBeverage(beverage.id);
+
               router.back();
             } catch (err) {
               console.error("Error deleting beverage:", err);
