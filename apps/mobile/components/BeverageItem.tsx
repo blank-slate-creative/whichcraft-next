@@ -49,8 +49,8 @@ export const BeverageItem = ({
   const selectedBgColor =
     isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
 
-  // Determine image size based on compact mode
-  const imageSize = compact ? 10 : 12;
+  // Determine image size based on compact mode (in pixels)
+  const imageSizePx = compact ? 40 : 48; // 10 tailwind = 40px, 12 tailwind = 48px
 
   // Determine container padding based on compact mode
   const containerPadding = compact ? "py-2 px-3" : "py-3 px-4";
@@ -69,12 +69,15 @@ export const BeverageItem = ({
       style={[bgColorStyle, containerStyle]}
     >
       <View
-        className={`h-${imageSize} w-${imageSize} rounded-md bg-secondary items-center justify-center`}
+        className="rounded-md bg-secondary items-center justify-center"
+        style={{ height: imageSizePx, width: imageSizePx }}
       >
         {beverage.image_url ?
           <Image
             source={{ uri: beverage.image_url }}
-            className={`h-${imageSize} w-${imageSize} rounded-md`}
+            className="rounded-md"
+            style={{ height: imageSizePx, width: imageSizePx }}
+            resizeMode="cover"
           />
         : <Text className="text-lg">
             {beverage.type === "Beer" ? "🍺" : "🍷"}
