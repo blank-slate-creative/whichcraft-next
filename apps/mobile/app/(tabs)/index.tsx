@@ -32,6 +32,7 @@ import Animated, {
   Extrapolation,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useFocusEffect } from "@react-navigation/native";
 import { Badge } from "../../components/Badge";
 import BeverageItem from "../../components/BeverageItem";
 
@@ -208,10 +209,11 @@ const FilterSheet = ({
 export default function HomeScreen() {
   const { session } = useAuth();
   const router = useRouter();
-  const { liked, sort_by, sort_order } = useLocalSearchParams<{
+  const { liked, sort_by, sort_order, refresh } = useLocalSearchParams<{
     liked?: string;
     sort_by?: BeverageFilters["sort_by"] | "undefined";
     sort_order?: BeverageFilters["sort_order"] | "undefined";
+    refresh?: string;
   }>();
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
@@ -337,6 +339,19 @@ export default function HomeScreen() {
       setIsRefreshing(false);
     }
   }, [fetchBeverages, session, currentLiked, currentSortBy, currentSortOrder]);
+
+  // Refresh when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      if (session?.access_token) {
+        fetchBeverages({
+          liked: currentLiked,
+          sort_by: currentSortBy,
+          sort_order: currentSortOrder,
+        });
+      }
+    }, [fetchBeverages, session, currentLiked, currentSortBy, currentSortOrder])
+  );
 
   // Apply search filter locally
   useEffect(() => {
