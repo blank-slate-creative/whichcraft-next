@@ -10,7 +10,7 @@ import { useColorScheme } from "nativewind";
 
 // Root layout must be exported as default
 export default function RootLayout() {
-  const {colorScheme: systemColorScheme} = useColorScheme();
+  const { colorScheme: systemColorScheme } = useColorScheme();
   const [theme, setTheme] = useState<string | null>(null);
 
   // Load theme preference
@@ -77,6 +77,16 @@ function RootLayoutNav() {
   }
 
   return (
-    <Slot />
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        animation: "slide_from_right",
+        presentation: "card",
+        animationDuration: 200,
+      }}
+    >
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="beverage" />
+    </Stack>
   );
 }

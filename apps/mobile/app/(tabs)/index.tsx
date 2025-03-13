@@ -402,7 +402,7 @@ export default function HomeScreen() {
 
   // Navigate to beverage detail
   const navigateToBeverageDetail = (id: string) => {
-    router.push("/");
+    router.push(`/beverage/${id}`);
   };
 
   return (
