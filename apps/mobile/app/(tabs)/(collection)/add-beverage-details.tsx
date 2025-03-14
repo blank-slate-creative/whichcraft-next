@@ -149,7 +149,7 @@ export default function AddBeverageDetailsScreen() {
                 />
               </View>
 
-              <View className="space-y-2">
+              <View className="gap-2">
                 <Text className="text-sm font-medium text-foreground">
                   Producer
                 </Text>
@@ -164,7 +164,7 @@ export default function AddBeverageDetailsScreen() {
                 />
               </View>
 
-              <View className="space-y-2">
+              <View className="gap-2">
                 <Text className="text-sm font-medium text-foreground">
                   Style
                 </Text>
@@ -179,7 +179,7 @@ export default function AddBeverageDetailsScreen() {
                 />
               </View>
 
-              <View className="space-y-2">
+              <View className="gap-2">
                 <Text className="text-sm font-medium text-foreground">
                   ABV (%)
                 </Text>
