@@ -11,14 +11,14 @@ import {
   Alert,
   TextInput,
 } from "react-native";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 import { BeverageApiClient, Beverage } from "@whichcraft/api-client";
 import { ThumbsUp, ThumbsDown, Trash2 } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Badge } from "../../components/Badge";
-import { BackButton } from "../../components/BackButton";
-import { debounce } from "../../utils/functions";
+import { Badge } from "../../../components/Badge";
+import { BackButton } from "../../../components/BackButton";
+import { debounce } from "../../../utils/functions";
 import { useBeverages } from "@whichcraft/beverage-context";
 
 // Create API client instance
@@ -248,16 +248,12 @@ export default function BeverageDetailScreen() {
     <>
       <Stack.Screen
         options={{
-          headerShown: true,
-          headerLeft: () => <BackButton />,
-          title: beverage?.name || "Beverage Details",
-          animation: "slide_from_right",
-          presentation: "card",
-          animationDuration: 200,
+          title: "",
           headerStyle: {
             backgroundColor: backgroundColor,
           },
           headerTintColor: primaryColor,
+          headerShadowVisible: false,
         }}
       />
 

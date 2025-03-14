@@ -48,7 +48,6 @@ export default function ProfileActions() {
   // Define sections with their actions
   const accountSections: ActionSection[] = [
     {
-      title: "Account",
       items: [
         {
           label: "Sign Out",
@@ -69,10 +68,9 @@ export default function ProfileActions() {
               {section.title}
             </ThemedText>
           )}
-          <ThemedView className="rounded-lg overflow-hidden border border-border">
+          <ThemedView className="rounded-lg overflow-hidden border border-border divide-y divide-border">
             {section.items.map((action, index) => (
               <React.Fragment key={action.label}>
-                {index > 0 && <View className="h-[1px] bg-border" />}
                 <TouchableOpacity
                   className="py-3.5 px-4 flex-row justify-between items-center"
                   onPress={action.onPress}

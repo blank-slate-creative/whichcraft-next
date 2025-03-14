@@ -1,4 +1,4 @@
-import { useRouter, useLocalSearchParams } from "expo-router";
+import { useRouter, useLocalSearchParams, Stack } from "expo-router";
 import { useState, useEffect, useCallback } from "react";
 import {
   View,
@@ -8,9 +8,9 @@ import {
   TextInput,
   ActivityIndicator,
   RefreshControl,
-  StatusBar,
+  Platform,
 } from "react-native";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 import { BeverageApiClient } from "@whichcraft/api-client";
 import { Beverage, BeverageFilters } from "@whichcraft/api-client";
 import {
@@ -23,17 +23,10 @@ import {
   Plus,
 } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
-import Animated, {
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  interpolate,
-  Extrapolation,
-} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
-import { Badge } from "../../components/Badge";
-import BeverageItem from "../../components/BeverageItem";
+import { Badge } from "../../../components/Badge";
+import BeverageItem from "../../../components/BeverageItem";
 import { useBeverages } from "@whichcraft/beverage-context";
 
 // Define sort options
@@ -236,58 +229,14 @@ export default function HomeScreen() {
   const destructiveColor = isDark ? "rgb(239, 68, 68)" : "rgb(239, 68, 68)";
   const backgroundColor = isDark ? "rgb(10, 10, 10)" : "rgb(255, 255, 255)";
 
-  // Animation values
-  const scrollY = useSharedValue(0);
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      scrollY.value = event.contentOffset.y;
-    },
-  });
-
-  // Header animation styles
-  const HEADER_HEIGHT = 60;
-  const TITLE_THRESHOLD = 30;
-
-  const headerAnimatedStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      scrollY.value,
-      [0, TITLE_THRESHOLD, TITLE_THRESHOLD + 10],
-      [0, 0, 1],
-      Extrapolation.CLAMP
-    );
-
-    const translateY = interpolate(
-      scrollY.value,
-      [0, TITLE_THRESHOLD],
-      [0, 0],
-      Extrapolation.CLAMP
-    );
-
-    return {
-      opacity,
-      transform: [{ translateY }],
-    };
-  });
-
-  // Border animation style
-  const headerBorderStyle = useAnimatedStyle(() => {
-    const borderOpacity = interpolate(
-      scrollY.value,
-      [0, TITLE_THRESHOLD, TITLE_THRESHOLD + 10],
-      [0, 0, 1],
-      Extrapolation.CLAMP
-    );
-
-    return {
-      borderBottomWidth: 1,
-      borderBottomColor:
-        isDark ?
-          `rgba(255,255,255,${borderOpacity * 0.1})`
-        : `rgba(0,0,0,${borderOpacity * 0.1})`,
-    };
-  });
-
-  const contentPaddingTop = HEADER_HEIGHT + insets.top;
+  // State
+  const [filteredBeverages, setFilteredBeverages] = useState<Beverage[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isFilterSheetVisible, setIsFilterSheetVisible] = useState(false);
+  const [hasInitialData, setHasInitialData] = useState(false);
 
   // Get current filter values from URL params
   const currentLiked =
@@ -305,15 +254,6 @@ export default function HomeScreen() {
       (option) =>
         option.field === currentSortBy && option.order === currentSortOrder
     ) || sortOptions[0];
-
-  // State
-  const [filteredBeverages, setFilteredBeverages] = useState<Beverage[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isFilterSheetVisible, setIsFilterSheetVisible] = useState(false);
-  const [hasInitialData, setHasInitialData] = useState(false);
 
   // Check if we have data in context that matches our filters
   useEffect(() => {
@@ -475,7 +415,7 @@ export default function HomeScreen() {
   const clearFilters = useCallback(() => {
     // Completely clear all URL parameters
     router.replace({
-      pathname: "/(tabs)",
+      pathname: "/(tabs)/(collection)",
       params: {},
     });
 
@@ -485,230 +425,178 @@ export default function HomeScreen() {
 
   // Navigate to beverage detail
   const navigateToBeverageDetail = (id: string) => {
-    // Find the beverage in our local state to pass along
-    const beverage = beverages.find((b) => b.id === id);
-
-    // Navigate to the detail page
-    router.push(`/beverage/${id}`);
+    router.push(`/(tabs)/(collection)/${id}`);
   };
 
   return (
-    <View className="flex-1 bg-background">
-      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
-
-      {/* Animated Header */}
-      <Animated.View
-        style={[
-          {
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: HEADER_HEIGHT + insets.top,
-            paddingTop: insets.top,
-            zIndex: 10,
+    <ScrollView
+      className="flex-1 bg-background"
+      contentInsetAdjustmentBehavior="automatic"
+      contentInset={{
+        bottom: insets.bottom + 20,
+      }}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefreshing}
+          onRefresh={handleRefresh}
+          colors={[primaryColor]}
+          tintColor={primaryColor}
+        />
+      }
+    >
+      <Stack.Screen
+        options={{
+          title: "Collection",
+          headerShadowVisible: true,
+          headerLargeTitle: true,
+          headerLargeTitleShadowVisible: false,
+          headerSearchBarOptions: {
+            placeholder: "Search beverages...",
+            onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
+          },
+          headerTintColor: primaryColor,
+          headerStyle: {
             backgroundColor: backgroundColor,
           },
-          headerBorderStyle,
-        ]}
-      >
-        <View className="flex-1 flex-row justify-between items-center px-4">
-          <Animated.Text
-            style={[headerAnimatedStyle]}
-            className="text-foreground font-bold text-lg"
-          >
-            Collection
-          </Animated.Text>
-          <TouchableOpacity
-            onPress={() => router.push("/add-beverage")}
-            className="flex-row items-center justify-center gap-1"
-          >
-            <Plus size={18} color={primaryColor} />
-            <Text className="text-foreground font-semibold text-md">Add</Text>
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
-
-      <Animated.FlatList
-        data={filteredBeverages}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{
-          paddingTop: contentPaddingTop, // Add extra padding for the static header
-          paddingBottom: 80,
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() =>
+                router.push("/(tabs)/(collection)/search-beverage")
+              }
+              className="flex-row items-center justify-center gap-1 mr-4"
+            >
+              <Plus size={18} color={primaryColor} />
+              <Text className="text-foreground font-semibold text-md">Add</Text>
+            </TouchableOpacity>
+          ),
         }}
-        onScroll={scrollHandler}
-        scrollEventThrottle={16}
-        ListHeaderComponent={
-          <>
-            {/* Static Header */}
-            <View className="px-4 pb-4">
-              <Text className="text-4xl font-bold text-foreground">
-                Collection
-              </Text>
-              {!isLoading && (
-                <Text className="text-muted-foreground mt-1">
-                  {stats.totalCount} beverages • {stats.likedCount} liked
-                </Text>
-              )}
-            </View>
-
-            {/* Search and Filter */}
-            <View className="px-4 pb-2">
-              <View className="relative">
-                <TextInput
-                  className="bg-secondary text-foreground rounded-lg py-3 pl-10 pr-4"
-                  placeholder="Search beverages..."
-                  placeholderTextColor="#9ca3af"
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
-                />
-                <View className="absolute left-3 top-3">
-                  <Search size={16} color={mutedForegroundColor} />
-                </View>
-                {searchQuery ?
-                  <TouchableOpacity
-                    className="absolute right-3 top-3"
-                    onPress={() => setSearchQuery("")}
-                  >
-                    <XCircle size={18} color={mutedForegroundColor} />
-                  </TouchableOpacity>
-                : null}
-              </View>
-            </View>
-
-            {/* Filter Button and Active Filters */}
-            <View className="px-4 mb-2 flex-row items-center ">
-              <TouchableOpacity
-                className="bg-secondary py-2 px-3 rounded-full flex-row items-center relative"
-                onPress={() => setIsFilterSheetVisible(true)}
-              >
-                <SlidersHorizontal
-                  size={12}
-                  color={mutedForegroundColor}
-                  style={{ marginRight: 6 }}
-                />
-                <Text className="text-sm text-foreground font-medium">
-                  Filters
-                </Text>
-                {currentLiked && (
-                  <View className="absolute top-1 right-1 h-2.5 w-2.5 bg-primary rounded-full" />
-                )}
-              </TouchableOpacity>
-
-              {currentLiked !== undefined && (
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  className="flex-1 ml-3"
-                >
-                  <View className="flex-row items-center">
-                    <Badge
-                      variant="secondary"
-                      icon={
-                        currentLiked ?
-                          <ThumbsUp
-                            size={12}
-                            color={primaryColor}
-                            style={{ marginRight: 6 }}
-                          />
-                        : <ThumbsDown
-                            size={12}
-                            color={destructiveColor}
-                            style={{ marginRight: 6 }}
-                          />
-                      }
-                      onRemove={() =>
-                        router.setParams({
-                          liked: undefined,
-                        })
-                      }
-                    >
-                      {currentLiked ? "Liked" : "Disliked"}
-                    </Badge>
-                  </View>
-                </ScrollView>
-              )}
-            </View>
-
-            {/* Error Message */}
-            {error && (
-              <View className="mx-4 mb-4 bg-destructive/10 p-3 rounded-lg">
-                <Text className="text-destructive text-sm">{error}</Text>
-              </View>
-            )}
-
-            {/* Loading State */}
-            {isLoading && !isRefreshing && (
-              <View className="items-center py-8">
-                <ActivityIndicator size="large" color={primaryColor} />
-              </View>
-            )}
-
-            {/* Empty State */}
-            {!isLoading && filteredBeverages.length === 0 && (
-              <View className="items-center justify-center p-4 py-8">
-                <View className="w-16 h-16 rounded-full bg-primary/10 items-center justify-center mb-4">
-                  <Plus size={32} color={primaryColor} />
-                </View>
-                <Text className="text-lg font-medium text-foreground mb-2">
-                  No beverages found
-                </Text>
-                <Text className="text-center text-muted-foreground mb-4">
-                  {searchQuery ?
-                    "Try adjusting your search or filters."
-                  : "Start building your collection by adding your first beverage."
-                  }
-                </Text>
-                {!searchQuery ?
-                  <TouchableOpacity
-                    className="bg-primary py-2 px-4 rounded-lg flex-row items-center"
-                    onPress={() => router.push("/add-beverage")}
-                  >
-                    <Plus
-                      size={18}
-                      color={primaryForegroundColor}
-                      style={{ marginRight: 4 }}
-                    />
-                    <Text className="text-primary-foreground font-medium">
-                      Add Your First Beverage
-                    </Text>
-                  </TouchableOpacity>
-                : <TouchableOpacity
-                    className="bg-secondary py-2 px-4 rounded-lg"
-                    onPress={() => setSearchQuery("")}
-                  >
-                    <Text className="text-foreground">Clear Search</Text>
-                  </TouchableOpacity>
-                }
-              </View>
-            )}
-          </>
-        }
-        renderItem={({ item }) => (
-          <BeverageItem
-            beverage={item}
-            onPress={() => navigateToBeverageDetail(item.id)}
-          />
-        )}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={handleRefresh}
-            colors={[primaryColor]}
-            tintColor={primaryColor}
-          />
-        }
-        ListEmptyComponent={
-          isLoading || filteredBeverages.length === 0 ?
-            null
-          : <View className="py-8 items-center">
-              <Text className="text-muted-foreground">
-                No beverages match your filters
-              </Text>
-            </View>
-        }
       />
 
+      <View className="flex-1 bg-background">
+        {/* Filter Button and Active Filters */}
+        <View className="px-4 mb-2 flex-row items-center">
+          <TouchableOpacity
+            className="bg-secondary py-2 px-3 rounded-full flex-row items-center relative"
+            onPress={() => setIsFilterSheetVisible(true)}
+          >
+            <SlidersHorizontal
+              size={12}
+              color={mutedForegroundColor}
+              style={{ marginRight: 6 }}
+            />
+            <Text className="text-sm text-foreground font-medium">Filters</Text>
+            {currentLiked && (
+              <View className="absolute top-1 right-1 h-2.5 w-2.5 bg-primary rounded-full" />
+            )}
+          </TouchableOpacity>
+
+          {currentLiked !== undefined && (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="flex-1 ml-3"
+            >
+              <View className="flex-row items-center">
+                <Badge
+                  variant="secondary"
+                  icon={
+                    currentLiked ?
+                      <ThumbsUp
+                        size={12}
+                        color={primaryColor}
+                        style={{ marginRight: 6 }}
+                      />
+                    : <ThumbsDown
+                        size={12}
+                        color={destructiveColor}
+                        style={{ marginRight: 6 }}
+                      />
+                  }
+                  onRemove={() =>
+                    router.setParams({
+                      liked: undefined,
+                    })
+                  }
+                >
+                  {currentLiked ? "Liked" : "Disliked"}
+                </Badge>
+              </View>
+            </ScrollView>
+          )}
+        </View>
+
+        {/* Error Message */}
+        {error && (
+          <View className="mx-4 mb-4 bg-destructive/10 p-3 rounded-lg">
+            <Text className="text-destructive text-sm">{error}</Text>
+          </View>
+        )}
+
+        {/* Loading State */}
+        {isLoading && !isRefreshing && (
+          <View className="items-center py-8">
+            <ActivityIndicator size="large" color={primaryColor} />
+          </View>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && filteredBeverages.length === 0 && (
+          <View className="items-center justify-center p-4 py-8">
+            <View className="w-16 h-16 rounded-full bg-primary/10 items-center justify-center mb-4">
+              <Plus size={32} color={primaryColor} />
+            </View>
+            <Text className="text-lg font-medium text-foreground mb-2">
+              No beverages found
+            </Text>
+            <Text className="text-center text-muted-foreground mb-4">
+              {searchQuery ?
+                "Try adjusting your search or filters."
+              : "Start building your collection by adding your first beverage."}
+            </Text>
+            {!searchQuery ?
+              <TouchableOpacity
+                className="bg-primary py-2 px-4 rounded-lg flex-row items-center"
+                onPress={() =>
+                  router.push("/(tabs)/(collection)/search-beverage")
+                }
+              >
+                <Plus
+                  size={18}
+                  color={primaryForegroundColor}
+                  style={{ marginRight: 4 }}
+                />
+                <Text className="text-primary-foreground font-medium">
+                  Add Your First Beverage
+                </Text>
+              </TouchableOpacity>
+            : <TouchableOpacity
+                className="bg-secondary py-2 px-4 rounded-lg"
+                onPress={() => setSearchQuery("")}
+              >
+                <Text className="text-foreground">Clear Search</Text>
+              </TouchableOpacity>
+            }
+          </View>
+        )}
+
+        {/* Beverage List */}
+        {!isLoading && filteredBeverages.length > 0 && (
+          <View className="flex-1">
+            {!isLoading && (
+              <Text className="text-muted-foreground px-4 mb-2">
+                {stats.totalCount} beverages • {stats.likedCount} liked
+              </Text>
+            )}
+            {filteredBeverages.map((beverage) => (
+              <BeverageItem
+                key={beverage.id}
+                beverage={beverage}
+                onPress={() => navigateToBeverageDetail(beverage.id)}
+              />
+            ))}
+          </View>
+        )}
+      </View>
       {/* Filter Sheet */}
       <FilterSheet
         isVisible={isFilterSheetVisible}
@@ -718,6 +606,6 @@ export default function HomeScreen() {
         onApplyFilter={applyFilter}
         onClearFilters={clearFilters}
       />
-    </View>
+    </ScrollView>
   );
 }
