@@ -12,19 +12,13 @@ import { BeverageProvider } from "@whichcraft/beverage-context";
 // Root layout must be exported as default
 export default function RootLayout() {
   const { colorScheme: systemColorScheme } = useColorScheme();
-  const [theme, setTheme] = useState<string | null>(
-    systemColorScheme ?? "system"
-  );
+  const [theme, setTheme] = useState<string | null>(null);
 
   // Load theme preference
   useEffect(() => {
     const loadTheme = async () => {
       try {
-        let savedTheme = await AsyncStorage.getItem("theme");
-        if (!savedTheme) {
-          savedTheme = systemColorScheme ?? "system";
-          await AsyncStorage.setItem("theme", savedTheme);
-        }
+        const savedTheme = await AsyncStorage.getItem("theme");
         setTheme(savedTheme);
       } catch (error) {
         console.error("Failed to load theme preference", error);

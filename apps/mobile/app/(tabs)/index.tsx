@@ -21,7 +21,6 @@ import {
   XCircle,
   SlidersHorizontal,
   Plus,
-  MoreHorizontal,
 } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 import Animated, {
@@ -521,7 +520,7 @@ export default function HomeScreen() {
             Collection
           </Animated.Text>
           <TouchableOpacity
-            onPress={() => router.push("/")}
+            onPress={() => router.push("/add-beverage")}
             className="flex-row items-center justify-center gap-1"
           >
             <Plus size={18} color={primaryColor} />
@@ -663,7 +662,7 @@ export default function HomeScreen() {
                 {!searchQuery ?
                   <TouchableOpacity
                     className="bg-primary py-2 px-4 rounded-lg flex-row items-center"
-                    onPress={() => router.push("/")}
+                    onPress={() => router.push("/add-beverage")}
                   >
                     <Plus
                       size={18}

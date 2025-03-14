@@ -32,6 +32,7 @@ export default function BeverageDetailScreen() {
   const { session } = useAuth();
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
+  // console.log("isDark", isDark);
   const insets = useSafeAreaInsets();
   const { deleteBeverage, setBeverages, setAllBeverages, beverages } =
     useBeverages();
@@ -245,10 +246,6 @@ export default function BeverageDetailScreen() {
 
   return (
     <>
-      <StatusBar
-        barStyle={isDark ? "light-content" : "dark-content"}
-        backgroundColor={backgroundColor}
-      />
       <Stack.Screen
         options={{
           headerShown: true,
@@ -257,6 +254,10 @@ export default function BeverageDetailScreen() {
           animation: "slide_from_right",
           presentation: "card",
           animationDuration: 200,
+          headerStyle: {
+            backgroundColor: backgroundColor,
+          },
+          headerTintColor: primaryColor,
         }}
       />
 
@@ -320,11 +321,15 @@ export default function BeverageDetailScreen() {
                 >
                   <ThumbsUp
                     size={20}
-                    color={beverage.liked === true ? "white" : primaryColor}
+                    color={
+                      beverage.liked === true ? backgroundColor : primaryColor
+                    }
                   />
                   <Text
                     className={`text-base ${
-                      beverage.liked === true ? "text-white" : "text-foreground"
+                      beverage.liked === true ?
+                        "text-primary-foreground"
+                      : "text-foreground"
                     }`}
                   >
                     Like

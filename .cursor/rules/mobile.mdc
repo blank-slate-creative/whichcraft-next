@@ -7,3 +7,8 @@ alwaysApply: false
 - Use Expo
 - Keep code clean, DRY, and well organized
 - Use Lucide icons for React Native
+- Reuse existing components whenever possible. Do not create a new component unless you are sure a suitable one does not exist.
+- Avoid making any major updates outside of the scope of the request
+- Don't change the UI design unless requested to do so
+- Follow existing UI design patterns on other screens
+- Use optimistic UI and avoid unnecessary loading states
