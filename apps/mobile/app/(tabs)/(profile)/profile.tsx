@@ -14,21 +14,20 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
-import { ThemeColors } from "../../../constants/Colors";
+import { useThemeColor } from "../../../hooks/useThemeColor";
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
   const [gravatarUrl, setGravatarUrl] = useState<string>("");
   const userName = user?.email?.split("@")[0] || "User";
   const email = user?.email || "";
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { colors, isDark } = useThemeColor();
   const insets = useSafeAreaInsets();
 
   // Theme colors
-  const primaryColor = ThemeColors.get(isDark, "primary");
-  const backgroundColor = ThemeColors.get(isDark, "background");
-  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
+  const primaryColor = colors.primary;
+  const backgroundColor = colors.background;
+  const mutedForegroundColor = colors.mutedForeground;
 
   useEffect(() => {
     if (email) {

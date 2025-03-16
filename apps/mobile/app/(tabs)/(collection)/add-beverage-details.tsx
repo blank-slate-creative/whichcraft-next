@@ -12,25 +12,23 @@ import {
   Alert,
   Image,
 } from "react-native";
-import { useColorScheme } from "nativewind";
 import { Beverage } from "@whichcraft/api-client";
 import { mobileBeverageApi } from "../../../utils/api";
 import { useBeverages } from "@whichcraft/beverage-context";
 import { ThumbsUp, ThumbsDown } from "lucide-react-native";
 import { Badge } from "../../../components/Badge";
-import { ThemeColors } from "../../../constants/Colors";
+import { useThemeColor } from "../../../hooks/useThemeColor";
 
 export default function AddBeverageDetailsScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { colors, isDark } = useThemeColor();
   const { setBeverages, setAllBeverages } = useBeverages();
 
   // Theme colors
-  const primaryColor = ThemeColors.get(isDark, "primary");
-  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
-  const backgroundColor = ThemeColors.get(isDark, "background");
+  const primaryColor = colors.primary;
+  const mutedForegroundColor = colors.mutedForeground;
+  const backgroundColor = colors.background;
 
   // Parse beverage data from params
   const initialBeverage: Beverage = JSON.parse(params.beverage as string);

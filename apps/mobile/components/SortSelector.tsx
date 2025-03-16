@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { TouchableOpacity, View, Text, Platform } from "react-native";
-import { useColorScheme } from "nativewind";
 import * as Haptics from "expo-haptics";
 import { ChevronDown } from "lucide-react-native";
 import {
@@ -8,7 +7,7 @@ import {
   MenuAction,
   MenuComponentRef,
 } from "@react-native-menu/menu";
-import { ThemeColors } from "../constants/Colors";
+import { useThemeColor } from "../hooks/useThemeColor";
 
 export interface SortOption {
   label: string;
@@ -28,13 +27,12 @@ export function SortSelector({
   selectedOption,
   onSelect,
 }: SortSelectorProps) {
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { colors, isDark } = useThemeColor();
   const menuRef = useRef<MenuComponentRef>(null);
 
   // Theme colors
-  const primaryColor = ThemeColors.get(isDark, "primary");
-  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
+  const primaryColor = colors.primary;
+  const mutedForegroundColor = colors.mutedForeground;
 
   const handleSelect = (option: SortOption) => {
     // Add haptic feedback when selecting an option

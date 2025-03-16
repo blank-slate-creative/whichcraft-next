@@ -22,14 +22,13 @@ import {
   SlidersHorizontal,
   Plus,
 } from "lucide-react-native";
-import { useColorScheme } from "nativewind";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import { Badge } from "../../../components/Badge";
 import BeverageItem from "../../../components/BeverageItem";
 import { useBeverages } from "@whichcraft/beverage-context";
 import { SortSelector, SortOption } from "../../../components/SortSelector";
-import { ThemeColors } from "../../../constants/Colors";
+import { useThemeColor } from "../../../hooks/useThemeColor";
 
 // Define sort options
 const sortOptions: SortOption[] = [
@@ -73,16 +72,15 @@ export default function HomeScreen() {
     sort_order?: BeverageFilters["sort_order"] | "undefined";
     refresh?: string;
   }>();
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { colors, isDark } = useThemeColor();
   const insets = useSafeAreaInsets();
 
   // Theme colors
-  const primaryColor = ThemeColors.get(isDark, "primary");
-  const primaryForegroundColor = ThemeColors.get(isDark, "primaryForeground");
-  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
-  const destructiveColor = ThemeColors.get(isDark, "destructive");
-  const backgroundColor = ThemeColors.get(isDark, "background");
+  const primaryColor = colors.primary;
+  const primaryForegroundColor = colors.primaryForeground;
+  const mutedForegroundColor = colors.mutedForeground;
+  const destructiveColor = colors.destructive;
+  const backgroundColor = colors.background;
 
   // State
   const [filteredBeverages, setFilteredBeverages] = useState<Beverage[]>([]);

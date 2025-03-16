@@ -10,23 +10,21 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import { useColorScheme } from "nativewind";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Beverage, BeerSearchResult } from "@whichcraft/api-client";
 import { BeverageItem } from "../../../components/BeverageItem";
 import { Search, Edit, X } from "lucide-react-native";
-import { ThemeColors } from "../../../constants/Colors";
+import { useThemeColor } from "../../../hooks/useThemeColor";
 
 export default function SearchBeverageScreen() {
   const router = useRouter();
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { colors, isDark } = useThemeColor();
   const insets = useSafeAreaInsets();
 
   // Theme colors
-  const primaryColor = ThemeColors.get(isDark, "primary");
-  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
-  const backgroundColor = ThemeColors.get(isDark, "background");
+  const primaryColor = colors.primary;
+  const mutedForegroundColor = colors.mutedForeground;
+  const backgroundColor = colors.background;
 
   // State
   const [isLoading, setIsLoading] = useState<boolean>(false);

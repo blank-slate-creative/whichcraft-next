@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { TouchableOpacity, Text, View } from "react-native";
 import { useColorScheme } from "nativewind";
 import { X } from "lucide-react-native";
-import { ThemeColors } from "../constants/Colors";
+import { useThemeColor } from "../hooks/useThemeColor";
 
 export type BadgeVariant = "default" | "primary" | "secondary" | "outline";
 export type BadgeSize = "sm" | "md" | "lg";
@@ -30,13 +30,12 @@ export function Badge({
   textClassName = "",
   selected = false,
 }: BadgeProps) {
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { colors } = useThemeColor();
 
   // Theme colors
-  const primaryColor = ThemeColors.get(isDark, "primary");
-  const primaryForegroundColor = ThemeColors.get(isDark, "primaryForeground");
-  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
+  const primaryColor = colors.primary;
+  const primaryForegroundColor = colors.primaryForeground;
+  const mutedForegroundColor = colors.mutedForeground;
 
   // Size classes
   const sizeClasses = {

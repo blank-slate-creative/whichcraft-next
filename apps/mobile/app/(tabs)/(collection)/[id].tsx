@@ -14,13 +14,12 @@ import {
 import { useAuth } from "../../../context/AuthContext";
 import { BeverageApiClient, Beverage } from "@whichcraft/api-client";
 import { ThumbsUp, ThumbsDown, Trash2 } from "lucide-react-native";
-import { useColorScheme } from "nativewind";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Badge } from "../../../components/Badge";
 import { BackButton } from "../../../components/BackButton";
 import { debounce } from "../../../utils/functions";
 import { useBeverages } from "@whichcraft/beverage-context";
-import { ThemeColors } from "../../../constants/Colors";
+import { useThemeColor } from "../../../hooks/useThemeColor";
 
 // Create API client instance
 const beverageApi = new BeverageApiClient({
@@ -31,17 +30,16 @@ export default function BeverageDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { session } = useAuth();
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { colors, isDark } = useThemeColor();
   const insets = useSafeAreaInsets();
   const { deleteBeverage, setBeverages, setAllBeverages, beverages } =
     useBeverages();
 
   // Theme colors
-  const primaryColor = ThemeColors.get(isDark, "primary");
-  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
-  const destructiveColor = ThemeColors.get(isDark, "destructive");
-  const backgroundColor = ThemeColors.get(isDark, "background");
+  const primaryColor = colors.primary;
+  const mutedForegroundColor = colors.mutedForeground;
+  const destructiveColor = colors.destructive;
+  const backgroundColor = colors.background;
 
   // State
   const [beverage, setBeverage] = useState<Beverage | null>(null);

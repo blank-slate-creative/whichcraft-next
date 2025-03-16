@@ -1,15 +1,13 @@
 import { useRouter, useLocalSearchParams, Stack } from "expo-router";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { ThumbsUp, ThumbsDown, X } from "lucide-react-native";
-import { useColorScheme } from "nativewind";
 import { Badge } from "../../../components/Badge";
 import { BeverageFilters } from "@whichcraft/api-client";
-import { ThemeColors } from "../../../constants/Colors";
+import { useThemeColor } from "../../../hooks/useThemeColor";
 
 export default function FilterScreen() {
   const router = useRouter();
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { colors, isDark } = useThemeColor();
 
   // Get params from URL
   const { liked } = useLocalSearchParams<{
@@ -17,10 +15,10 @@ export default function FilterScreen() {
   }>();
 
   // Theme colors
-  const primaryForegroundColor = ThemeColors.get(isDark, "primaryForeground");
-  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
-  const primaryColor = ThemeColors.get(isDark, "primary");
-  const backgroundColor = ThemeColors.get(isDark, "background");
+  const primaryForegroundColor = colors.primaryForeground;
+  const mutedForegroundColor = colors.mutedForeground;
+  const primaryColor = colors.primary;
+  const backgroundColor = colors.background;
   // Get current filter values from URL params
   const currentLiked =
     liked === "undefined" || liked === undefined ? undefined : liked;
