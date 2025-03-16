@@ -9,15 +9,22 @@ import {
   ActivityIndicator,
   Alert,
   TextInput,
+  Platform,
 } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { BeverageApiClient, Beverage } from "@whichcraft/api-client";
-import { ThumbsUp, ThumbsDown, Trash2 } from "lucide-react-native";
+import { ThumbsUp, ThumbsDown, MoreHorizontal } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Badge } from "../../components/Badge";
 import { debounce } from "../../utils/functions";
 import { useBeverages } from "@whichcraft/beverage-context";
 import { useThemeColor } from "../../hooks/useThemeColor";
+import {
+  MenuView,
+  MenuAction,
+  MenuComponentRef,
+} from "@react-native-menu/menu";
+import * as Haptics from "expo-haptics";
 
 // Create API client instance
 const beverageApi = new BeverageApiClient({
@@ -32,6 +39,7 @@ export default function BeverageDetailScreen() {
   const insets = useSafeAreaInsets();
   const { deleteBeverage, setBeverages, setAllBeverages, beverages } =
     useBeverages();
+  const menuRef = useRef<MenuComponentRef>(null);
 
   // Theme colors
   const primaryColor = colors.primary;
@@ -206,6 +214,11 @@ export default function BeverageDetailScreen() {
   const handleDelete = async () => {
     if (!session?.access_token || !beverage) return;
 
+    // Add haptic feedback
+    if (Platform.OS === "ios") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+
     Alert.alert(
       "Delete Beverage",
       `Are you sure you want to delete "${beverage.name}"?`,
@@ -239,6 +252,51 @@ export default function BeverageDetailScreen() {
     );
   };
 
+  // Menu actions for the overflow menu
+  const menuActions: MenuAction[] = [
+    {
+      id: "delete",
+      title: "Delete Beverage",
+      attributes: {
+        destructive: true,
+      },
+      image: Platform.select({
+        ios: "trash",
+        android: undefined,
+      }),
+    },
+  ];
+
+  // Header right component with overflow menu
+  const HeaderRight = () => {
+    if (!beverage) return null;
+
+    return (
+      <MenuView
+        ref={menuRef}
+        actions={menuActions}
+        onPressAction={({ nativeEvent }) => {
+          if (nativeEvent.event === "delete") {
+            handleDelete();
+          }
+        }}
+        themeVariant={isDark ? "dark" : "light"}
+        shouldOpenOnLongPress={false}
+      >
+        <TouchableOpacity
+          className="p-2 bg-primary rounded-full"
+          onPress={() => {
+            if (Platform.OS === "android") {
+              menuRef.current?.show();
+            }
+          }}
+        >
+          <MoreHorizontal size={18} color={backgroundColor} />
+        </TouchableOpacity>
+      </MenuView>
+    );
+  };
+
   return (
     <>
       <Stack.Screen
@@ -251,6 +309,7 @@ export default function BeverageDetailScreen() {
           },
           headerTintColor: primaryColor,
           headerShadowVisible: false,
+          headerRight: HeaderRight,
         }}
       />
 
@@ -384,16 +443,6 @@ export default function BeverageDetailScreen() {
                 {new Date(beverage.created_at).toLocaleDateString()}
               </Text>
             </View>
-
-            {/* Delete Button */}
-            <TouchableOpacity
-              className="flex-row items-center justify-center gap-2 p-3 rounded-md bg-destructive"
-              onPress={handleDelete}
-              disabled={isUpdating}
-            >
-              <Trash2 size={20} color="white" />
-              <Text className="text-base text-white">Delete Beverage</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
       }

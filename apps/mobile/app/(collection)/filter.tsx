@@ -1,6 +1,6 @@
 import { useRouter, useLocalSearchParams, Stack } from "expo-router";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { ThumbsUp, ThumbsDown, X } from "lucide-react-native";
+import { ThumbsUp, ThumbsDown, X, RotateCcw } from "lucide-react-native";
 import { Badge } from "../../components/Badge";
 import { BeverageFilters } from "@whichcraft/api-client";
 import { useThemeColor } from "../../hooks/useThemeColor";
@@ -68,13 +68,13 @@ export default function FilterScreen() {
           },
           headerTintColor: primaryColor,
           headerLeft: () => (
-            <TouchableOpacity onPress={closeFilter} className="ml-2">
-              <X size={24} color={primaryColor} />
+            <TouchableOpacity onPress={closeFilter}>
+              <Text className="text-primary">Cancel</Text>
             </TouchableOpacity>
           ),
           headerRight: () => (
-            <TouchableOpacity onPress={clearFilters} className="mr-4">
-              <Text className="text-primary font-semibold">Reset All</Text>
+            <TouchableOpacity onPress={applyAndClose}>
+              <Text className="text-primary font-semibold">Done</Text>
             </TouchableOpacity>
           ),
         }}
@@ -129,20 +129,17 @@ export default function FilterScreen() {
           </View>
         </View>
 
-        <View className="flex-row gap-2 mt-4">
-          <TouchableOpacity
-            className="flex-1 py-3 border border-border rounded-md items-center"
-            onPress={closeFilter}
-          >
-            <Text className="text-foreground">Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="flex-1 py-3 bg-primary rounded-md items-center"
-            onPress={applyAndClose}
-          >
-            <Text className="text-primary-foreground">Apply</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          className="flex-row items-center justify-center py-3 border border-border rounded-md mt-4"
+          onPress={clearFilters}
+        >
+          <RotateCcw
+            size={16}
+            color={mutedForegroundColor}
+            style={{ marginRight: 8 }}
+          />
+          <Text className="text-foreground">Reset All Filters</Text>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );

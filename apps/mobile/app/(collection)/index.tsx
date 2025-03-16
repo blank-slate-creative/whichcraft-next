@@ -58,22 +58,15 @@ const beverageApi = new BeverageApiClient({
 export default function HomeScreen() {
   const { session, user } = useAuth();
   const router = useRouter();
-  const {
-    beverages,
-    setBeverages,
-    setAllBeverages,
-    stats,
-    deleteBeverage,
-    allBeverages,
-  } = useBeverages();
+  const { beverages, setBeverages, setAllBeverages, stats, allBeverages } =
+    useBeverages();
   const { liked, sort_by, sort_order, refresh } = useLocalSearchParams<{
     liked?: string;
     sort_by?: BeverageFilters["sort_by"] | "undefined";
     sort_order?: BeverageFilters["sort_order"] | "undefined";
     refresh?: string;
   }>();
-  const { colors, isDark } = useThemeColor();
-  const insets = useSafeAreaInsets();
+  const { colors } = useThemeColor();
 
   // Theme colors
   const primaryColor = colors.primary;
@@ -338,11 +331,12 @@ export default function HomeScreen() {
                       style={{ marginRight: 6 }}
                     />
                 }
-                onRemove={() =>
+                onRemove={() => {
                   router.setParams({
                     liked: undefined,
-                  })
-                }
+                  });
+                  setIsLoading(true);
+                }}
               >
                 {currentLiked ? "Liked" : "Disliked"}
               </Badge>

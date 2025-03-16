@@ -22,11 +22,6 @@
       },
       "package": "com.ericcecchi.whichcraft"
     },
-    "web": {
-      "bundler": "metro",
-      "output": "single",
-      "favicon": "./assets/images/favicon.png"
-    },
     "plugins": [
       "expo-router",
       [
