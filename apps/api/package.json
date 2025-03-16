@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "install": "uv venv && uv pip install -r requirements.txt",
+    "setup": "uv venv && uv pip install -r requirements.txt",
     "dev": "uv run app.py",
     "deploy": "./deploy-api.sh",
     "build": "docker build -t api .",

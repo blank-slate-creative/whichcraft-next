@@ -6,7 +6,7 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
-    "install": {},
+    "setup": {},
     "deploy": {
       "dependsOn": ["^build"],
       "cache": false
