@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
-import { useAuth } from "../../../context/AuthContext";
-import { ThemeSwitcher } from "../../../components/ThemeSwitcher";
-import ProfileActions from "../../../components/ProfileActions";
-import { getGravatarUrl } from "../../../utils/gravatar";
+import { useAuth } from "../../context/AuthContext";
+import { ThemeSwitcher } from "../../components/ThemeSwitcher";
+import ProfileActions from "../../components/ProfileActions";
+import { getGravatarUrl } from "../../utils/gravatar";
 import { useColorScheme } from "nativewind";
 import Animated, {
   useAnimatedScrollHandler,
@@ -14,7 +14,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
-import { useThemeColor } from "../../../hooks/useThemeColor";
+import { useThemeColor } from "../../hooks/useThemeColor";
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();

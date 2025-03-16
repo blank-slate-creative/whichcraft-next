@@ -11,7 +11,7 @@ import {
   Platform,
   Image,
 } from "react-native";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { BeverageApiClient } from "@whichcraft/api-client";
 import { Beverage, BeverageFilters } from "@whichcraft/api-client";
 import {
@@ -27,12 +27,12 @@ import {
 } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
-import { Badge } from "../../../components/Badge";
-import BeverageItem from "../../../components/BeverageItem";
+import { Badge } from "../../components/Badge";
+import BeverageItem from "../../components/BeverageItem";
 import { useBeverages } from "@whichcraft/beverage-context";
-import { SortSelector, SortOption } from "../../../components/SortSelector";
-import { useThemeColor } from "../../../hooks/useThemeColor";
-import { getGravatarUrl } from "../../../utils/gravatar";
+import { SortSelector, SortOption } from "../../components/SortSelector";
+import { useThemeColor } from "../../hooks/useThemeColor";
+import { getGravatarUrl } from "../../utils/gravatar";
 
 // Define sort options
 const sortOptions: SortOption[] = [
@@ -250,7 +250,7 @@ export default function HomeScreen() {
   const clearFilters = useCallback(() => {
     // Completely clear all URL parameters
     router.replace({
-      pathname: "/(tabs)/(collection)",
+      pathname: "/(collection)",
       params: {},
     });
 
@@ -259,13 +259,13 @@ export default function HomeScreen() {
 
   // Navigate to beverage detail
   const navigateToBeverageDetail = (id: string) => {
-    router.push(`/(tabs)/(collection)/${id}`);
+    router.push(`/(collection)/${id}`);
   };
 
   // Navigate to filter screen
   const navigateToFilterScreen = () => {
     router.push({
-      pathname: "/(tabs)/(collection)/filter",
+      pathname: "/(collection)/filter",
       params: {
         liked: currentLiked === undefined ? undefined : String(currentLiked),
       },
@@ -329,9 +329,7 @@ export default function HomeScreen() {
           headerRight: () => (
             <View className="flex-row items-center gap-4">
               <TouchableOpacity
-                onPress={() =>
-                  router.push("/(tabs)/(collection)/search-beverage")
-                }
+                onPress={() => router.push("/(collection)/search-beverage")}
                 className="flex-row items-center justify-center gap-1"
               >
                 <PlusCircle
@@ -345,7 +343,7 @@ export default function HomeScreen() {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => router.push("/(tabs)/(profile)/profile")}
+                onPress={() => router.push("/(collection)/profile")}
               >
                 {avatarUrl ?
                   <Image
@@ -454,9 +452,7 @@ export default function HomeScreen() {
             {!searchQuery ?
               <TouchableOpacity
                 className="bg-primary py-2 px-4 rounded-lg flex-row items-center"
-                onPress={() =>
-                  router.push("/(tabs)/(collection)/search-beverage")
-                }
+                onPress={() => router.push("/(collection)/search-beverage")}
               >
                 <Plus
                   size={18}

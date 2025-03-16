@@ -11,15 +11,14 @@ import {
   Alert,
   TextInput,
 } from "react-native";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { BeverageApiClient, Beverage } from "@whichcraft/api-client";
 import { ThumbsUp, ThumbsDown, Trash2 } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Badge } from "../../../components/Badge";
-import { BackButton } from "../../../components/BackButton";
-import { debounce } from "../../../utils/functions";
+import { Badge } from "../../components/Badge";
+import { debounce } from "../../utils/functions";
 import { useBeverages } from "@whichcraft/beverage-context";
-import { useThemeColor } from "../../../hooks/useThemeColor";
+import { useThemeColor } from "../../hooks/useThemeColor";
 
 // Create API client instance
 const beverageApi = new BeverageApiClient({

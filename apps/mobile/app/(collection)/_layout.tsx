@@ -8,6 +8,7 @@ export default function CollectionLayout() {
       <Stack.Screen name="[id]" />
       <Stack.Screen name="search-beverage" />
       <Stack.Screen name="add-beverage-details" />
+      <Stack.Screen name="profile" />
       <Stack.Screen
         name="filter"
         options={{

@@ -80,15 +80,8 @@ function RootLayoutNav() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        animation: "slide_from_right",
-        presentation: "card",
-        animationDuration: 200,
-      }}
-    >
-      <Stack.Screen name="(tabs)" />
+    <Stack>
+      <Stack.Screen name="(collection)" />
     </Stack>
   );
 }

@@ -13,11 +13,11 @@ import {
   Image,
 } from "react-native";
 import { Beverage } from "@whichcraft/api-client";
-import { mobileBeverageApi } from "../../../utils/api";
+import { mobileBeverageApi } from "../../utils/api";
 import { useBeverages } from "@whichcraft/beverage-context";
 import { ThumbsUp, ThumbsDown } from "lucide-react-native";
-import { Badge } from "../../../components/Badge";
-import { useThemeColor } from "../../../hooks/useThemeColor";
+import { Badge } from "../../components/Badge";
+import { useThemeColor } from "../../hooks/useThemeColor";
 
 export default function AddBeverageDetailsScreen() {
   const router = useRouter();
@@ -95,7 +95,7 @@ export default function AddBeverageDetailsScreen() {
 
       // Navigate back to collection with refresh param
       router.replace({
-        pathname: "/(tabs)/(collection)",
+        pathname: "/(collection)",
         params: { refresh: "true" },
       });
     } catch (error) {

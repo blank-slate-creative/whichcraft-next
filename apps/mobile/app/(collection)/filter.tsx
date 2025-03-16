@@ -1,9 +1,9 @@
 import { useRouter, useLocalSearchParams, Stack } from "expo-router";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { ThumbsUp, ThumbsDown, X } from "lucide-react-native";
-import { Badge } from "../../../components/Badge";
+import { Badge } from "../../components/Badge";
 import { BeverageFilters } from "@whichcraft/api-client";
-import { useThemeColor } from "../../../hooks/useThemeColor";
+import { useThemeColor } from "../../hooks/useThemeColor";
 
 export default function FilterScreen() {
   const router = useRouter();
@@ -34,7 +34,7 @@ export default function FilterScreen() {
   const clearFilters = () => {
     // Navigate back to collection with cleared params
     router.replace({
-      pathname: "/(tabs)/(collection)",
+      pathname: "/(collection)",
       params: {},
     });
   };

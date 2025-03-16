@@ -12,9 +12,9 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Beverage, BeerSearchResult } from "@whichcraft/api-client";
-import { BeverageItem } from "../../../components/BeverageItem";
+import { BeverageItem } from "../../components/BeverageItem";
 import { Search, Edit, X } from "lucide-react-native";
-import { useThemeColor } from "../../../hooks/useThemeColor";
+import { useThemeColor } from "../../hooks/useThemeColor";
 
 export default function SearchBeverageScreen() {
   const router = useRouter();
@@ -117,7 +117,7 @@ export default function SearchBeverageScreen() {
   // Handle select beverage from search results
   const handleSelectBeverage = (beverage: Beverage) => {
     router.push({
-      pathname: "/(tabs)/(collection)/add-beverage-details",
+      pathname: "/(collection)/add-beverage-details",
       params: { beverage: JSON.stringify(beverage) },
     });
   };
@@ -140,7 +140,7 @@ export default function SearchBeverageScreen() {
     };
 
     router.push({
-      pathname: "/(tabs)/(collection)/add-beverage-details",
+      pathname: "/(collection)/add-beverage-details",
       params: {
         beverage: JSON.stringify(emptyBeverage),
         isManualEntry: "true",
