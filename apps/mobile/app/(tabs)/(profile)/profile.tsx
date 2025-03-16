@@ -14,9 +14,10 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
+import { ThemeColors } from "../../../constants/Colors";
 
 export default function ProfileScreen() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [gravatarUrl, setGravatarUrl] = useState<string>("");
   const userName = user?.email?.split("@")[0] || "User";
   const email = user?.email || "";
@@ -25,10 +26,9 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
 
   // Theme colors
-  const primaryColor = isDark ? "rgb(250, 250, 250)" : "rgb(10, 10, 10)";
-  const backgroundColor = isDark ? "rgb(10, 10, 10)" : "rgb(250, 250, 250)";
-  const mutedForegroundColor =
-    isDark ? "rgb(163, 163, 163)" : "rgb(115, 115, 115)";
+  const primaryColor = ThemeColors.get(isDark, "primary");
+  const backgroundColor = ThemeColors.get(isDark, "background");
+  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
 
   useEffect(() => {
     if (email) {

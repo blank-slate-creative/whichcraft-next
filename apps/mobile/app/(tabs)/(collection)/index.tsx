@@ -1,5 +1,5 @@
 import { useRouter, useLocalSearchParams, Stack } from "expo-router";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   View,
   Text,
@@ -29,6 +29,7 @@ import { Badge } from "../../../components/Badge";
 import BeverageItem from "../../../components/BeverageItem";
 import { useBeverages } from "@whichcraft/beverage-context";
 import { SortSelector, SortOption } from "../../../components/SortSelector";
+import { ThemeColors } from "../../../constants/Colors";
 
 // Define sort options
 const sortOptions: SortOption[] = [
@@ -77,13 +78,11 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
 
   // Theme colors
-  const primaryColor = isDark ? "rgb(250, 250, 250)" : "rgb(10, 10, 10)";
-  const primaryForegroundColor =
-    isDark ? "rgb(10, 10, 10)" : "rgb(250, 250, 250)";
-  const mutedForegroundColor =
-    isDark ? "rgb(163, 163, 163)" : "rgb(115, 115, 115)";
-  const destructiveColor = isDark ? "rgb(239, 68, 68)" : "rgb(239, 68, 68)";
-  const backgroundColor = isDark ? "rgb(10, 10, 10)" : "rgb(255, 255, 255)";
+  const primaryColor = ThemeColors.get(isDark, "primary");
+  const primaryForegroundColor = ThemeColors.get(isDark, "primaryForeground");
+  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
+  const destructiveColor = ThemeColors.get(isDark, "destructive");
+  const backgroundColor = ThemeColors.get(isDark, "background");
 
   // State
   const [filteredBeverages, setFilteredBeverages] = useState<Beverage[]>([]);

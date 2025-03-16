@@ -10,6 +10,7 @@ import {
 import { ThumbsUp, ThumbsDown, MoreHorizontal } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 import { Beverage } from "@whichcraft/api-client";
+import { ThemeColors } from "../constants/Colors";
 
 interface BeverageItemProps {
   beverage: Beverage;
@@ -42,10 +43,9 @@ export const BeverageItem = ({
   const isDark = colorScheme === "dark";
 
   // Theme colors
-  const primaryColor = isDark ? "rgb(250, 250, 250)" : "rgb(10, 10, 10)";
-  const mutedForegroundColor =
-    isDark ? "rgb(163, 163, 163)" : "rgb(115, 115, 115)";
-  const destructiveColor = isDark ? "rgb(239, 68, 68)" : "rgb(239, 68, 68)";
+  const primaryColor = ThemeColors.get(isDark, "primary");
+  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
+  const destructiveColor = ThemeColors.get(isDark, "destructive");
   const selectedBgColor =
     isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
 

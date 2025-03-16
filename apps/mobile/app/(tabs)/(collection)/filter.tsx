@@ -4,6 +4,7 @@ import { ThumbsUp, ThumbsDown, X } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 import { Badge } from "../../../components/Badge";
 import { BeverageFilters } from "@whichcraft/api-client";
+import { ThemeColors } from "../../../constants/Colors";
 
 export default function FilterScreen() {
   const router = useRouter();
@@ -16,12 +17,10 @@ export default function FilterScreen() {
   }>();
 
   // Theme colors
-  const primaryForegroundColor =
-    isDark ? "rgb(10, 10, 10)" : "rgb(250, 250, 250)";
-  const mutedForegroundColor =
-    isDark ? "rgb(163, 163, 163)" : "rgb(115, 115, 115)";
-  const primaryColor = isDark ? "rgb(250, 250, 250)" : "rgb(10, 10, 10)";
-  const backgroundColor = isDark ? "rgb(10, 10, 10)" : "rgb(255, 255, 255)";
+  const primaryForegroundColor = ThemeColors.get(isDark, "primaryForeground");
+  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
+  const primaryColor = ThemeColors.get(isDark, "primary");
+  const backgroundColor = ThemeColors.get(isDark, "background");
   // Get current filter values from URL params
   const currentLiked =
     liked === "undefined" || liked === undefined ? undefined : liked;

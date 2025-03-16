@@ -18,6 +18,7 @@ import { mobileBeverageApi } from "../../../utils/api";
 import { useBeverages } from "@whichcraft/beverage-context";
 import { ThumbsUp, ThumbsDown } from "lucide-react-native";
 import { Badge } from "../../../components/Badge";
+import { ThemeColors } from "../../../constants/Colors";
 
 export default function AddBeverageDetailsScreen() {
   const router = useRouter();
@@ -27,10 +28,9 @@ export default function AddBeverageDetailsScreen() {
   const { setBeverages, setAllBeverages } = useBeverages();
 
   // Theme colors
-  const primaryColor = isDark ? "rgb(250, 250, 250)" : "rgb(10, 10, 10)";
-  const mutedForegroundColor =
-    isDark ? "rgb(163, 163, 163)" : "rgb(115, 115, 115)";
-  const backgroundColor = isDark ? "rgb(10, 10, 10)" : "rgb(255, 255, 255)";
+  const primaryColor = ThemeColors.get(isDark, "primary");
+  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
+  const backgroundColor = ThemeColors.get(isDark, "background");
 
   // Parse beverage data from params
   const initialBeverage: Beverage = JSON.parse(params.beverage as string);

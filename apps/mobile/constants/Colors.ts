@@ -36,6 +36,38 @@ const darkColors = {
   border: "#262626", // --border: 38, 38, 38
 };
 
+// RGB values for direct use in components
+const rgbColors = {
+  light: {
+    background: "rgb(255, 255, 255)",
+    foreground: "rgb(10, 10, 10)",
+    primary: "rgb(10, 10, 10)",
+    primaryForeground: "rgb(250, 250, 250)",
+    secondary: "rgb(245, 245, 245)",
+    secondaryForeground: "rgb(10, 10, 10)",
+    muted: "rgb(245, 245, 245)",
+    mutedForeground: "rgb(115, 115, 115)",
+    accent: "rgb(245, 245, 245)",
+    accentForeground: "rgb(10, 10, 10)",
+    destructive: "rgb(239, 68, 68)",
+    border: "rgb(230, 230, 230)",
+  },
+  dark: {
+    background: "rgb(10, 10, 10)",
+    foreground: "rgb(250, 250, 250)",
+    primary: "rgb(250, 250, 250)",
+    primaryForeground: "rgb(10, 10, 10)",
+    secondary: "rgb(38, 38, 38)",
+    secondaryForeground: "rgb(250, 250, 250)",
+    muted: "rgb(38, 38, 38)",
+    mutedForeground: "rgb(163, 163, 163)",
+    accent: "rgb(38, 38, 38)",
+    accentForeground: "rgb(250, 250, 250)",
+    destructive: "rgb(239, 68, 68)", // Using the same as light for consistency with current code
+    border: "rgb(38, 38, 38)",
+  },
+};
+
 export const Colors = {
   light: {
     text: lightColors.foreground,
@@ -53,4 +85,14 @@ export const Colors = {
     tabIconDefault: darkColors.mutedForeground,
     tabIconSelected: darkColors.primary,
   },
+};
+
+// Export RGB colors for direct use in components
+export const ThemeColors = {
+  // Function to get the appropriate color based on the theme
+  get: (isDark: boolean, colorName: keyof typeof rgbColors.light) => {
+    return isDark ? rgbColors.dark[colorName] : rgbColors.light[colorName];
+  },
+  // Direct access to RGB colors
+  rgb: rgbColors,
 };

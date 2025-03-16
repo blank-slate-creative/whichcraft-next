@@ -8,6 +8,7 @@ import {
   MenuAction,
   MenuComponentRef,
 } from "@react-native-menu/menu";
+import { ThemeColors } from "../constants/Colors";
 
 export interface SortOption {
   label: string;
@@ -32,9 +33,8 @@ export function SortSelector({
   const menuRef = useRef<MenuComponentRef>(null);
 
   // Theme colors
-  const primaryColor = isDark ? "rgb(250, 250, 250)" : "rgb(10, 10, 10)";
-  const mutedForegroundColor =
-    isDark ? "rgb(163, 163, 163)" : "rgb(115, 115, 115)";
+  const primaryColor = ThemeColors.get(isDark, "primary");
+  const mutedForegroundColor = ThemeColors.get(isDark, "mutedForeground");
 
   const handleSelect = (option: SortOption) => {
     // Add haptic feedback when selecting an option
