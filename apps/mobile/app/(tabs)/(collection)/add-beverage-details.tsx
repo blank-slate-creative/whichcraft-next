@@ -13,7 +13,6 @@ import {
   Image,
 } from "react-native";
 import { useColorScheme } from "nativewind";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Beverage } from "@whichcraft/api-client";
 import { mobileBeverageApi } from "../../../utils/api";
 import { useBeverages } from "@whichcraft/beverage-context";
@@ -25,7 +24,6 @@ export default function AddBeverageDetailsScreen() {
   const params = useLocalSearchParams();
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
-  const insets = useSafeAreaInsets();
   const { setBeverages, setAllBeverages } = useBeverages();
 
   // Theme colors

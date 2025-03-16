@@ -28,15 +28,9 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Badge } from "../../../components/Badge";
 import BeverageItem from "../../../components/BeverageItem";
 import { useBeverages } from "@whichcraft/beverage-context";
+import { SortSelector, SortOption } from "../../../components/SortSelector";
 
 // Define sort options
-interface SortOption {
-  label: string;
-  value: string;
-  field: "created_at" | "name" | "type" | "producer";
-  order: "asc" | "desc";
-}
-
 const sortOptions: SortOption[] = [
   {
     label: "Date Added (Newest)",
@@ -60,144 +54,6 @@ const sortOptions: SortOption[] = [
 const beverageApi = new BeverageApiClient({
   apiUrl: process.env.EXPO_PUBLIC_API_URL || "https://api.whichcraft.app",
 });
-
-// Filter Sheet Component
-const FilterSheet = ({
-  isVisible,
-  onClose,
-  currentLiked,
-  currentSortOption,
-  onApplyFilter,
-  onClearFilters,
-}: {
-  isVisible: boolean;
-  onClose: () => void;
-  currentLiked?: string;
-  currentSortOption: SortOption;
-  onApplyFilter: (params: {
-    liked?: string;
-    sortBy?: BeverageFilters["sort_by"];
-    sortOrder?: BeverageFilters["sort_order"];
-  }) => void;
-  onClearFilters: () => void;
-}) => {
-  const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
-
-  // Theme colors
-  const primaryForegroundColor =
-    isDark ? "rgb(10, 10, 10)" : "rgb(250, 250, 250)";
-  const mutedForegroundColor =
-    isDark ? "rgb(163, 163, 163)" : "rgb(115, 115, 115)";
-
-  if (!isVisible) return null;
-
-  return (
-    <View className="absolute bottom-0 left-0 right-0 bg-background rounded-t-xl shadow-lg z-10 h-[80vh]">
-      <View className="p-4 border-b border-border">
-        <View className="flex-row justify-between items-center">
-          <Text className="text-xl font-bold text-foreground">Filters</Text>
-          <TouchableOpacity onPress={onClose}>
-            <X size={24} color={mutedForegroundColor} />
-          </TouchableOpacity>
-        </View>
-        <Text className="text-sm text-muted-foreground">
-          Filter your beverage collection
-        </Text>
-      </View>
-
-      <ScrollView className="p-4">
-        <View className="mb-6">
-          <Text className="text-sm font-medium text-foreground mb-3">
-            Rating
-          </Text>
-          <View className="flex-row flex-wrap gap-2">
-            <Badge
-              selected={!currentLiked}
-              onPress={() => onApplyFilter({ liked: undefined })}
-            >
-              All Ratings
-            </Badge>
-            <Badge
-              selected={currentLiked === "true"}
-              onPress={() => onApplyFilter({ liked: "true" })}
-              icon={
-                <ThumbsUp
-                  size={14}
-                  color={
-                    currentLiked === "true" ?
-                      primaryForegroundColor
-                    : mutedForegroundColor
-                  }
-                  style={{ marginRight: 4 }}
-                />
-              }
-            >
-              Liked
-            </Badge>
-            <Badge
-              selected={currentLiked === "false"}
-              onPress={() => onApplyFilter({ liked: "false" })}
-              icon={
-                <ThumbsDown
-                  size={14}
-                  color={
-                    currentLiked === "false" ?
-                      primaryForegroundColor
-                    : mutedForegroundColor
-                  }
-                  style={{ marginRight: 4 }}
-                />
-              }
-            >
-              Disliked
-            </Badge>
-          </View>
-        </View>
-
-        <View className="mb-6">
-          <Text className="text-sm font-medium text-foreground mb-3">
-            Sort By
-          </Text>
-          <View className="gap-2">
-            {sortOptions.map((option) => (
-              <Badge
-                key={option.value}
-                selected={currentSortOption.value === option.value}
-                onPress={() =>
-                  onApplyFilter({
-                    liked: currentLiked || undefined,
-                    sortBy: option.field,
-                    sortOrder: option.order,
-                  })
-                }
-                size="lg"
-                className="rounded-md w-full"
-              >
-                {option.label}
-              </Badge>
-            ))}
-          </View>
-        </View>
-
-        <View className="flex-row gap-2 mt-4">
-          <TouchableOpacity
-            className="flex-1 py-2 border border-border rounded-md items-center"
-            onPress={onClose}
-          >
-            <Text className="text-foreground">Cancel</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="flex-1 py-2 bg-primary rounded-md items-center"
-            onPress={onClearFilters}
-          >
-            <Text className="text-primary-foreground">Reset All</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </View>
-  );
-};
 
 export default function HomeScreen() {
   const { session } = useAuth();
@@ -235,7 +91,6 @@ export default function HomeScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isFilterSheetVisible, setIsFilterSheetVisible] = useState(false);
   const [hasInitialData, setHasInitialData] = useState(false);
 
   // Get current filter values from URL params
@@ -389,28 +244,6 @@ export default function HomeScreen() {
     });
   };
 
-  // Apply filter
-  const applyFilter = useCallback(
-    ({
-      liked,
-      sortBy,
-      sortOrder,
-    }: {
-      liked?: string;
-      sortBy?: BeverageFilters["sort_by"];
-      sortOrder?: BeverageFilters["sort_order"];
-    }) => {
-      router.setParams({
-        liked,
-        sort_by: sortBy,
-        sort_order: sortOrder,
-      });
-
-      setIsFilterSheetVisible(false);
-    },
-    [router]
-  );
-
   // Clear all filters
   const clearFilters = useCallback(() => {
     // Completely clear all URL parameters
@@ -420,12 +253,29 @@ export default function HomeScreen() {
     });
 
     setSearchQuery("");
-    setIsFilterSheetVisible(false);
   }, [router]);
 
   // Navigate to beverage detail
   const navigateToBeverageDetail = (id: string) => {
     router.push(`/(tabs)/(collection)/${id}`);
+  };
+
+  // Navigate to filter screen
+  const navigateToFilterScreen = () => {
+    router.push({
+      pathname: "/(tabs)/(collection)/filter",
+      params: {
+        liked: currentLiked === undefined ? undefined : String(currentLiked),
+      },
+    });
+  };
+
+  // Handle sort option selection
+  const handleSortOptionSelect = (option: SortOption) => {
+    router.setParams({
+      sort_by: option.field,
+      sort_order: option.order,
+    });
   };
 
   return (
@@ -474,55 +324,64 @@ export default function HomeScreen() {
 
       <View className="flex-1 bg-background">
         {/* Filter Button and Active Filters */}
-        <View className="px-4 mb-2 flex-row items-center">
-          <TouchableOpacity
-            className="bg-secondary py-2 px-3 rounded-full flex-row items-center relative"
-            onPress={() => setIsFilterSheetVisible(true)}
+        <View className="px-4 mb-2">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className="flex-row gap-2"
           >
-            <SlidersHorizontal
-              size={12}
-              color={mutedForegroundColor}
-              style={{ marginRight: 6 }}
-            />
-            <Text className="text-sm text-foreground font-medium">Filters</Text>
-            {currentLiked && (
-              <View className="absolute top-1 right-1 h-2.5 w-2.5 bg-primary rounded-full" />
-            )}
-          </TouchableOpacity>
-
-          {currentLiked !== undefined && (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              className="flex-1 ml-3"
+            <TouchableOpacity
+              className="bg-secondary py-2 px-3 rounded-full flex-row items-center relative mr-2"
+              onPress={navigateToFilterScreen}
             >
-              <View className="flex-row items-center">
-                <Badge
-                  variant="secondary"
-                  icon={
-                    currentLiked ?
-                      <ThumbsUp
-                        size={12}
-                        color={primaryColor}
-                        style={{ marginRight: 6 }}
-                      />
-                    : <ThumbsDown
-                        size={12}
-                        color={destructiveColor}
-                        style={{ marginRight: 6 }}
-                      />
-                  }
-                  onRemove={() =>
-                    router.setParams({
-                      liked: undefined,
-                    })
-                  }
-                >
-                  {currentLiked ? "Liked" : "Disliked"}
-                </Badge>
-              </View>
-            </ScrollView>
-          )}
+              <SlidersHorizontal
+                size={12}
+                color={mutedForegroundColor}
+                style={{ marginRight: 6 }}
+              />
+              <Text className="text-sm text-foreground font-medium">
+                Filters
+              </Text>
+              {currentLiked !== undefined && (
+                <View className="absolute top-1 right-1 h-2.5 w-2.5 bg-primary rounded-full" />
+              )}
+            </TouchableOpacity>
+
+            {currentLiked !== undefined && (
+              <Badge
+                variant="secondary"
+                icon={
+                  currentLiked ?
+                    <ThumbsUp
+                      size={12}
+                      color={primaryColor}
+                      style={{ marginRight: 6 }}
+                    />
+                  : <ThumbsDown
+                      size={12}
+                      color={destructiveColor}
+                      style={{ marginRight: 6 }}
+                    />
+                }
+                onRemove={() =>
+                  router.setParams({
+                    liked: undefined,
+                  })
+                }
+              >
+                {currentLiked ? "Liked" : "Disliked"}
+              </Badge>
+            )}
+
+            {/* Sort Selector - now inside the ScrollView */}
+            <View>
+              <SortSelector
+                options={sortOptions}
+                selectedOption={currentSortOption}
+                onSelect={handleSortOptionSelect}
+              />
+            </View>
+          </ScrollView>
         </View>
 
         {/* Error Message */}
@@ -597,15 +456,6 @@ export default function HomeScreen() {
           </View>
         )}
       </View>
-      {/* Filter Sheet */}
-      <FilterSheet
-        isVisible={isFilterSheetVisible}
-        onClose={() => setIsFilterSheetVisible(false)}
-        currentLiked={currentLiked ? currentLiked.toString() : undefined}
-        currentSortOption={currentSortOption}
-        onApplyFilter={applyFilter}
-        onClearFilters={clearFilters}
-      />
     </ScrollView>
   );
 }

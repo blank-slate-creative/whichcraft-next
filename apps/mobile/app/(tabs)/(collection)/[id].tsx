@@ -32,7 +32,6 @@ export default function BeverageDetailScreen() {
   const { session } = useAuth();
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
-  // console.log("isDark", isDark);
   const insets = useSafeAreaInsets();
   const { deleteBeverage, setBeverages, setAllBeverages, beverages } =
     useBeverages();
