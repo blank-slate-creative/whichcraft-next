@@ -361,7 +361,7 @@ export default function BeverageDetailScreen() {
             {/* Rating */}
             <View className="mb-6">
               <Text className="text-sm font-medium text-foreground mb-2">
-                Rating
+                Would you drink it again?
               </Text>
               <View className="flex-row gap-4">
                 <TouchableOpacity
@@ -384,7 +384,7 @@ export default function BeverageDetailScreen() {
                       : "text-foreground"
                     }`}
                   >
-                    Like
+                    Absolutely!
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -407,7 +407,7 @@ export default function BeverageDetailScreen() {
                       : "text-foreground"
                     }`}
                   >
-                    Dislike
+                    No Way!
                   </Text>
                 </TouchableOpacity>
               </View>

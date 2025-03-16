@@ -230,7 +230,7 @@ export default function AddBeverageDetailsScreen() {
           {/* Rating */}
           <View className="mb-6">
             <Text className="text-sm font-medium text-foreground mb-2">
-              Rating
+              Would you drink it again?
             </Text>
             <View className="flex-row gap-4">
               <TouchableOpacity
@@ -242,11 +242,7 @@ export default function AddBeverageDetailsScreen() {
                 <ThumbsUp
                   size={20}
                   color={
-                    beverageData.liked === true ?
-                      isDark ?
-                        "rgb(10, 10, 10)"
-                      : "rgb(250, 250, 250)"
-                    : primaryColor
+                    beverageData.liked === true ? backgroundColor : primaryColor
                   }
                 />
                 <Text
@@ -256,7 +252,7 @@ export default function AddBeverageDetailsScreen() {
                     : "text-foreground"
                   }`}
                 >
-                  Like
+                  Absolutely!
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -270,9 +266,7 @@ export default function AddBeverageDetailsScreen() {
                 <ThumbsDown
                   size={20}
                   color={
-                    beverageData.liked === false ?
-                      "white"
-                    : mutedForegroundColor
+                    beverageData.liked === false ? "white" : colors.destructive
                   }
                 />
                 <Text
@@ -282,7 +276,7 @@ export default function AddBeverageDetailsScreen() {
                     : "text-foreground"
                   }`}
                 >
-                  Dislike
+                  No Way!
                 </Text>
               </TouchableOpacity>
             </View>
