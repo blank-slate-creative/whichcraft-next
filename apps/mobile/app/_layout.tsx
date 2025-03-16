@@ -81,7 +81,14 @@ function RootLayoutNav() {
 
   return (
     <Stack>
-      <Stack.Screen name="(collection)" />
+      <Stack.Screen
+        name="(collection)"
+        options={{
+          headerShown: false,
+          animation: "slide_from_right",
+          presentation: "card",
+        }}
+      />
     </Stack>
   );
 }

@@ -1,15 +1,14 @@
 import { useRouter, useLocalSearchParams, Stack } from "expo-router";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  TextInput,
   ActivityIndicator,
   RefreshControl,
-  Platform,
   Image,
+  FlatList,
 } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { BeverageApiClient } from "@whichcraft/api-client";
@@ -17,9 +16,6 @@ import { Beverage, BeverageFilters } from "@whichcraft/api-client";
 import {
   ThumbsUp,
   ThumbsDown,
-  Search,
-  X,
-  XCircle,
   SlidersHorizontal,
   Plus,
   User,
@@ -246,17 +242,6 @@ export default function HomeScreen() {
     });
   };
 
-  // Clear all filters
-  const clearFilters = useCallback(() => {
-    // Completely clear all URL parameters
-    router.replace({
-      pathname: "/(collection)",
-      params: {},
-    });
-
-    setSearchQuery("");
-  }, [router]);
-
   // Navigate to beverage detail
   const navigateToBeverageDetail = (id: string) => {
     router.push(`/(collection)/${id}`);
@@ -296,80 +281,32 @@ export default function HomeScreen() {
     loadAvatar();
   }, [user]);
 
-  return (
-    <ScrollView
-      className="flex-1 bg-background"
-      contentInsetAdjustmentBehavior="automatic"
-      contentInset={{
-        bottom: insets.bottom + 20,
-      }}
-      refreshControl={
-        <RefreshControl
-          refreshing={isRefreshing}
-          onRefresh={handleRefresh}
-          colors={[primaryColor]}
-          tintColor={primaryColor}
-        />
-      }
-    >
-      <Stack.Screen
-        options={{
-          title: "Collection",
-          headerShadowVisible: true,
-          headerLargeTitle: true,
-          headerLargeTitleShadowVisible: false,
-          headerSearchBarOptions: {
-            placeholder: "Search beverages...",
-            onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
-          },
-          headerTintColor: primaryColor,
-          headerStyle: {
-            backgroundColor: backgroundColor,
-          },
-          headerRight: () => (
-            <View className="flex-row items-center gap-4">
-              <TouchableOpacity
-                onPress={() => router.push("/(collection)/search-beverage")}
-                className="flex-row items-center justify-center gap-1"
-              >
-                <PlusCircle
-                  fill={colors.primary}
-                  size={24}
-                  color={colors.primaryForeground}
-                />
-                <Text className="text-foreground font-semibold text-md">
-                  Add
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => router.push("/(collection)/profile")}
-              >
-                {avatarUrl ?
-                  <Image
-                    source={{ uri: avatarUrl }}
-                    className="h-8 w-8 rounded-full"
-                  />
-                : <View className="h-8 w-8 rounded-full bg-primary/10 items-center justify-center">
-                    <User size={16} color={primaryColor} />
-                  </View>
-                }
-              </TouchableOpacity>
-            </View>
-          ),
-        }}
+  // Render item for FlatList
+  const renderBeverageItem = useCallback(
+    ({ item }: { item: Beverage }) => (
+      <BeverageItem
+        beverage={item}
+        onPress={() => navigateToBeverageDetail(item.id)}
       />
+    ),
+    [navigateToBeverageDetail]
+  );
 
-      <View className="flex-1 bg-background">
+  // List header component
+  const ListHeaderComponent = useCallback(
+    () => (
+      <View>
         {/* Filter Button and Active Filters */}
         <View className="px-4 mb-2">
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            className="flex-row gap-2"
+            contentContainerStyle={{
+              gap: 4,
+            }}
           >
             <TouchableOpacity
-              className="bg-secondary py-2 px-3 rounded-full flex-row items-center relative mr-2"
+              className="bg-secondary py-2 px-3 rounded-full flex-row items-center relative"
               onPress={navigateToFilterScreen}
             >
               <SlidersHorizontal
@@ -411,13 +348,11 @@ export default function HomeScreen() {
               </Badge>
             )}
 
-            <View>
-              <SortSelector
-                options={sortOptions}
-                selectedOption={currentSortOption}
-                onSelect={handleSortOptionSelect}
-              />
-            </View>
+            <SortSelector
+              options={sortOptions}
+              selectedOption={currentSortOption}
+              onSelect={handleSortOptionSelect}
+            />
           </ScrollView>
         </View>
 
@@ -473,24 +408,102 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {/* Beverage List */}
+        {/* Stats count */}
         {!isLoading && filteredBeverages.length > 0 && (
-          <View className="flex-1">
-            {!isLoading && (
-              <Text className="text-muted-foreground px-4 mb-2">
-                {stats.totalCount} beverages • {stats.likedCount} liked
-              </Text>
-            )}
-            {filteredBeverages.map((beverage) => (
-              <BeverageItem
-                key={beverage.id}
-                beverage={beverage}
-                onPress={() => navigateToBeverageDetail(beverage.id)}
-              />
-            ))}
-          </View>
+          <Text className="text-muted-foreground px-4 mb-2">
+            {stats.totalCount} beverages • {stats.likedCount} liked
+          </Text>
         )}
       </View>
-    </ScrollView>
+    ),
+    [
+      error,
+      isLoading,
+      isRefreshing,
+      filteredBeverages.length,
+      searchQuery,
+      stats,
+      currentLiked,
+      primaryColor,
+      destructiveColor,
+      mutedForegroundColor,
+      primaryForegroundColor,
+      currentSortOption,
+      navigateToFilterScreen,
+      handleSortOptionSelect,
+      router,
+    ]
+  );
+
+  return (
+    <>
+      <Stack.Screen
+        options={{
+          title: "Collection",
+          headerShadowVisible: true,
+          headerLargeTitle: true,
+          headerLargeTitleShadowVisible: false,
+          headerSearchBarOptions: {
+            placeholder: "Search beverages...",
+            onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
+          },
+          headerTintColor: primaryColor,
+          headerStyle: {
+            backgroundColor: backgroundColor,
+          },
+          headerRight: () => (
+            <View className="flex-row items-center gap-4">
+              <TouchableOpacity
+                onPress={() => router.push("/(collection)/search-beverage")}
+                className="flex-row items-center justify-center gap-1"
+              >
+                <PlusCircle
+                  fill={colors.primary}
+                  size={24}
+                  color={colors.primaryForeground}
+                />
+                <Text className="text-foreground font-semibold text-md">
+                  Add
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => router.push("/(collection)/profile")}
+              >
+                {avatarUrl ?
+                  <Image
+                    source={{ uri: avatarUrl }}
+                    className="h-8 w-8 rounded-full"
+                  />
+                : <View className="h-8 w-8 rounded-full bg-primary/10 items-center justify-center">
+                    <User size={16} color={primaryColor} />
+                  </View>
+                }
+              </TouchableOpacity>
+            </View>
+          ),
+        }}
+      />
+
+      <FlatList
+        className="flex-1 bg-background"
+        data={filteredBeverages}
+        renderItem={renderBeverageItem}
+        keyExtractor={(item) => item.id}
+        ListHeaderComponent={ListHeaderComponent}
+        contentInsetAdjustmentBehavior="automatic"
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            colors={[primaryColor]}
+            tintColor={primaryColor}
+          />
+        }
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+      />
+    </>
   );
 }

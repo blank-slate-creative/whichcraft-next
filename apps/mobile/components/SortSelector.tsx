@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { TouchableOpacity, View, Text, Platform } from "react-native";
 import * as Haptics from "expo-haptics";
-import { ChevronDown } from "lucide-react-native";
+import { ArrowUpDown } from "lucide-react-native";
 import {
   MenuView,
   MenuAction,
@@ -73,6 +73,7 @@ export function SortSelector({
       shouldOpenOnLongPress={false}
     >
       <TouchableOpacity
+        className="bg-secondary py-2 px-3 rounded-full flex-row items-center gap-1"
         onPress={() => {
           // For Android, we can programmatically show the menu
           if (Platform.OS === "android") {
@@ -80,12 +81,8 @@ export function SortSelector({
           }
         }}
       >
-        <View className="bg-secondary py-2 px-3 rounded-full flex-row items-center">
-          <Text className="text-sm text-foreground font-medium mr-1">
-            Sort: {selectedOption.label}
-          </Text>
-          <ChevronDown size={14} color={mutedForegroundColor} />
-        </View>
+        <ArrowUpDown size={14} color={mutedForegroundColor} />
+        <Text className="text-sm text-foreground font-medium">Sort</Text>
       </TouchableOpacity>
     </MenuView>
   );
