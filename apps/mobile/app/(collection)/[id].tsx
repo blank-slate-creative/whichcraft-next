@@ -7,7 +7,6 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
-  StatusBar,
   Alert,
   TextInput,
 } from "react-native";
@@ -245,6 +244,8 @@ export default function BeverageDetailScreen() {
       <Stack.Screen
         options={{
           title: "",
+          headerLargeTitle: true,
+          headerLargeTitleShadowVisible: false,
           headerStyle: {
             backgroundColor: backgroundColor,
           },
@@ -265,9 +266,9 @@ export default function BeverageDetailScreen() {
         </View>
       : <ScrollView
           className="flex-1 bg-background"
-          contentContainerStyle={{ paddingBottom: insets.bottom }}
+          contentInsetAdjustmentBehavior="automatic"
         >
-          <View className="p-4">
+          <View className="px-4">
             {/* Beverage Image */}
             <View className="items-center mb-6">
               <View className="h-32 w-32 rounded-lg bg-secondary items-center justify-center mb-4">

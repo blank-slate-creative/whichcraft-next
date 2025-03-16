@@ -35,59 +35,6 @@ export default function ProfileScreen() {
     }
   }, [email]);
 
-  // Animation values
-  const scrollY = useSharedValue(0);
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      scrollY.value = event.contentOffset.y;
-    },
-  });
-
-  // Header animation styles
-  const HEADER_HEIGHT = 60;
-  const TITLE_THRESHOLD = 30;
-
-  const headerAnimatedStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      scrollY.value,
-      [0, TITLE_THRESHOLD, TITLE_THRESHOLD + 10],
-      [0, 0, 1],
-      Extrapolation.CLAMP
-    );
-
-    const translateY = interpolate(
-      scrollY.value,
-      [0, TITLE_THRESHOLD],
-      [0, 0],
-      Extrapolation.CLAMP
-    );
-
-    return {
-      opacity,
-      transform: [{ translateY }],
-    };
-  });
-
-  // Border animation style
-  const headerBorderStyle = useAnimatedStyle(() => {
-    const borderOpacity = interpolate(
-      scrollY.value,
-      [0, TITLE_THRESHOLD, TITLE_THRESHOLD + 10],
-      [0, 0, 1],
-      Extrapolation.CLAMP
-    );
-
-    return {
-      borderBottomWidth: 1,
-      borderBottomColor:
-        isDark ?
-          `rgba(255,255,255,${borderOpacity * 0.1})`
-        : `rgba(0,0,0,${borderOpacity * 0.1})`,
-    };
-  });
-
-  const contentPaddingTop = HEADER_HEIGHT + insets.top;
-
   return (
     <ScrollView
       className="flex-1 bg-background"
@@ -107,7 +54,7 @@ export default function ProfileScreen() {
           },
         }}
       />
-      <View className="flex-1 gap-8 px-4 py-8">
+      <View className="flex-1 gap-8 p-4">
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center gap-4">
             <View className="h-16 w-16 rounded-full overflow-hidden bg-secondary">
