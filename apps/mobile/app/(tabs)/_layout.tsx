@@ -1,14 +1,14 @@
 import { Redirect, Tabs } from "expo-router";
-import { Platform, useColorScheme } from "react-native";
+import { Platform } from "react-native";
 import { User, Beer } from "lucide-react-native";
 
 import { HapticTab } from "@/components/HapticTab";
 import TabBarBackground from "@/components/ui/TabBarBackground";
-import { Colors } from "@/constants/Colors";
 import { useAuth } from "@/context/AuthContext";
+import { useThemeColor } from "@/hooks/useThemeColor";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { colors } = useThemeColor();
   const { loading, session } = useAuth();
 
   if (loading) {
@@ -26,7 +26,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarActiveTintColor: colors.foreground,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,

@@ -1,5 +1,5 @@
 import { useColorScheme } from "nativewind";
-import { ThemeColors } from "../constants/Colors";
+import { Colors } from "../constants/Colors";
 
 /**
  * A hook that provides access to theme colors based on the current color scheme.
@@ -8,15 +8,14 @@ import { ThemeColors } from "../constants/Colors";
 export function useThemeColor() {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";
-  const rgbColors = ThemeColors.rgb;
 
   /**
    * Get a color from the theme based on the current color scheme
    * @param colorName The name of the color to get
    * @returns The color value as a string (rgb format)
    */
-  const getColor = (colorName: keyof typeof rgbColors.light) => {
-    return isDark ? rgbColors.dark[colorName] : rgbColors.light[colorName];
+  const getColor = (colorName: keyof typeof Colors.light) => {
+    return isDark ? Colors.dark[colorName] : Colors.light[colorName];
   };
 
   // Return all theme colors as an object for easy access

@@ -7,7 +7,7 @@ import { useThemeColor } from "../../../hooks/useThemeColor";
 
 export default function FilterScreen() {
   const router = useRouter();
-  const { colors, isDark } = useThemeColor();
+  const { colors } = useThemeColor();
 
   // Get params from URL
   const { liked } = useLocalSearchParams<{
