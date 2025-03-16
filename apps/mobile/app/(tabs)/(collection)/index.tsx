@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Platform,
+  Image,
 } from "react-native";
 import { useAuth } from "../../../context/AuthContext";
 import { BeverageApiClient } from "@whichcraft/api-client";
@@ -21,6 +22,8 @@ import {
   XCircle,
   SlidersHorizontal,
   Plus,
+  User,
+  PlusCircle,
 } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
@@ -29,6 +32,7 @@ import BeverageItem from "../../../components/BeverageItem";
 import { useBeverages } from "@whichcraft/beverage-context";
 import { SortSelector, SortOption } from "../../../components/SortSelector";
 import { useThemeColor } from "../../../hooks/useThemeColor";
+import { getGravatarUrl } from "../../../utils/gravatar";
 
 // Define sort options
 const sortOptions: SortOption[] = [
@@ -56,7 +60,7 @@ const beverageApi = new BeverageApiClient({
 });
 
 export default function HomeScreen() {
-  const { session } = useAuth();
+  const { session, user } = useAuth();
   const router = useRouter();
   const {
     beverages,
@@ -89,6 +93,7 @@ export default function HomeScreen() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasInitialData, setHasInitialData] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   // Get current filter values from URL params
   const currentLiked =
@@ -275,6 +280,22 @@ export default function HomeScreen() {
     });
   };
 
+  // Load avatar URL when user is available
+  useEffect(() => {
+    const loadAvatar = async () => {
+      if (user?.email) {
+        try {
+          const url = await getGravatarUrl(user.email, 64);
+          setAvatarUrl(url);
+        } catch (error) {
+          console.error("Error loading avatar:", error);
+        }
+      }
+    };
+
+    loadAvatar();
+  }, [user]);
+
   return (
     <ScrollView
       className="flex-1 bg-background"
@@ -306,15 +327,37 @@ export default function HomeScreen() {
             backgroundColor: backgroundColor,
           },
           headerRight: () => (
-            <TouchableOpacity
-              onPress={() =>
-                router.push("/(tabs)/(collection)/search-beverage")
-              }
-              className="flex-row items-center justify-center gap-1 mr-4"
-            >
-              <Plus size={18} color={primaryColor} />
-              <Text className="text-foreground font-semibold text-md">Add</Text>
-            </TouchableOpacity>
+            <View className="flex-row items-center gap-4">
+              <TouchableOpacity
+                onPress={() =>
+                  router.push("/(tabs)/(collection)/search-beverage")
+                }
+                className="flex-row items-center justify-center gap-1"
+              >
+                <PlusCircle
+                  fill={colors.primary}
+                  size={24}
+                  color={colors.primaryForeground}
+                />
+                <Text className="text-foreground font-semibold text-md">
+                  Add
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => router.push("/(tabs)/(profile)/profile")}
+              >
+                {avatarUrl ?
+                  <Image
+                    source={{ uri: avatarUrl }}
+                    className="h-8 w-8 rounded-full"
+                  />
+                : <View className="h-8 w-8 rounded-full bg-primary/10 items-center justify-center">
+                    <User size={16} color={primaryColor} />
+                  </View>
+                }
+              </TouchableOpacity>
+            </View>
           ),
         }}
       />
@@ -370,7 +413,6 @@ export default function HomeScreen() {
               </Badge>
             )}
 
-            {/* Sort Selector - now inside the ScrollView */}
             <View>
               <SortSelector
                 options={sortOptions}
