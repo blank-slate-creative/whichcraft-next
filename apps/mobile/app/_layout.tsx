@@ -1,7 +1,7 @@
-import { Slot, Stack } from "expo-router";
+import { Slot, Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 import "react-native-reanimated";
 import "../global.css";
 import { AuthProvider, useAuth } from "../context/AuthContext";
@@ -26,7 +26,7 @@ export default function RootLayout() {
     };
 
     loadTheme();
-  });
+  }, []); // Added dependency array to prevent continuous re-renders
 
   // Determine which color scheme to use
   let colorScheme = systemColorScheme;
@@ -51,13 +51,28 @@ export default function RootLayout() {
 // Handle navigation based on auth state
 function RootLayoutNav() {
   const { user, loading } = useAuth();
+  const router = useRouter();
 
-  // Show splash screen while checking auth state
+  // Force navigation based on auth state
+  useEffect(() => {
+    if (!loading) {
+      if (!user) {
+        // Redirect to sign-in if not authenticated
+        router.replace("/sign-in");
+      }
+    }
+  }, [user, loading, router]);
+
+  // Show loading indicator while checking auth state
   if (loading) {
-    return null;
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 
-  // If user is not authenticated, redirect to sign-in
+  // If user is not authenticated, show sign-in stack
   if (!user) {
     return (
       <Stack>
@@ -79,6 +94,7 @@ function RootLayoutNav() {
     );
   }
 
+  // If user is authenticated, show collection stack
   return (
     <Stack>
       <Stack.Screen
