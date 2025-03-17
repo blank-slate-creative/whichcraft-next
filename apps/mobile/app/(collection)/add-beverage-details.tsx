@@ -93,11 +93,13 @@ export default function AddBeverageDetailsScreen() {
         );
       }
 
-      // Navigate back to collection with refresh param
-      router.replace({
-        pathname: "/(collection)",
-        params: { refresh: "true" },
-      });
+      // Reset navigation stack to the collection root
+      router.dismissTo("/(collection)");
+
+      // Refresh the collection
+      router.setParams({ refresh: "true" });
+
+      setIsLoading(false);
     } catch (error) {
       console.error("Save error:", error);
       Alert.alert("Error", "Failed to save beverage");
