@@ -3,28 +3,21 @@ import { Stack, useRouter } from "expo-router";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Platform,
   Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Beverage, BeerSearchResult } from "@whichcraft/api-client";
 import { BeverageItem } from "../../components/BeverageItem";
-import { Search, Edit, X } from "lucide-react-native";
+import { Edit } from "lucide-react-native";
 import { useThemeColor } from "../../hooks/useThemeColor";
 
 export default function SearchBeverageScreen() {
   const router = useRouter();
-  const { colors, isDark } = useThemeColor();
+  const { colors } = useThemeColor();
   const insets = useSafeAreaInsets();
-
-  // Theme colors
-  const primaryColor = colors.primary;
-  const mutedForegroundColor = colors.mutedForeground;
-  const backgroundColor = colors.background;
 
   // State
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -157,9 +150,9 @@ export default function SearchBeverageScreen() {
           headerLargeTitleShadowVisible: false,
           headerShown: true,
           headerStyle: {
-            backgroundColor: backgroundColor,
+            backgroundColor: colors.background,
           },
-          headerTintColor: primaryColor,
+          headerTintColor: colors.primary,
           headerSearchBarOptions: {
             placeholder: "Search for a beer...",
             onChangeText: (e) => handleSearchInputChange(e.nativeEvent.text),
@@ -169,7 +162,7 @@ export default function SearchBeverageScreen() {
               className="flex-row items-center gap-2"
               onPress={handleManualEntry}
             >
-              <Edit size={18} color={primaryColor} />
+              <Edit size={18} color={colors.primary} />
               <Text className="text-foreground font-medium">Add Manually</Text>
             </TouchableOpacity>
           ),
@@ -195,7 +188,7 @@ export default function SearchBeverageScreen() {
         <View>
           {isLoading ?
             <View className="items-center justify-center py-8">
-              <ActivityIndicator size="large" color={primaryColor} />
+              <ActivityIndicator size="large" color={colors.primary} />
             </View>
           : searchResults.length > 0 ?
             <View className="mb-4">

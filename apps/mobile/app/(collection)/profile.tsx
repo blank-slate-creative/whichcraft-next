@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, ScrollView } from "react-native";
 import { useAuth } from "../../context/AuthContext";
-import { ThemeSwitcher } from "../../components/ThemeSwitcher";
 import ProfileActions from "../../components/ProfileActions";
 import { getGravatarUrl } from "../../utils/gravatar";
-import { useColorScheme } from "nativewind";
-import Animated, {
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  interpolate,
-  Extrapolation,
-} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
 import { useThemeColor } from "../../hooks/useThemeColor";
@@ -23,11 +14,6 @@ export default function ProfileScreen() {
   const email = user?.email || "";
   const { colors, isDark } = useThemeColor();
   const insets = useSafeAreaInsets();
-
-  // Theme colors
-  const primaryColor = colors.primary;
-  const backgroundColor = colors.background;
-  const mutedForegroundColor = colors.mutedForeground;
 
   useEffect(() => {
     if (email) {
@@ -45,12 +31,12 @@ export default function ProfileScreen() {
           title: "Profile",
           headerShown: true,
           headerLargeTitle: true,
-          headerTintColor: primaryColor,
+          headerTintColor: colors.primary,
           headerBlurEffect: "regular",
           headerShadowVisible: true,
           headerLargeTitleShadowVisible: false,
           headerStyle: {
-            backgroundColor: backgroundColor,
+            backgroundColor: colors.background,
           },
         }}
       />

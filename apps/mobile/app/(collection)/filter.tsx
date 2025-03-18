@@ -2,7 +2,6 @@ import { useRouter, useLocalSearchParams, Stack } from "expo-router";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { ThumbsUp, ThumbsDown, X, RotateCcw } from "lucide-react-native";
 import { Badge } from "../../components/Badge";
-import { BeverageFilters } from "@whichcraft/api-client";
 import { useThemeColor } from "../../hooks/useThemeColor";
 
 export default function FilterScreen() {

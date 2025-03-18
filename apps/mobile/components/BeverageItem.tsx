@@ -8,7 +8,6 @@ import {
   TextStyle,
 } from "react-native";
 import { ThumbsUp, ThumbsDown, MoreHorizontal } from "lucide-react-native";
-import { useColorScheme } from "nativewind";
 import { Beverage } from "@whichcraft/api-client";
 import { useThemeColor } from "../hooks/useThemeColor";
 
@@ -39,14 +38,7 @@ export const BeverageItem = ({
   selected = false,
   rightComponent,
 }: BeverageItemProps) => {
-  const { colors, isDark } = useThemeColor();
-
-  // Theme colors
-  const primaryColor = colors.primary;
-  const mutedForegroundColor = colors.mutedForeground;
-  const destructiveColor = colors.destructive;
-  const selectedBgColor =
-    isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)";
+  const { colors } = useThemeColor();
 
   // Determine image size based on compact mode (in pixels)
   const imageSizePx = compact ? 40 : 48; // 10 tailwind = 40px, 12 tailwind = 48px
@@ -57,15 +49,14 @@ export const BeverageItem = ({
   // Determine border style
   const borderStyle = hideBottomBorder ? "" : "border-b border-border";
 
-  // Determine background color if selected
-  const bgColorStyle = selected ? { backgroundColor: selectedBgColor } : {};
-
   return (
     <TouchableOpacity
-      className={`flex-row items-center gap-3 ${containerPadding} ${borderStyle}`}
+      className={`flex-row items-center gap-3 ${containerPadding} ${borderStyle} ${
+        selected ? "bg-muted/50" : ""
+      }`}
       onPress={onPress}
       disabled={disabled || !onPress}
-      style={[bgColorStyle, containerStyle]}
+      style={containerStyle}
     >
       <View
         className="rounded-md bg-secondary items-center justify-center"
@@ -110,10 +101,10 @@ export const BeverageItem = ({
       : showRating ?
         <View className="h-8 w-8 rounded-full items-center justify-center">
           {beverage.liked ?
-            <ThumbsUp size={18} color={primaryColor} />
+            <ThumbsUp size={18} color={colors.primary} />
           : beverage.liked === false ?
-            <ThumbsDown size={18} color={destructiveColor} />
-          : <MoreHorizontal size={18} color={mutedForegroundColor} />}
+            <ThumbsDown size={18} color={colors.destructive} />
+          : <MoreHorizontal size={18} color={colors.mutedForeground} />}
         </View>
       : null}
     </TouchableOpacity>

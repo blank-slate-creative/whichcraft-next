@@ -32,11 +32,6 @@ export function Badge({
 }: BadgeProps) {
   const { colors } = useThemeColor();
 
-  // Theme colors
-  const primaryColor = colors.primary;
-  const primaryForegroundColor = colors.primaryForeground;
-  const mutedForegroundColor = colors.mutedForeground;
-
   // Size classes
   const sizeClasses = {
     sm: "py-0.5 px-2",
@@ -101,7 +96,7 @@ export function Badge({
         >
           <X
             size={14}
-            color={selected ? primaryForegroundColor : mutedForegroundColor}
+            color={selected ? colors.primaryForeground : colors.mutedForeground}
           />
         </TouchableOpacity>
       )}

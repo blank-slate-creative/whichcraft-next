@@ -21,7 +21,6 @@ import {
   User,
   PlusCircle,
 } from "lucide-react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import { Badge } from "../../components/Badge";
 import BeverageItem from "../../components/BeverageItem";
@@ -67,13 +66,6 @@ export default function HomeScreen() {
     refresh?: string;
   }>();
   const { colors } = useThemeColor();
-
-  // Theme colors
-  const primaryColor = colors.primary;
-  const primaryForegroundColor = colors.primaryForeground;
-  const mutedForegroundColor = colors.mutedForeground;
-  const destructiveColor = colors.destructive;
-  const backgroundColor = colors.background;
 
   // State
   const [filteredBeverages, setFilteredBeverages] = useState<Beverage[]>([]);
@@ -304,7 +296,7 @@ export default function HomeScreen() {
             >
               <SlidersHorizontal
                 size={12}
-                color={mutedForegroundColor}
+                color={colors.mutedForeground}
                 style={{ marginRight: 6 }}
               />
               <Text className="text-sm text-foreground font-medium">
@@ -322,12 +314,12 @@ export default function HomeScreen() {
                   currentLiked ?
                     <ThumbsUp
                       size={12}
-                      color={primaryColor}
+                      color={colors.primary}
                       style={{ marginRight: 6 }}
                     />
                   : <ThumbsDown
                       size={12}
-                      color={destructiveColor}
+                      color={colors.destructive}
                       style={{ marginRight: 6 }}
                     />
                 }
@@ -360,7 +352,7 @@ export default function HomeScreen() {
         {/* Loading State */}
         {isLoading && !isRefreshing && (
           <View className="items-center py-8">
-            <ActivityIndicator size="large" color={primaryColor} />
+            <ActivityIndicator size="large" color={colors.primary} />
           </View>
         )}
 
@@ -368,7 +360,7 @@ export default function HomeScreen() {
         {!isLoading && filteredBeverages.length === 0 && (
           <View className="items-center justify-center p-4 py-8">
             <View className="w-16 h-16 rounded-full bg-primary/10 items-center justify-center mb-4">
-              <Plus size={32} color={primaryColor} />
+              <Plus size={32} color={colors.primary} />
             </View>
             <Text className="text-lg font-medium text-foreground mb-2">
               No beverages found
@@ -385,7 +377,7 @@ export default function HomeScreen() {
               >
                 <Plus
                   size={18}
-                  color={primaryForegroundColor}
+                  color={colors.primaryForeground}
                   style={{ marginRight: 4 }}
                 />
                 <Text className="text-primary-foreground font-medium">
@@ -418,10 +410,7 @@ export default function HomeScreen() {
       searchQuery,
       stats,
       currentLiked,
-      primaryColor,
-      destructiveColor,
-      mutedForegroundColor,
-      primaryForegroundColor,
+      colors,
       currentSortOption,
       navigateToFilterScreen,
       handleSortOptionSelect,
@@ -441,9 +430,9 @@ export default function HomeScreen() {
             placeholder: "Search beverages...",
             onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
           },
-          headerTintColor: primaryColor,
+          headerTintColor: colors.primary,
           headerStyle: {
-            backgroundColor: backgroundColor,
+            backgroundColor: colors.background,
           },
           headerRight: () => (
             <View className="flex-row items-center gap-4">
@@ -470,7 +459,7 @@ export default function HomeScreen() {
                     className="h-8 w-8 rounded-full"
                   />
                 : <View className="h-8 w-8 rounded-full bg-primary/10 items-center justify-center">
-                    <User size={16} color={primaryColor} />
+                    <User size={16} color={colors.primary} />
                   </View>
                 }
               </TouchableOpacity>
@@ -490,8 +479,8 @@ export default function HomeScreen() {
           <RefreshControl
             refreshing={isRefreshing}
             onRefresh={handleRefresh}
-            colors={[primaryColor]}
-            tintColor={primaryColor}
+            colors={[colors.primary]}
+            tintColor={colors.primary}
           />
         }
         initialNumToRender={10}

@@ -25,11 +25,6 @@ export default function AddBeverageDetailsScreen() {
   const { colors, isDark } = useThemeColor();
   const { setBeverages, setAllBeverages } = useBeverages();
 
-  // Theme colors
-  const primaryColor = colors.primary;
-  const mutedForegroundColor = colors.mutedForeground;
-  const backgroundColor = colors.background;
-
   // Parse beverage data from params
   const initialBeverage: Beverage = JSON.parse(params.beverage as string);
   const isManualEntry = params.isManualEntry === "true";
@@ -119,9 +114,9 @@ export default function AddBeverageDetailsScreen() {
           headerShown: true,
           presentation: "card",
           headerStyle: {
-            backgroundColor: backgroundColor,
+            backgroundColor: colors.background,
           },
-          headerTintColor: primaryColor,
+          headerTintColor: colors.primary,
         }}
       />
       <KeyboardAvoidingView
@@ -244,7 +239,9 @@ export default function AddBeverageDetailsScreen() {
                 <ThumbsUp
                   size={20}
                   color={
-                    beverageData.liked === true ? backgroundColor : primaryColor
+                    beverageData.liked === true ?
+                      colors.background
+                    : colors.primary
                   }
                 />
                 <Text
@@ -296,7 +293,7 @@ export default function AddBeverageDetailsScreen() {
               value={beverageData.notes || ""}
               onChangeText={(text) => handleBeverageDataChange({ notes: text })}
               placeholder="Add notes about this beverage..."
-              placeholderTextColor={mutedForegroundColor}
+              placeholderTextColor={colors.mutedForeground}
               textAlignVertical="top"
             />
           </View>

@@ -1,7 +1,5 @@
 import React from "react";
-import { TouchableOpacity, View, Alert } from "react-native";
-import { ThemedText } from "./ThemedText";
-import { ThemedView } from "./ThemedView";
+import { TouchableOpacity, View, Alert, Text } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import { router } from "expo-router";
 import { LogOut, ChevronRight } from "lucide-react-native";
@@ -64,11 +62,11 @@ export default function ProfileActions() {
       {accountSections.map((section, sectionIndex) => (
         <View key={sectionIndex} className="space-y-2">
           {section.title && (
-            <ThemedText className="text-sm font-medium px-1 mb-1">
+            <Text className="text-sm font-medium px-1 mb-1">
               {section.title}
-            </ThemedText>
+            </Text>
           )}
-          <ThemedView className="rounded-lg overflow-hidden border border-border divide-y divide-border">
+          <View className="bg-background rounded-lg overflow-hidden border border-border divide-y divide-border">
             {section.items.map((action, index) => (
               <React.Fragment key={action.label}>
                 <TouchableOpacity
@@ -78,11 +76,11 @@ export default function ProfileActions() {
                 >
                   <View className="flex-row items-center">
                     {action.icon}
-                    <ThemedText
+                    <Text
                       className={`font-medium ml-3 ${action.danger ? "text-destructive" : ""}`}
                     >
                       {action.label}
-                    </ThemedText>
+                    </Text>
                   </View>
                   {action.showChevron && (
                     <ChevronRight size={18} color={mutedForegroundColor} />
@@ -90,7 +88,7 @@ export default function ProfileActions() {
                 </TouchableOpacity>
               </React.Fragment>
             ))}
-          </ThemedView>
+          </View>
         </View>
       ))}
     </View>

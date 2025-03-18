@@ -41,12 +41,6 @@ export default function BeverageDetailScreen() {
     useBeverages();
   const menuRef = useRef<MenuComponentRef>(null);
 
-  // Theme colors
-  const primaryColor = colors.primary;
-  const mutedForegroundColor = colors.mutedForeground;
-  const destructiveColor = colors.destructive;
-  const backgroundColor = colors.background;
-
   // State
   const [beverage, setBeverage] = useState<Beverage | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -284,14 +278,14 @@ export default function BeverageDetailScreen() {
         shouldOpenOnLongPress={false}
       >
         <TouchableOpacity
-          className="p-2 bg-primary rounded-full"
+          className="p-2"
           onPress={() => {
             if (Platform.OS === "android") {
               menuRef.current?.show();
             }
           }}
         >
-          <MoreHorizontal size={18} color={backgroundColor} />
+          <MoreHorizontal size={20} color={colors.primary} />
         </TouchableOpacity>
       </MenuView>
     );
@@ -305,9 +299,9 @@ export default function BeverageDetailScreen() {
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
           headerStyle: {
-            backgroundColor: backgroundColor,
+            backgroundColor: colors.background,
           },
-          headerTintColor: primaryColor,
+          headerTintColor: colors.primary,
           headerShadowVisible: false,
           headerRight: HeaderRight,
         }}
@@ -315,7 +309,7 @@ export default function BeverageDetailScreen() {
 
       {isLoading ?
         <View className="flex-1 items-center justify-center bg-background">
-          <ActivityIndicator size="large" color={primaryColor} />
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       : error || !beverage ?
         <View className="flex-1 items-center justify-center bg-background">
@@ -374,7 +368,9 @@ export default function BeverageDetailScreen() {
                   <ThumbsUp
                     size={20}
                     color={
-                      beverage.liked === true ? backgroundColor : primaryColor
+                      beverage.liked === true ?
+                        colors.background
+                      : colors.primary
                     }
                   />
                   <Text
@@ -397,7 +393,7 @@ export default function BeverageDetailScreen() {
                   <ThumbsDown
                     size={20}
                     color={
-                      beverage.liked === false ? "white" : destructiveColor
+                      beverage.liked === false ? "white" : colors.destructive
                     }
                   />
                   <Text
@@ -430,7 +426,7 @@ export default function BeverageDetailScreen() {
                 value={notes}
                 onChangeText={handleNotesChange}
                 placeholder="Add notes about this beverage..."
-                placeholderTextColor={mutedForegroundColor}
+                placeholderTextColor={colors.mutedForeground}
               />
             </View>
 

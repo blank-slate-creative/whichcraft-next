@@ -30,10 +30,6 @@ export function SortSelector({
   const { colors, isDark } = useThemeColor();
   const menuRef = useRef<MenuComponentRef>(null);
 
-  // Theme colors
-  const primaryColor = colors.primary;
-  const mutedForegroundColor = colors.mutedForeground;
-
   const handleSelect = (option: SortOption) => {
     // Add haptic feedback when selecting an option
     if (Platform.OS === "ios") {
@@ -81,7 +77,7 @@ export function SortSelector({
           }
         }}
       >
-        <ArrowUpDown size={14} color={mutedForegroundColor} />
+        <ArrowUpDown size={14} color={colors.mutedForeground} />
         <Text className="text-sm text-foreground font-medium">Sort</Text>
       </TouchableOpacity>
     </MenuView>
