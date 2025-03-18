@@ -518,7 +518,7 @@ def search_beer():
         # Prepare the search payload
         payload = {
             "query": search_term,
-            "hitsPerPage": 5,  # Limit results to 5
+            "hitsPerPage": 10,  # Limit results to 10
         }
 
         # Make the request to Algolia

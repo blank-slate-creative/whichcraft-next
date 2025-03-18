@@ -13,11 +13,13 @@ import { Beverage, BeerSearchResult } from "@whichcraft/api-client";
 import { BeverageItem } from "../../components/BeverageItem";
 import { Edit } from "lucide-react-native";
 import { useThemeColor } from "../../hooks/useThemeColor";
+import { SearchBarCommands } from "react-native-screens";
 
 export default function SearchBeverageScreen() {
   const router = useRouter();
   const { colors } = useThemeColor();
   const insets = useSafeAreaInsets();
+  const searchBarRef = useRef<SearchBarCommands>(null);
 
   // State
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -109,6 +111,13 @@ export default function SearchBeverageScreen() {
 
   // Handle select beverage from search results
   const handleSelectBeverage = (beverage: Beverage) => {
+    // Clear the search state
+    setSearchQuery("");
+    setSearchResults([]);
+    if (searchBarRef.current) {
+      searchBarRef.current.clearText();
+    }
+
     router.push({
       pathname: "/(collection)/add-beverage-details",
       params: { beverage: JSON.stringify(beverage) },
@@ -156,6 +165,7 @@ export default function SearchBeverageScreen() {
           headerSearchBarOptions: {
             placeholder: "Search for a beer...",
             onChangeText: (e) => handleSearchInputChange(e.nativeEvent.text),
+            ref: searchBarRef,
           },
           headerRight: () => (
             <TouchableOpacity
