@@ -4,7 +4,6 @@
     "slug": "whichcraft",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "whichcraft",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,6 +12,10 @@
       "bundleIdentifier": "com.ericcecchi.whichcraft",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
+      },
+      "icon": {
+        "light": "./assets/images/icon.png",
+        "dark": "./assets/images/icon.png"
       }
     },
     "android": {
