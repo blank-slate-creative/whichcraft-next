@@ -1,0 +1,18 @@
+{
+  "webcredentials": {
+    "apps": [
+      "S9ZV3U7URD.com.ericcecchi.whichcraft"
+    ]
+  },
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "S9ZV3U7URD.com.ericcecchi.whichcraft",
+        "paths": [
+          "*"
+        ]
+      }
+    ]
+  }
+}

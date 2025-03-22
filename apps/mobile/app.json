@@ -16,7 +16,11 @@
       "icon": {
         "light": "./assets/images/icon.png",
         "dark": "./assets/images/icon.png"
-      }
+      },
+      "associatedDomains": [
+        "webcredentials:whichcraft.ericcecchi.com",
+        "applinks:whichcraft.ericcecchi.com"
+      ]
     },
     "android": {
       "adaptiveIcon": {

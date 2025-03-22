@@ -69,6 +69,8 @@ export default function SignInScreen() {
                   placeholderTextColor="rgb(var(--muted-foreground))"
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  textContentType="emailAddress"
+                  autoComplete="email"
                   value={email}
                   onChangeText={setEmail}
                 />
@@ -83,6 +85,8 @@ export default function SignInScreen() {
                   placeholder="Your password"
                   placeholderTextColor="rgb(var(--muted-foreground))"
                   secureTextEntry
+                  textContentType="password"
+                  autoComplete="password"
                   value={password}
                   onChangeText={setPassword}
                 />

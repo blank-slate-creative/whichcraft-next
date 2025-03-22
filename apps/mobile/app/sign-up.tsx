@@ -103,6 +103,8 @@ export default function SignUpScreen() {
                   placeholderTextColor="rgb(var(--muted-foreground))"
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  textContentType="emailAddress"
+                  autoComplete="email"
                   value={email}
                   onChangeText={setEmail}
                 />
@@ -118,6 +120,8 @@ export default function SignUpScreen() {
                   placeholderTextColor="rgb(var(--muted-foreground))"
                   secureTextEntry
                   passwordRules={"minlength: 8"}
+                  textContentType="newPassword"
+                  autoComplete="new-password"
                   value={password}
                   onChangeText={setPassword}
                 />
@@ -132,6 +136,8 @@ export default function SignUpScreen() {
                   placeholder="Confirm your password"
                   placeholderTextColor="rgb(var(--muted-foreground))"
                   secureTextEntry
+                  textContentType="newPassword"
+                  autoComplete="new-password"
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
                 />
