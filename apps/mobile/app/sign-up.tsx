@@ -11,17 +11,21 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  useColorScheme,
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import * as AppleAuthentication from "expo-apple-authentication";
 
 export default function SignUpScreen() {
+  const isDarkMode = useColorScheme() === "dark";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [appleLoading, setAppleLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { signUp } = useAuth();
+  const { signUp, signInWithApple, isAppleAuthAvailable } = useAuth();
 
   const handleSignUp = async () => {
     if (!email || !password || !confirmPassword) {
@@ -47,11 +51,30 @@ export default function SignUpScreen() {
       } else if (!session) {
         // If no session is returned, the user needs to confirm their email
         setSuccess(true);
+      } else {
+        // If session is returned, the user is automatically signed in
+        router.replace("/");
       }
     } catch (error: any) {
       Alert.alert("Error", error.message || "An unexpected error occurred");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAppleSignIn = async () => {
+    setAppleLoading(true);
+    try {
+      const { error, session } = await signInWithApple();
+      if (error) {
+        Alert.alert("Error", error.message);
+      } else if (session) {
+        router.replace("/");
+      }
+    } catch (error: any) {
+      Alert.alert("Error", error.message || "An unexpected error occurred");
+    } finally {
+      setAppleLoading(false);
     }
   };
 
@@ -155,6 +178,36 @@ export default function SignUpScreen() {
                   </Text>
                 }
               </TouchableOpacity>
+
+              {isAppleAuthAvailable && (
+                <View className="gap-4">
+                  <Text className="text-center text-muted-foreground">or</Text>
+                  {appleLoading ?
+                    <View className="w-full h-12 border border-border rounded-lg items-center justify-center">
+                      <ActivityIndicator color="rgb(var(--foreground))" />
+                    </View>
+                  : <AppleAuthentication.AppleAuthenticationButton
+                      buttonType={
+                        AppleAuthentication.AppleAuthenticationButtonType
+                          .SIGN_UP
+                      }
+                      buttonStyle={
+                        isDarkMode ?
+                          AppleAuthentication.AppleAuthenticationButtonStyle
+                            .WHITE
+                        : AppleAuthentication.AppleAuthenticationButtonStyle
+                            .BLACK
+                      }
+                      cornerRadius={8}
+                      style={{
+                        height: 44,
+                        width: "100%",
+                      }}
+                      onPress={handleAppleSignIn}
+                    />
+                  }
+                </View>
+              )}
             </View>
 
             <View className="flex-row justify-center mt-6">

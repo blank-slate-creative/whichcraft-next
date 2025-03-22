@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "../utils/supabase";
 import { AppState } from "react-native";
+import * as AppleAuthentication from "expo-apple-authentication";
 
 // Define the context type
 type AuthContextType = {
@@ -14,6 +15,8 @@ type AuthContextType = {
     password: string
   ) => Promise<{ error: any; session: Session | null }>;
   signOut: () => Promise<void>;
+  signInWithApple: () => Promise<{ error: any; session: Session | null }>;
+  isAppleAuthAvailable: boolean;
 };
 
 // Create the context with a default value
@@ -24,6 +27,8 @@ const AuthContext = createContext<AuthContextType>({
   signIn: async () => ({ error: null }),
   signUp: async () => ({ error: null, session: null }),
   signOut: async () => {},
+  signInWithApple: async () => ({ error: null, session: null }),
+  isAppleAuthAvailable: false,
 });
 
 // Create a provider component
@@ -31,6 +36,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAppleAuthAvailable, setIsAppleAuthAvailable] = useState(false);
+
+  // Check if Apple authentication is available
+  useEffect(() => {
+    const checkAppleAuthAvailability = async () => {
+      try {
+        const available = await AppleAuthentication.isAvailableAsync();
+        setIsAppleAuthAvailable(available);
+      } catch (error) {
+        console.log("Apple authentication not available:", error);
+        setIsAppleAuthAvailable(false);
+      }
+    };
+
+    checkAppleAuthAvailability();
+  }, []);
 
   // Handle app state changes for token refresh
   useEffect(() => {
@@ -90,6 +111,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { error, session: data.session };
   };
 
+  // Sign in with Apple
+  const signInWithApple = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      if (!credential.identityToken) {
+        return {
+          error: new Error("No identity token provided"),
+          session: null,
+        };
+      }
+
+      // Sign in with Supabase using the Apple ID token
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: "apple",
+        token: credential.identityToken,
+      });
+
+      return { error, session: data.session };
+    } catch (error: any) {
+      // Handle user cancellation
+      if (error.code === "ERR_REQUEST_CANCELED") {
+        return { error: null, session: null };
+      }
+      return { error, session: null };
+    }
+  };
+
   // Sign out
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -103,6 +157,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signIn,
     signUp,
     signOut,
+    signInWithApple,
+    isAppleAuthAvailable,
   };
 
   // Return the provider with the value
