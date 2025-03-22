@@ -6,6 +6,11 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "expo-router";
@@ -29,8 +34,8 @@ export default function SignUpScreen() {
       return;
     }
 
-    if (password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters");
+    if (password.length < 8) {
+      Alert.alert("Error", "Password must be at least 8 characters");
       return;
     }
 
@@ -72,83 +77,95 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View className="flex-1 bg-background p-6">
-      <View className="flex-1 justify-center">
-        <Text className="text-3xl font-bold text-center mb-8 text-foreground">
-          Create an Account
-        </Text>
-
-        <View className="gap-4">
-          <View>
-            <Text className="text-sm font-medium mb-1 text-muted-foreground">
-              Email
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-background"
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+          className="p-6"
+        >
+          <View className="flex-1 justify-center">
+            <Text className="text-3xl font-bold text-center mb-8 text-foreground">
+              Create an Account
             </Text>
-            <TextInput
-              className="w-full h-12 px-4 border border-border rounded-lg bg-background text-foreground"
-              placeholder="you@example.com"
-              placeholderTextColor="rgb(var(--muted-foreground))"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
 
-          <View>
-            <Text className="text-sm font-medium mb-1 text-muted-foreground">
-              Password
-            </Text>
-            <TextInput
-              className="w-full h-12 px-4 border border-border rounded-lg bg-background text-foreground"
-              placeholder="Your password"
-              placeholderTextColor="rgb(var(--muted-foreground))"
-              secureTextEntry
-              value={password}
-              onChangeText={setPassword}
-            />
-          </View>
+            <View className="gap-4">
+              <View>
+                <Text className="text-sm font-medium mb-1 text-muted-foreground">
+                  Email
+                </Text>
+                <TextInput
+                  className="w-full h-12 px-4 border border-border rounded-lg bg-background text-foreground"
+                  placeholder="you@example.com"
+                  placeholderTextColor="rgb(var(--muted-foreground))"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  value={email}
+                  onChangeText={setEmail}
+                />
+              </View>
 
-          <View>
-            <Text className="text-sm font-medium mb-1 text-muted-foreground">
-              Confirm Password
-            </Text>
-            <TextInput
-              className="w-full h-12 px-4 border border-border rounded-lg bg-background text-foreground"
-              placeholder="Confirm your password"
-              placeholderTextColor="rgb(var(--muted-foreground))"
-              secureTextEntry
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-            />
-          </View>
+              <View>
+                <Text className="text-sm font-medium mb-1 text-muted-foreground">
+                  Password
+                </Text>
+                <TextInput
+                  className="w-full h-12 px-4 border border-border rounded-lg bg-background text-foreground"
+                  placeholder="Your password"
+                  placeholderTextColor="rgb(var(--muted-foreground))"
+                  secureTextEntry
+                  passwordRules={"minlength: 8"}
+                  value={password}
+                  onChangeText={setPassword}
+                />
+              </View>
 
-          <TouchableOpacity
-            className="w-full h-12 bg-primary rounded-lg items-center justify-center mt-4"
-            onPress={handleSignUp}
-            disabled={loading}
-          >
-            {loading ?
-              <ActivityIndicator color="rgb(var(--primary-foreground))" />
-            : <Text className="text-primary-foreground font-medium">
-                Sign Up
+              <View>
+                <Text className="text-sm font-medium mb-1 text-muted-foreground">
+                  Confirm Password
+                </Text>
+                <TextInput
+                  className="w-full h-12 px-4 border border-border rounded-lg bg-background text-foreground"
+                  placeholder="Confirm your password"
+                  placeholderTextColor="rgb(var(--muted-foreground))"
+                  secureTextEntry
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                />
+              </View>
+
+              <TouchableOpacity
+                className="w-full h-12 bg-primary rounded-lg items-center justify-center mt-4"
+                onPress={handleSignUp}
+                disabled={loading}
+              >
+                {loading ?
+                  <ActivityIndicator color="rgb(var(--primary-foreground))" />
+                : <Text className="text-primary-foreground font-medium">
+                    Sign Up
+                  </Text>
+                }
+              </TouchableOpacity>
+            </View>
+
+            <View className="flex-row justify-center mt-6">
+              <Text className="text-muted-foreground">
+                Already have an account?{" "}
               </Text>
-            }
-          </TouchableOpacity>
-        </View>
-
-        <View className="flex-row justify-center mt-6">
-          <Text className="text-muted-foreground">
-            Already have an account?{" "}
-          </Text>
-          <Link href="/sign-in" asChild>
-            <TouchableOpacity>
-              <Text className="text-accent-foreground font-medium">
-                Sign In
-              </Text>
-            </TouchableOpacity>
-          </Link>
-        </View>
-      </View>
-    </View>
+              <Link href="/sign-in" asChild>
+                <TouchableOpacity>
+                  <Text className="text-accent-foreground font-medium">
+                    Sign In
+                  </Text>
+                </TouchableOpacity>
+              </Link>
+            </View>
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
