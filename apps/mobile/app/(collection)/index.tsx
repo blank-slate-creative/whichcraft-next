@@ -20,6 +20,7 @@ import {
   Plus,
   User,
   PlusCircle,
+  Beer,
 } from "lucide-react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Badge } from "../../components/Badge";
@@ -128,10 +129,20 @@ export default function HomeScreen() {
 
       setBeverages(filtered);
       setHasInitialData(true);
+      setIsLoading(false);
+    } else if (hasInitialData) {
+      // If we have initial data but no beverages, we're done loading
+      setIsLoading(false);
     } else {
       setIsLoading(true);
     }
-  }, [allBeverages, currentLiked, currentSortBy, currentSortOrder]);
+  }, [
+    allBeverages,
+    currentLiked,
+    currentSortBy,
+    currentSortOrder,
+    hasInitialData,
+  ]);
 
   // Fetch beverages
   const fetchBeverages = useCallback(
@@ -360,7 +371,7 @@ export default function HomeScreen() {
         {!isLoading && filteredBeverages.length === 0 && (
           <View className="items-center justify-center p-4 py-8">
             <View className="w-16 h-16 rounded-full bg-primary/10 items-center justify-center mb-4">
-              <Plus size={32} color={colors.primary} />
+              <Beer size={32} color={colors.primary} />
             </View>
             <Text className="text-lg font-medium text-foreground mb-2">
               No beverages found
