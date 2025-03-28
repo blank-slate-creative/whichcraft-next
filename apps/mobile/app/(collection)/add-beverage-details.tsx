@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import {
   View,
@@ -11,13 +11,17 @@ import {
   Platform,
   Alert,
   Image,
+  StyleSheet,
+  Dimensions,
 } from "react-native";
 import { Beverage } from "@whichcraft/api-client";
 import { mobileBeverageApi } from "../../utils/api";
 import { useBeverages } from "@whichcraft/beverage-context";
-import { ThumbsUp, ThumbsDown } from "lucide-react-native";
+import { ThumbsUp, ThumbsDown, MapPin, Search } from "lucide-react-native";
 import { Badge } from "../../components/Badge";
 import { useThemeColor } from "../../hooks/useThemeColor";
+import * as Location from "expo-location";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 export default function AddBeverageDetailsScreen() {
   const router = useRouter();
@@ -32,10 +36,232 @@ export default function AddBeverageDetailsScreen() {
   // State
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [beverageData, setBeverageData] = useState<Beverage>(initialBeverage);
+  const [locationPermission, setLocationPermission] = useState<boolean>(false);
+  const [isLocationLoading, setIsLocationLoading] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [mapRegion, setMapRegion] = useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+    latitudeDelta: 0.005,
+    longitudeDelta: 0.005,
+  });
+
+  // Get location permission when component mounts
+  useEffect(() => {
+    (async () => {
+      setIsLocationLoading(true);
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      setLocationPermission(status === "granted");
+
+      if (status === "granted") {
+        // Initialize with user's current location if permission granted
+        try {
+          const currentLocation = await Location.getCurrentPositionAsync({});
+          const { latitude, longitude } = currentLocation.coords;
+
+          setMapRegion({
+            latitude,
+            longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          });
+
+          // If there's already a location in beverageData with coordinates, use that instead
+          if (beverageData.location) {
+            try {
+              const locationObj = JSON.parse(beverageData.location);
+              if (locationObj.latitude && locationObj.longitude) {
+                setMapRegion({
+                  latitude: locationObj.latitude,
+                  longitude: locationObj.longitude,
+                  latitudeDelta: 0.005,
+                  longitudeDelta: 0.005,
+                });
+              }
+            } catch (e) {
+              // If location is stored as text, keep using current location
+            }
+          }
+        } catch (error) {
+          console.error("Error getting location:", error);
+        }
+      }
+      setIsLocationLoading(false);
+    })();
+  }, []);
+
+  // Handle map marker drag
+  const handleMapMarkerDrag = (e: any) => {
+    const { latitude, longitude } = e.nativeEvent.coordinate;
+    setMapRegion({
+      ...mapRegion,
+      latitude,
+      longitude,
+    });
+
+    // Update beverage data with new location
+    const locationData = {
+      latitude,
+      longitude,
+    };
+    handleBeverageDataChange({ location: JSON.stringify(locationData) });
+  };
+
+  // Get current location
+  const getCurrentLocation = async () => {
+    if (!locationPermission) {
+      Alert.alert(
+        "Location Permission Required",
+        "Please enable location permissions to use this feature",
+        [{ text: "OK" }]
+      );
+      return;
+    }
+
+    setIsLocationLoading(true);
+    try {
+      const currentLocation = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = currentLocation.coords;
+
+      setMapRegion({
+        latitude,
+        longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      });
+
+      // Update beverage data with new location
+      const locationData = {
+        latitude,
+        longitude,
+      };
+      handleBeverageDataChange({ location: JSON.stringify(locationData) });
+    } catch (error) {
+      console.error("Error getting location:", error);
+      Alert.alert("Error", "Failed to get current location");
+    } finally {
+      setIsLocationLoading(false);
+    }
+  };
 
   // Handle beverage data changes
   const handleBeverageDataChange = (data: Partial<Beverage>) => {
     setBeverageData((prev) => ({ ...prev, ...data }));
+  };
+
+  // Handle location search
+  const searchLocation = async (query: string) => {
+    setSearchQuery(query);
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      let results;
+      if (Platform.OS === "ios") {
+        // Use MapKit geocoding for iOS
+        const geocodeResults = await Location.geocodeAsync(query);
+
+        // Get place details for each location
+        const detailedResults = await Promise.all(
+          geocodeResults.map(async (result) => {
+            const reverseGeocode = await Location.reverseGeocodeAsync({
+              latitude: result.latitude,
+              longitude: result.longitude,
+            });
+
+            const place = reverseGeocode[0];
+            return {
+              id: `${result.latitude}-${result.longitude}`,
+              name: place.name || query,
+              address: [place.street, place.city, place.region, place.country]
+                .filter(Boolean)
+                .join(", "),
+              location: {
+                latitude: result.latitude,
+                longitude: result.longitude,
+              },
+            };
+          })
+        );
+
+        setSearchResults(detailedResults);
+      } else {
+        // Use Google Places API for Android
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(
+            query
+          )}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`
+        );
+        const data = await response.json();
+        setSearchResults(data.predictions || []);
+      }
+    } catch (error) {
+      console.error("Location search error:", error);
+      Alert.alert("Error", "Failed to search for location");
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Handle location selection
+  const handleLocationSelect = async (result: any) => {
+    setIsLocationLoading(true);
+    try {
+      let coordinates;
+      let locationName;
+      let address;
+
+      if (Platform.OS === "ios") {
+        coordinates = {
+          latitude: result.location.latitude,
+          longitude: result.location.longitude,
+        };
+        locationName = result.name;
+        address = result.address;
+      } else {
+        // For Android, we need to get the place details
+        const response = await fetch(
+          `https://maps.googleapis.com/maps/api/place/details/json?place_id=${result.place_id}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`
+        );
+        const data = await response.json();
+        if (data.result?.geometry?.location) {
+          coordinates = {
+            latitude: data.result.geometry.location.lat,
+            longitude: data.result.geometry.location.lng,
+          };
+          locationName = result.description;
+          address = data.result.formatted_address;
+        }
+      }
+
+      if (coordinates) {
+        setMapRegion({
+          ...mapRegion,
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+        });
+        handleBeverageDataChange({
+          location: JSON.stringify({
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude,
+            name: locationName,
+            address: address,
+          }),
+        });
+      }
+    } catch (error) {
+      console.error("Error getting place details:", error);
+      Alert.alert("Error", "Failed to get location details");
+    } finally {
+      setIsLocationLoading(false);
+      setSearchQuery("");
+      setSearchResults([]);
+    }
   };
 
   // Handle save beverage
@@ -62,6 +288,7 @@ export default function AddBeverageDetailsScreen() {
         untappd_beer_id: beverageData.untappd_beer_id || undefined,
         untappd_brewery_id: beverageData.untappd_brewery_id || undefined,
         image_url: beverageData.image_url || undefined,
+        location: beverageData.location || undefined,
       };
 
       // Optimistically update UI
@@ -281,6 +508,97 @@ export default function AddBeverageDetailsScreen() {
             </View>
           </View>
 
+          {/* Location */}
+          <View className="mb-6">
+            <View className="flex-row justify-between items-center mb-2">
+              <Text className="text-sm font-medium text-foreground">
+                Location
+              </Text>
+              <TouchableOpacity
+                className="flex-row items-center gap-1 py-1 px-2 rounded-md bg-secondary"
+                onPress={getCurrentLocation}
+                disabled={isLocationLoading}
+              >
+                <MapPin size={14} color={colors.primary} />
+                <Text className="text-xs text-primary">
+                  {isLocationLoading ? "Loading..." : "Current Location"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Location Search */}
+            <View className="mb-2">
+              <View className="relative">
+                <TextInput
+                  className="bg-secondary text-foreground rounded-lg py-3 px-4 pr-10"
+                  placeholder="Search for a venue..."
+                  placeholderTextColor="#9ca3af"
+                  value={searchQuery}
+                  onChangeText={searchLocation}
+                />
+                <View className="absolute right-3 top-3">
+                  {isSearching ?
+                    <ActivityIndicator size="small" color={colors.primary} />
+                  : <Search size={20} color={colors.mutedForeground} />}
+                </View>
+              </View>
+
+              {searchResults.length > 0 && (
+                <View className="bg-secondary rounded-lg mt-1 max-h-40">
+                  <ScrollView>
+                    {searchResults.map((result, index) => (
+                      <TouchableOpacity
+                        key={
+                          Platform.OS === "ios" ?
+                            `${result.id}`
+                          : result.place_id
+                        }
+                        className="p-3 border-b border-border"
+                        onPress={() => handleLocationSelect(result)}
+                      >
+                        <Text className="text-foreground">
+                          {Platform.OS === "ios" ?
+                            `${result.name}${result.address ? ` • ${result.address}` : ""}`
+                          : result.description}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
+              )}
+            </View>
+
+            <View
+              className="overflow-hidden rounded-lg"
+              style={{ height: 200 }}
+            >
+              {locationPermission ?
+                <MapView
+                  style={styles.map}
+                  provider={Platform.OS === "ios" ? undefined : PROVIDER_GOOGLE}
+                  region={mapRegion}
+                  onRegionChangeComplete={setMapRegion}
+                >
+                  <Marker
+                    coordinate={{
+                      latitude: mapRegion.latitude,
+                      longitude: mapRegion.longitude,
+                    }}
+                    draggable
+                    onDragEnd={handleMapMarkerDrag}
+                    pinColor={colors.primary}
+                  />
+                </MapView>
+              : <View className="flex-1 items-center justify-center bg-secondary">
+                  <Text className="text-muted-foreground text-center px-4">
+                    Location permission is required to use the map. Please
+                    enable location in your device settings.
+                  </Text>
+                </View>
+              }
+            </View>
+          </View>
+
           {/* Notes */}
           <View className="mb-6">
             <Text className="text-sm font-medium text-foreground mb-2">
@@ -311,7 +629,7 @@ export default function AddBeverageDetailsScreen() {
                   color={isDark ? "rgb(10, 10, 10)" : "rgb(250, 250, 250)"}
                 />
               : <Text className="text-primary-foreground font-medium">
-                  Save Beer
+                  Save
                 </Text>
               }
             </TouchableOpacity>
@@ -321,3 +639,9 @@ export default function AddBeverageDetailsScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+});

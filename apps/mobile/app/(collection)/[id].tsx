@@ -10,10 +10,17 @@ import {
   Alert,
   TextInput,
   Platform,
+  StyleSheet,
+  Dimensions,
 } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { BeverageApiClient, Beverage } from "@whichcraft/api-client";
-import { ThumbsUp, ThumbsDown, MoreHorizontal } from "lucide-react-native";
+import {
+  ThumbsUp,
+  ThumbsDown,
+  MoreHorizontal,
+  MapPin,
+} from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Badge } from "../../components/Badge";
 import { debounce } from "../../utils/functions";
@@ -25,6 +32,7 @@ import {
   MenuComponentRef,
 } from "@react-native-menu/menu";
 import * as Haptics from "expo-haptics";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 // Create API client instance
 const beverageApi = new BeverageApiClient({
@@ -439,9 +447,70 @@ export default function BeverageDetailScreen() {
                 {new Date(beverage.created_at).toLocaleDateString()}
               </Text>
             </View>
+
+            {/* Location */}
+            {beverage.location && (
+              <View className="mb-6">
+                <Text className="text-sm font-medium text-foreground mb-2">
+                  Location
+                </Text>
+                <View
+                  className="overflow-hidden rounded-lg"
+                  style={{ height: 200 }}
+                >
+                  {(() => {
+                    try {
+                      const locationData = JSON.parse(beverage.location);
+                      if (locationData.latitude && locationData.longitude) {
+                        const region = {
+                          latitude: locationData.latitude,
+                          longitude: locationData.longitude,
+                          latitudeDelta: 0.005,
+                          longitudeDelta: 0.005,
+                        };
+                        return (
+                          <MapView style={styles.map} initialRegion={region}>
+                            <Marker
+                              coordinate={{
+                                latitude: locationData.latitude,
+                                longitude: locationData.longitude,
+                              }}
+                              pinColor={colors.primary}
+                            />
+                          </MapView>
+                        );
+                      }
+                    } catch (e) {
+                      // If location is stored as text, show that instead
+                      return (
+                        <View className="flex-1 items-center justify-center bg-secondary py-4">
+                          <View className="flex-row items-center">
+                            <MapPin
+                              size={16}
+                              color={colors.primary}
+                              style={{ marginRight: 4 }}
+                            />
+                            <Text className="text-foreground">
+                              {beverage.location}
+                            </Text>
+                          </View>
+                        </View>
+                      );
+                    }
+                    return null;
+                  })()}
+                </View>
+              </View>
+            )}
           </View>
         </ScrollView>
       }
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+});

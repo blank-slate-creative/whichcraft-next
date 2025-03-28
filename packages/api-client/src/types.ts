@@ -31,6 +31,7 @@ export interface Beverage {
   created_at: string;
   untappd_beer_id: number | null;
   untappd_brewery_id: number | null;
+  location?: string | null;
 }
 
 /**
