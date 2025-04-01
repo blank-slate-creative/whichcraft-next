@@ -378,13 +378,45 @@ export default function HomeScreen() {
             </Text>
             <Text className="text-center text-muted-foreground mb-4">
               {searchQuery ?
-                "Try adjusting your search or filters."
+                `No beverages found matching "${searchQuery}". Try adjusting your filters, clearing the search, or adding a new beverage.`
               : "Start building your collection by adding your first beverage."}
             </Text>
-            {!searchQuery ?
-              <TouchableOpacity
+
+            {searchQuery ?
+              <View className="items-center">
+                <TouchableOpacity
+                  className="bg-primary py-2 px-4 rounded-lg flex-row items-center mb-2"
+                  onPress={() =>
+                    router.push({
+                      pathname: "/(collection)/search-beverage",
+                      params: { query: searchQuery },
+                    })
+                  }
+                >
+                  <Plus
+                    size={18}
+                    color={colors.primaryForeground}
+                    style={{ marginRight: 4 }}
+                  />
+                  <Text className="text-primary-foreground font-medium">
+                    Add New Beverage
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  className="bg-secondary py-2 px-4 rounded-lg"
+                  onPress={() => setSearchQuery("")}
+                >
+                  <Text className="text-foreground">Clear Search</Text>
+                </TouchableOpacity>
+              </View>
+            : <TouchableOpacity
                 className="bg-primary py-2 px-4 rounded-lg flex-row items-center"
-                onPress={() => router.push("/(collection)/search-beverage")}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(collection)/search-beverage",
+                    params: { query: searchQuery },
+                  })
+                }
               >
                 <Plus
                   size={18}
@@ -394,12 +426,6 @@ export default function HomeScreen() {
                 <Text className="text-primary-foreground font-medium">
                   Add Your First Beverage
                 </Text>
-              </TouchableOpacity>
-            : <TouchableOpacity
-                className="bg-secondary py-2 px-4 rounded-lg"
-                onPress={() => setSearchQuery("")}
-              >
-                <Text className="text-foreground">Clear Search</Text>
               </TouchableOpacity>
             }
           </View>

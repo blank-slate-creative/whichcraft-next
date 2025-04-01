@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Stack, useRouter } from "expo-router";
+import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import {
   View,
   Text,
@@ -20,57 +20,26 @@ export default function SearchBeverageScreen() {
   const { colors } = useThemeColor();
   const insets = useSafeAreaInsets();
   const searchBarRef = useRef<SearchBarCommands>(null);
+  const { query } = useLocalSearchParams<{ query?: string }>();
 
   // State
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>(query || "");
   const [searchResults, setSearchResults] = useState<Beverage[]>([]);
 
   // Debounce search
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  // Handle search input change
-  const handleSearchInputChange = (text: string) => {
-    setSearchQuery(text);
-
-    // Clear previous timeout
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
-    }
-
-    // Clear search results if input is empty
-    if (!text.trim()) {
-      setSearchResults([]);
-      return;
-    }
-
-    // Set new timeout
-    debounceTimeout.current = setTimeout(() => {
-      if (text.trim().length > 2) {
-        handleSearch();
-      }
-    }, 500);
-  };
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current);
-      }
-    };
-  }, []);
-
   // Handle search
-  const handleSearch = useCallback(async () => {
-    if (!searchQuery.trim()) return;
+  const handleSearch = useCallback(async (searchTerm: string) => {
+    if (!searchTerm.trim()) return;
 
     try {
       setIsLoading(true);
 
       // Use the actual beer search API
       const response = await fetch(
-        `${process.env.EXPO_PUBLIC_API_URL || "https://api.whichcraft.app"}/api/search/beer?q=${encodeURIComponent(searchQuery)}`
+        `${process.env.EXPO_PUBLIC_API_URL || "https://api.whichcraft.app"}/api/search/beer?q=${encodeURIComponent(searchTerm)}`
       );
 
       if (!response.ok) {
@@ -107,7 +76,59 @@ export default function SearchBeverageScreen() {
     } finally {
       setIsLoading(false);
     }
-  }, [searchQuery]);
+  }, []); // No dependencies needed since searchTerm is passed as parameter
+
+  // Set initial search bar text and perform search
+  useEffect(() => {
+    if (!query) return;
+
+    // Need to wait a bit for the search bar to be ready
+    const timer = setTimeout(() => {
+      if (searchBarRef.current) {
+        searchBarRef.current.setText(query);
+        searchBarRef.current.focus();
+      }
+
+      // Perform the initial search if query is long enough
+      if (query.trim().length > 2) {
+        handleSearch(query);
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  // Handle search input change
+  const handleSearchInputChange = (text: string) => {
+    setSearchQuery(text);
+
+    // Clear previous timeout
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    // Clear search results if input is empty
+    if (!text.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    // Set new timeout
+    debounceTimeout.current = setTimeout(() => {
+      if (text.trim().length > 2) {
+        handleSearch(text);
+      }
+    }, 500);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, []);
 
   // Handle select beverage from search results
   const handleSelectBeverage = (beverage: Beverage) => {
