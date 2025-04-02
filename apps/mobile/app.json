@@ -45,7 +45,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "WhichCraft uses your location to mark where you enjoyed your drinks.",
+          "locationAlwaysAndWhenInUsePermission": "Allow WhichCraft to use your location to find nearby venues.",
           "isAndroidBackgroundLocationEnabled": false,
           "isIosBackgroundLocationEnabled": false
         }

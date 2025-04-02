@@ -12,7 +12,6 @@ import {
   Alert,
   Image,
   StyleSheet,
-  Dimensions,
 } from "react-native";
 import { Beverage } from "@whichcraft/api-client";
 import { mobileBeverageApi } from "../../utils/api";
@@ -21,7 +20,9 @@ import { ThumbsUp, ThumbsDown, MapPin, Search } from "lucide-react-native";
 import { Badge } from "../../components/Badge";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import * as Location from "expo-location";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
+import { LocationSearch } from "../../src/components/LocationSearch";
+import type { LocationResult } from "../../src/hooks/useLocationSearch";
 
 export default function AddBeverageDetailsScreen() {
   const router = useRouter();
@@ -47,6 +48,10 @@ export default function AddBeverageDetailsScreen() {
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
   });
+  const [markerCoordinate, setMarkerCoordinate] = useState({
+    latitude: 37.78825,
+    longitude: -122.4324,
+  });
 
   // Get location permission when component mounts
   useEffect(() => {
@@ -61,23 +66,31 @@ export default function AddBeverageDetailsScreen() {
           const currentLocation = await Location.getCurrentPositionAsync({});
           const { latitude, longitude } = currentLocation.coords;
 
-          setMapRegion({
+          const newRegion = {
             latitude,
             longitude,
             latitudeDelta: 0.005,
             longitudeDelta: 0.005,
-          });
+          };
+
+          setMapRegion(newRegion);
+          setMarkerCoordinate({ latitude, longitude });
 
           // If there's already a location in beverageData with coordinates, use that instead
           if (beverageData.location) {
             try {
               const locationObj = JSON.parse(beverageData.location);
               if (locationObj.latitude && locationObj.longitude) {
-                setMapRegion({
+                const savedRegion = {
                   latitude: locationObj.latitude,
                   longitude: locationObj.longitude,
                   latitudeDelta: 0.005,
                   longitudeDelta: 0.005,
+                };
+                setMapRegion(savedRegion);
+                setMarkerCoordinate({
+                  latitude: locationObj.latitude,
+                  longitude: locationObj.longitude,
                 });
               }
             } catch (e) {
@@ -91,23 +104,6 @@ export default function AddBeverageDetailsScreen() {
       setIsLocationLoading(false);
     })();
   }, []);
-
-  // Handle map marker drag
-  const handleMapMarkerDrag = (e: any) => {
-    const { latitude, longitude } = e.nativeEvent.coordinate;
-    setMapRegion({
-      ...mapRegion,
-      latitude,
-      longitude,
-    });
-
-    // Update beverage data with new location
-    const locationData = {
-      latitude,
-      longitude,
-    };
-    handleBeverageDataChange({ location: JSON.stringify(locationData) });
-  };
 
   // Get current location
   const getCurrentLocation = async () => {
@@ -125,12 +121,15 @@ export default function AddBeverageDetailsScreen() {
       const currentLocation = await Location.getCurrentPositionAsync({});
       const { latitude, longitude } = currentLocation.coords;
 
-      setMapRegion({
+      const newRegion = {
         latitude,
         longitude,
         latitudeDelta: 0.005,
         longitudeDelta: 0.005,
-      });
+      };
+
+      setMapRegion(newRegion);
+      setMarkerCoordinate({ latitude, longitude });
 
       // Update beverage data with new location
       const locationData = {
@@ -208,60 +207,33 @@ export default function AddBeverageDetailsScreen() {
     }
   };
 
-  // Handle location selection
-  const handleLocationSelect = async (result: any) => {
-    setIsLocationLoading(true);
-    try {
-      let coordinates;
-      let locationName;
-      let address;
-
-      if (Platform.OS === "ios") {
-        coordinates = {
-          latitude: result.location.latitude,
-          longitude: result.location.longitude,
-        };
-        locationName = result.name;
-        address = result.address;
-      } else {
-        // For Android, we need to get the place details
-        const response = await fetch(
-          `https://maps.googleapis.com/maps/api/place/details/json?place_id=${result.place_id}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`
-        );
-        const data = await response.json();
-        if (data.result?.geometry?.location) {
-          coordinates = {
-            latitude: data.result.geometry.location.lat,
-            longitude: data.result.geometry.location.lng,
-          };
-          locationName = result.description;
-          address = data.result.formatted_address;
-        }
-      }
-
-      if (coordinates) {
-        setMapRegion({
-          ...mapRegion,
-          latitude: coordinates.latitude,
-          longitude: coordinates.longitude,
-        });
-        handleBeverageDataChange({
-          location: JSON.stringify({
-            latitude: coordinates.latitude,
-            longitude: coordinates.longitude,
-            name: locationName,
-            address: address,
-          }),
-        });
-      }
-    } catch (error) {
-      console.error("Error getting place details:", error);
-      Alert.alert("Error", "Failed to get location details");
-    } finally {
-      setIsLocationLoading(false);
-      setSearchQuery("");
-      setSearchResults([]);
+  // Handle location selection from LocationSearch
+  const handleLocationSelect = (location: LocationResult | null) => {
+    if (!location) {
+      // Clear location data when selection is cleared
+      handleBeverageDataChange({ location: null });
+      return;
     }
+
+    const { latitude, longitude } = location.coordinates;
+
+    const newRegion = {
+      ...mapRegion,
+      latitude,
+      longitude,
+    };
+
+    setMapRegion(newRegion);
+    setMarkerCoordinate({ latitude, longitude });
+
+    // Update beverage data with new location
+    const locationData = {
+      latitude,
+      longitude,
+      name: location.name,
+      address: location.address,
+    };
+    handleBeverageDataChange({ location: JSON.stringify(locationData) });
   };
 
   // Handle save beverage
@@ -510,93 +482,42 @@ export default function AddBeverageDetailsScreen() {
 
           {/* Location */}
           <View className="mb-6">
-            <View className="flex-row justify-between items-center mb-2">
-              <Text className="text-sm font-medium text-foreground">
-                Location
-              </Text>
-              <TouchableOpacity
-                className="flex-row items-center gap-1 py-1 px-2 rounded-md bg-secondary"
-                onPress={getCurrentLocation}
-                disabled={isLocationLoading}
-              >
-                <MapPin size={14} color={colors.primary} />
-                <Text className="text-xs text-primary">
-                  {isLocationLoading ? "Loading..." : "Current Location"}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <Text className="text-base font-medium mb-2 text-foreground">
+              Location
+            </Text>
 
-            {/* Location Search */}
-            <View className="mb-2">
-              <View className="relative">
-                <TextInput
-                  className="bg-secondary text-foreground rounded-lg py-3 px-4 pr-10"
-                  placeholder="Search for a venue..."
-                  placeholderTextColor="#9ca3af"
-                  value={searchQuery}
-                  onChangeText={searchLocation}
-                />
-                <View className="absolute right-3 top-3">
-                  {isSearching ?
-                    <ActivityIndicator size="small" color={colors.primary} />
-                  : <Search size={20} color={colors.mutedForeground} />}
+            <LocationSearch
+              onSelectLocation={handleLocationSelect}
+              placeholder="Search for a venue or location"
+            />
+
+            <View className="mt-4 h-48 overflow-hidden rounded-lg">
+              {isLocationLoading ?
+                <View className="flex-1 items-center justify-center bg-gray-100">
+                  <ActivityIndicator size="large" color={colors.primary} />
                 </View>
-              </View>
-
-              {searchResults.length > 0 && (
-                <View className="bg-secondary rounded-lg mt-1 max-h-40">
-                  <ScrollView>
-                    {searchResults.map((result, index) => (
-                      <TouchableOpacity
-                        key={
-                          Platform.OS === "ios" ?
-                            `${result.id}`
-                          : result.place_id
-                        }
-                        className="p-3 border-b border-border"
-                        onPress={() => handleLocationSelect(result)}
-                      >
-                        <Text className="text-foreground">
-                          {Platform.OS === "ios" ?
-                            `${result.name}${result.address ? ` • ${result.address}` : ""}`
-                          : result.description}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-              )}
-            </View>
-
-            <View
-              className="overflow-hidden rounded-lg"
-              style={{ height: 200 }}
-            >
-              {locationPermission ?
-                <MapView
-                  style={styles.map}
-                  provider={Platform.OS === "ios" ? undefined : PROVIDER_GOOGLE}
+              : <MapView
+                  style={{ flex: 1 }}
                   region={mapRegion}
                   onRegionChangeComplete={setMapRegion}
                 >
-                  <Marker
-                    coordinate={{
-                      latitude: mapRegion.latitude,
-                      longitude: mapRegion.longitude,
-                    }}
-                    draggable
-                    onDragEnd={handleMapMarkerDrag}
-                    pinColor={colors.primary}
-                  />
+                  <Marker coordinate={markerCoordinate} />
                 </MapView>
-              : <View className="flex-1 items-center justify-center bg-secondary">
-                  <Text className="text-muted-foreground text-center px-4">
-                    Location permission is required to use the map. Please
-                    enable location in your device settings.
-                  </Text>
-                </View>
               }
             </View>
+
+            <TouchableOpacity
+              className="mt-2 flex-row items-center justify-center py-2 bg-primary/10 rounded-lg"
+              onPress={getCurrentLocation}
+              disabled={isLocationLoading}
+            >
+              <MapPin size={20} color={colors.primary} />
+              <Text className="ml-2 text-primary font-medium">
+                {isLocationLoading ?
+                  "Getting location..."
+                : "Use Current Location"}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {/* Notes */}

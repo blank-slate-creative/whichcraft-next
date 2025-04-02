@@ -200,3 +200,74 @@ The web app can be deployed to Vercel.
 #### API (Flask)
 
 The API can be deployed to Fly.io using the deploy script.
+
+# WhichCraft Next
+
+A next-generation app for craft beer enthusiasts.
+
+## Features
+
+### Location Search
+
+The app includes a lightweight location search implementation with the following
+features:
+
+- Native iOS location search via Expo Location integration
+- Venue search with address and coordinates
+- Simple, reusable React component
+- Custom React hook for location search logic
+
+### Usage
+
+```jsx
+import { LocationSearch } from "./app/components/LocationSearch";
+
+// In your component
+<LocationSearch
+  onSelectLocation={(location) => {
+    console.log(location.name, location.address, location.coordinates);
+  }}
+  placeholder="Search for venues"
+/>;
+```
+
+## Implementation Details
+
+The location search feature uses:
+
+1. **Expo Location** for permission handling and current location
+2. A lightweight MapKit JS wrapper for iOS native search (placeholder for real
+   implementation)
+3. Simple, reusable React components
+
+## Setup Instructions
+
+1. Install dependencies:
+
+```
+npm install expo-location
+```
+
+2. Add location permissions to your app.json:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ]
+    ]
+  }
+}
+```
+
+3. Import and use the LocationSearch component in your screens.
+
+## Example
+
+See the `app/screens/LocationSearchExample.tsx` file for a complete usage
+example.

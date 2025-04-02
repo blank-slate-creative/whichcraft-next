@@ -1,43 +1,39 @@
-import { ApiClientConfig } from "./types";
+export interface ApiClientConfig {
+  apiUrl: string;
+}
 
 /**
  * Base API client class
  */
 export class ApiClient {
-  protected apiUrl: string;
+  private baseUrl: string;
 
   constructor(config: ApiClientConfig) {
-    this.apiUrl = config.apiUrl;
+    this.baseUrl = config.apiUrl;
   }
 
   /**
    * Make an authenticated API request with the provided token
    */
-  protected async makeApiRequest(
+  protected async makeApiRequest<T>(
     endpoint: string,
-    token: string,
+    token?: string,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
     body?: any
-  ) {
-    if (!token) {
-      throw new Error("Authentication required");
-    }
-
-    const headers: HeadersInit = {
+  ): Promise<T> {
+    const headers: Record<string, string> = {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     };
 
-    const requestOptions: RequestInit = {
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${this.baseUrl}${endpoint}`, {
       method,
       headers,
-    };
-
-    if (body && (method === "POST" || method === "PUT")) {
-      requestOptions.body = JSON.stringify(body);
-    }
-
-    const response = await fetch(`${this.apiUrl}${endpoint}`, requestOptions);
+      body: body ? JSON.stringify(body) : undefined,
+    });
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));

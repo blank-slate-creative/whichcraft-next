@@ -1,5 +1,5 @@
 import { ApiClient } from "./api-client";
-import { Beverage, BeverageFilters } from "./types";
+import { Beverage, BeverageFilters, VenueSearchResult } from "./types";
 
 /**
  * Beverage API client
@@ -81,5 +81,26 @@ export class BeverageApiClient extends ApiClient {
    */
   async delete(token: string, id: string): Promise<void> {
     return this.makeApiRequest(`/api/beverages/${id}`, token, "DELETE");
+  }
+
+  /**
+   * Search for venues using Untappd's Algolia search
+   * @param query Search query string
+   * @param options Optional search options
+   */
+  async searchVenues(
+    query: string,
+    options?: {
+      latitude?: number;
+      longitude?: number;
+    }
+  ): Promise<VenueSearchResult[]> {
+    let endpoint = `/api/search/venue?q=${encodeURIComponent(query)}`;
+
+    if (options?.latitude && options?.longitude) {
+      endpoint += `&lat=${options.latitude}&lng=${options.longitude}`;
+    }
+
+    return this.makeApiRequest(endpoint, undefined, "GET");
   }
 }

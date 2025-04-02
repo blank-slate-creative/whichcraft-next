@@ -139,3 +139,60 @@ resources:
 
 - [WhichCraft Web App](../web): The web version of WhichCraft
 - [WhichCraft API](../api): The backend API that powers both web and mobile apps
+
+## Location Search Feature
+
+A lightweight implementation for searching venues and locations using native iOS
+capabilities.
+
+### Features
+
+- Native iOS location search via Expo Location
+- Venue search with address and coordinates
+- NativeWind styling
+- Optimistic UI updates
+- TypeScript support
+
+### Implementation Details
+
+The location search feature uses:
+
+1. **Expo Location** for permission handling and current location
+2. **NativeWind** for consistent styling
+3. **React Native Navigation** for native search UI
+4. Modular components and hooks for reusability
+
+### Usage
+
+```tsx
+import { LocationSearch } from "@/components/LocationSearch";
+
+function MyScreen() {
+  return (
+    <LocationSearch
+      onSelectLocation={(location) => {
+        console.log(location.name, location.address, location.coordinates);
+      }}
+      placeholder="Search for venues"
+    />
+  );
+}
+```
+
+### Example
+
+See `src/screens/LocationSearchExample.tsx` for a complete usage example.
+
+### Dependencies
+
+The feature requires the following dependencies which are already included in
+the project:
+
+- expo-location
+- nativewind
+- react-native-safe-area-context
+
+### Location Permissions
+
+Location permissions are configured in `app.json`. The app will request location
+access when needed to provide nearby venue results.

@@ -48,3 +48,26 @@ export interface BeerSearchResult {
   brewery_name: string;
   brewery_id: number;
 }
+
+/**
+ * Venue Search Result interface
+ */
+export interface VenueSearchResult {
+  id: string;
+  name: string;
+  primary_category: string;
+  categories: string[];
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  coordinates: {
+    latitude: number;
+    longitude: number;
+  };
+  image_url?: string;
+  has_beer: boolean;
+  has_food: boolean;
+  has_wine: boolean;
+  has_spirits: boolean;
+}
