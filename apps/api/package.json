@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "setup": "uv venv && uv pip install -r requirements.txt",
-    "dev": "uv run app.py",
+    "dev": "uv run -m uvicorn app.main:app --reload",
     "deploy": "./deploy-api.sh",
     "build": "docker build -t api .",
     "start": "docker run -p 8080:8080 api"

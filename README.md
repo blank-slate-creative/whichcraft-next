@@ -37,10 +37,10 @@ remember your favorites and avoid repeating mistakes.
 
 - **Backend**:
 
-  - Flask API with SQLAlchemy
+  - FastAPI with Pydantic models and SQLAlchemy
   - PostgreSQL database (via Supabase)
   - JWT authentication
-  - Flask-Migrate for database migrations
+  - Alembic for database migrations
 
 - **Infrastructure**:
   - Supabase for authentication and database
@@ -159,7 +159,7 @@ includes the following packages/apps:
 ### Apps
 
 - `web`: a [Next.js](https://nextjs.org/) app
-- `api`: a [Flask](https://flask.palletsprojects.com/) app
+- `api`: a [FastAPI](https://fastapi.tiangolo.com/) app
 
 ### Packages
 
@@ -197,7 +197,7 @@ Each app can be deployed independently to its respective platform.
 
 The web app can be deployed to Vercel.
 
-#### API (Flask)
+#### API (FastAPI)
 
 The API can be deployed to Fly.io using the deploy script.
 

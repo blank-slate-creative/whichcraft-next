@@ -36,16 +36,12 @@ The data model has been updated to separate the `Beverage` model from the
    - Remove legacy columns
 
    ```
-   flask db upgrade
+   alembic upgrade head
    ```
 
 3. **Verify the migration**: Check that all data has been properly migrated
    ```
-   flask shell
-   >>> from app import db, User, Beverage, BeverageType, Producer, Entry
-   >>> Entry.query.count()  # Should match the previous Beverage count
-   >>> BeverageType.query.count()  # Should have one entry per unique beverage type
-   >>> Producer.query.count()  # Should have one entry per unique producer
+   python -c "from app.database import get_db; from app.models import User, Beverage, BeverageType, Producer, Entry; db = next(get_db()); print(f'Entries: {db.query(Entry).count()}'); print(f'BeverageTypes: {db.query(BeverageType).count()}'); print(f'Producers: {db.query(Producer).count()}')"
    ```
 
 ### API Changes
@@ -89,7 +85,7 @@ The API endpoints have been updated to work with the new data model:
 
 4. Run the application:
    ```
-   flask run
+   uvicorn app.main:app --reload
    ```
 
 ### Database Migrations
@@ -97,19 +93,19 @@ The API endpoints have been updated to work with the new data model:
 To create a new migration:
 
 ```
-flask db migrate -m "Description of changes"
+alembic revision --autogenerate -m "Description of changes"
 ```
 
 To apply migrations:
 
 ```
-flask db upgrade
+alembic upgrade head
 ```
 
 To revert a migration:
 
 ```
-flask db downgrade
+alembic downgrade -1
 ```
 
 ## Running the API
