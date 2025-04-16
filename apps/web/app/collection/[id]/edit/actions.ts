@@ -1,8 +1,7 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import { serverBeverageApi } from '@/utils/server-api';
-import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 interface FormState {
   status: 'idle' | 'submitting' | 'success' | 'error';
@@ -10,58 +9,59 @@ interface FormState {
 }
 
 export async function updateBeverageAction(
-  id: string,
   prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
-  // Validate form
-  const name = formData.get('name') as string;
-  const type = formData.get('type') as string;
-  const liked = formData.get('liked') as string;
-
-  if (!name || !type || liked === undefined) {
+  const id = formData.get('id') as string;
+  if (!id) {
     return {
       status: 'error',
-      message: 'Please fill in all required fields and rate the beverage',
+      message: 'Beverage ID is required',
+    };
+  }
+
+  const name = formData.get('name') as string;
+  const type = formData.get('type') as string;
+  const liked = formData.get('liked') === 'true';
+
+  if (!name || !type || typeof liked !== 'boolean') {
+    return {
+      status: 'error',
+      message: 'Name, type, and liked status are required',
     };
   }
 
   try {
-    // Get ABV value and convert empty string to null
-    const abvValue = formData.get('abv');
-    const abv = abvValue === '' || abvValue === null ? null : Number(abvValue);
-
-    // Update beverage using the server API utility
     await serverBeverageApi.update(id, {
       name,
-      producer: formData.get('producer') as string,
       type,
+      liked,
+      producer: formData.get('producer') as string,
       style: formData.get('style') as string,
       notes: formData.get('notes') as string,
-      liked: liked === 'true',
-      abv,
+      abv: formData.get('abv') ? parseFloat(formData.get('abv') as string) : null,
+      untappd_beer_id: formData.get('untappd_beer_id')
+        ? parseInt(formData.get('untappd_beer_id') as string, 10)
+        : null,
+      untappd_brewery_id: formData.get('untappd_brewery_id')
+        ? parseInt(formData.get('untappd_brewery_id') as string, 10)
+        : null,
       image_url: formData.get('image_url') as string,
+      location: formData.get('location') as string,
     });
 
-    // Revalidate the collection path to update the cache
-    revalidatePath('/collection');
-
-    // Return success state instead of redirecting here
     return {
       status: 'success',
-      message: 'Beverage updated successfully!',
+      message: 'Beverage updated successfully',
     };
   } catch (error) {
-    console.error('Error updating beverage:', error);
     return {
       status: 'error',
-      message: 'Failed to update beverage. Please try again.',
+      message: error instanceof Error ? error.message : 'Failed to update beverage',
     };
   }
 }
 
-// Keep the redirectToCollection function for client-side use
-export async function redirectToCollection() {
-  revalidatePath('/collection');
+export function redirectToCollection() {
   redirect('/collection');
 }

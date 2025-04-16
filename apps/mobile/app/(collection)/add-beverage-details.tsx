@@ -21,8 +21,8 @@ import { Badge } from "../../components/Badge";
 import { useThemeColor } from "../../hooks/useThemeColor";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
-import { LocationSearch } from "../../src/components/LocationSearch";
-import type { LocationResult } from "../../src/hooks/useLocationSearch";
+import { LocationSearch } from "../../components/LocationSearch";
+import type { LocationResult } from "../../hooks/useLocationSearch";
 
 export default function AddBeverageDetailsScreen() {
   const router = useRouter();

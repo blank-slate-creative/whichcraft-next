@@ -1,11 +1,12 @@
 'use client';
 
 import React from 'react';
-import { Beer, Wine, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Beer, Wine, ThumbsUp, ThumbsDown, MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Beverage } from '@whichcraft/api-client';
+import { VenueMap } from '@/components/VenueMap';
 
 export type BeverageDisplayVariant = 'list' | 'card' | 'detail' | 'compact';
 
@@ -19,6 +20,7 @@ export interface BeverageDisplayProps {
   showNotes?: boolean;
   showAbv?: boolean;
   showDate?: boolean;
+  showLocation?: boolean;
 }
 
 // Client Component for image handling
@@ -90,6 +92,7 @@ export function BeverageDisplay({
   showNotes = false,
   showAbv = false,
   showDate = false,
+  showLocation = variant === 'detail',
 }: BeverageDisplayProps) {
   // Define icon sizes
   const iconSizes = {
@@ -127,6 +130,17 @@ export function BeverageDisplay({
 
   // Determine if this is a beer or wine
   const isBeer = beverage.type === 'Beer';
+
+  // Parse location data if it exists
+  const locationData = React.useMemo(() => {
+    if (!beverage.location) return null;
+    try {
+      return JSON.parse(beverage.location);
+    } catch (e) {
+      // If location is stored as plain text, return it as name only
+      return { name: beverage.location };
+    }
+  }, [beverage.location]);
 
   // Render the badge
   const renderBadge = () => (
@@ -167,12 +181,45 @@ export function BeverageDisplay({
     );
   };
 
+  // Render location information
+  const renderLocation = () => {
+    if (!showLocation || !locationData) return null;
+
+    return (
+      <div className="mt-6">
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">Location</h3>
+        <div className="space-y-3">
+          <div className="flex items-start gap-3 p-3 bg-muted rounded-lg">
+            <MapPin className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <div>
+              <div className="font-medium">{locationData.name}</div>
+              {locationData.address && (
+                <div className="text-sm text-muted-foreground">
+                  {[locationData.address, locationData.city, locationData.state]
+                    .filter(Boolean)
+                    .join(', ')}
+                </div>
+              )}
+            </div>
+          </div>
+          {locationData.latitude && locationData.longitude && (
+            <VenueMap
+              latitude={locationData.latitude}
+              longitude={locationData.longitude}
+              className="w-full h-48 rounded-lg overflow-hidden"
+            />
+          )}
+        </div>
+      </div>
+    );
+  };
+
   // Render additional details for detail view
   const renderDetails = () => {
     if (variant !== 'detail' && !showAbv && !showDate && !showNotes) return null;
 
     return (
-      <div className="mt-3 space-y-2">
+      <div className="mt-3 space-y-4">
         {(showDate || variant === 'detail') && (
           <div>
             <dt className="text-sm font-medium text-muted-foreground">Added on</dt>
@@ -186,6 +233,8 @@ export function BeverageDisplay({
             <p className="whitespace-pre-wrap text-sm">{beverage.notes || 'No notes added.'}</p>
           </div>
         )}
+
+        {renderLocation()}
       </div>
     );
   };

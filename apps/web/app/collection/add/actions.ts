@@ -26,6 +26,11 @@ export async function saveBeverageAction(
   }
 
   try {
+    // Get optional numeric values
+    const abv = formData.get('abv') as string;
+    const untappd_beer_id = formData.get('untappd_beer_id') as string;
+    const untappd_brewery_id = formData.get('untappd_brewery_id') as string;
+
     // Create beverage using the server API utility
     await serverBeverageApi.create({
       name,
@@ -34,10 +39,11 @@ export async function saveBeverageAction(
       style: formData.get('style') as string,
       notes: formData.get('notes') as string,
       liked: liked === 'true',
-      abv: parseFloat(formData.get('abv') as string),
-      untappd_beer_id: parseInt(formData.get('untappd_beer_id') as string),
-      untappd_brewery_id: parseInt(formData.get('untappd_brewery_id') as string),
-      image_url: formData.get('image_url') as string,
+      abv: abv ? parseFloat(abv) : null,
+      untappd_beer_id: untappd_beer_id ? parseInt(untappd_beer_id) : null,
+      untappd_brewery_id: untappd_brewery_id ? parseInt(untappd_brewery_id) : null,
+      image_url: (formData.get('image_url') as string) || null,
+      location: (formData.get('location') as string) || null,
     });
 
     // Revalidate the collection path to update the cache

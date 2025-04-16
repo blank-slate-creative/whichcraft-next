@@ -7,12 +7,12 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Modal,
-  SafeAreaView,
   Platform,
   Keyboard,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocationSearch, LocationResult } from "../hooks/useLocationSearch";
-import { useThemeColor } from "../../hooks/useThemeColor";
+import { useThemeColor } from "../hooks/useThemeColor";
 import { Search, X, MapPin } from "lucide-react-native";
 
 interface LocationSearchProps {
