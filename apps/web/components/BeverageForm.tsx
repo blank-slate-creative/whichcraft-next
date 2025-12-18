@@ -88,7 +88,7 @@ export function BeverageForm({
             latitude: locationData.latitude,
             longitude: locationData.longitude,
           },
-        };
+        } as VenueSearchResult;
       }
     } catch (e) {
       // If location is not JSON, it's probably just a name
@@ -103,7 +103,7 @@ export function BeverageForm({
             latitude: 0,
             longitude: 0,
           },
-        };
+        } as VenueSearchResult;
       }
     }
     return null;

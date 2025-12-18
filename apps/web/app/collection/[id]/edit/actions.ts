@@ -62,6 +62,6 @@ export async function updateBeverageAction(
   }
 }
 
-export function redirectToCollection() {
+export async function redirectToCollection() {
   redirect('/collection');
 }

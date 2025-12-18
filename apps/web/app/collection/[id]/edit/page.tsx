@@ -45,7 +45,7 @@ export default async function EditBeveragePage({ params }: { params: Promise<{ i
           <h1 className="text-2xl font-bold tracking-tight block">Edit Beverage</h1>
         </div>
 
-        <EditBeverageForm initialBeverage={beverage} />
+        <EditBeverageForm beverage={beverage} />
       </div>
     );
   } catch (error) {
