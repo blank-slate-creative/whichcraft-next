@@ -1,7 +1,7 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+name: Base Rules
+description: Core development guidelines for the whichcraft-next project
+applyTo: "**"
 ---
 ### 🔄 Project Awareness & Context
 - **Always read `PLANNING.md`** at the start of a new conversation to understand the project's architecture, goals, style, and constraints.

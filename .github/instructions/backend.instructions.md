@@ -1,7 +1,7 @@
 ---
-description: 
-globs: apps/api/**/*,packages/**/*.py
-alwaysApply: false
+description: Backend code style and conventions guide
+name: Backend Instructions
+applyTo: apps/api/**/*,packages/**/*.py
 ---
 ### 📎 Style & Conventions
 - **Use Python** as the primary language for the backend.

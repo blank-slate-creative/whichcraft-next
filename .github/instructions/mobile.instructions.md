@@ -1,7 +1,7 @@
 ---
-description: Mobile app development
-globs: apps/mobile/**/*
-alwaysApply: false
+name: Mobile app development
+description: Guidelines for mobile app development
+applyTo: apps/mobile/**/*
 ---
 - Use NativeWind for styling
 - Use Expo

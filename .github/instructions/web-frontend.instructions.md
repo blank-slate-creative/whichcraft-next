@@ -1,7 +1,7 @@
 ---
+name: Web Frontend Instructions
 description: When updating UIs
-globs: apps/web/**/*.ts*
-alwaysApply: false
+applyTo: apps/web/**/*.ts*
 ---
 
 - Use Shadcn and Radix for new UI components
