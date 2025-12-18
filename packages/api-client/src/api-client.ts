@@ -1,6 +1,4 @@
-export interface ApiClientConfig {
-  apiUrl: string;
-}
+import { ApiClientConfig } from './types';
 
 /**
  * Base API client class

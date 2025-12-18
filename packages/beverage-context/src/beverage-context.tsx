@@ -75,6 +75,7 @@ export function BeverageProvider({
   }, []);
 
   return (
+    // @ts-ignore
     <BeverageContext.Provider
       value={{
         beverages,
