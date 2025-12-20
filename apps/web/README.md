@@ -1,3 +1,0 @@
-# Whichcraft Web App (Next.js)
-
-// ... existing code from original README.md ...
