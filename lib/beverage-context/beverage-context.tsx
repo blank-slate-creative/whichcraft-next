@@ -65,7 +65,6 @@ export function BeverageProvider({ initialBeverages, children }: BeverageProvide
   }, []);
 
   return (
-    // @ts-expect-error - React 19 compatibility issue
     <BeverageContext.Provider
       value={{
         beverages,
