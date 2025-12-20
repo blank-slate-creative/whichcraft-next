@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "setup": "uv venv && uv pip install -r requirements.txt",
+    "setup": "mise install && uv venv --python $(mise which python) && uv pip install -r requirements.txt",
     "dev": "uv run -m uvicorn app.main:app --reload",
     "deploy": "./deploy-api.sh",
     "build": "docker build -t api .",
