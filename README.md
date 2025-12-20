@@ -82,12 +82,7 @@ remember your favorites and avoid repeating mistakes.
    NEXT_PUBLIC_API_URL=http://localhost:5000
    ```
 
-   and for the backend in the `apps/api` directory:
-
-   ```
-   DATABASE_URL=your-supabase-postgres-connection-string
-   JWT_SECRET=your-jwt-secret
-   ```
+   and for the backend, please refer to the [API repository](https://github.com/ericcecchi/whichcraft-api).
 
 4. Start the development servers:
    ```bash
@@ -109,11 +104,8 @@ remember your favorites and avoid repeating mistakes.
    vercel
    ```
 
-3. Deploy the API to Fly.io:
-   ```bash
-   cd apps/api
-   ./deploy-api.sh
-   ```
+3. Deploy the API:
+   Please refer to the [API repository](https://github.com/ericcecchi/whichcraft-api) for deployment instructions.
 
 ## Database Schema
 
@@ -159,7 +151,7 @@ includes the following packages/apps:
 ### Apps
 
 - `web`: a [Next.js](https://nextjs.org/) app
-- `api`: a [FastAPI](https://fastapi.tiangolo.com/) app
+- `api`: Moved to [ericcecchi/whichcraft-api](https://github.com/ericcecchi/whichcraft-api)
 
 ### Packages
 
@@ -199,7 +191,7 @@ The web app can be deployed to Vercel.
 
 #### API (FastAPI)
 
-The API can be deployed to Fly.io using the deploy script.
+The API has been moved to its own repository. Please refer to [ericcecchi/whichcraft-api](https://github.com/ericcecchi/whichcraft-api).
 
 # WhichCraft Next
 
