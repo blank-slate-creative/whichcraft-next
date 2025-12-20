@@ -52,7 +52,7 @@ async def search_beer(q: str = Query(..., description="Search term")):
                         type_name=hit.get("type_name", ""),
                         rating=hit.get("rating_score", 0),
                         rating_count=hit.get("rating_count", 0),
-                        image_url=hit.get("beer_label_hd", ""),
+                        image_url=hit.get("beer_label_hd") or hit.get("beer_label", ""),
                         abv=hit.get("beer_abv", 0),
                         brewery_name=hit.get("brewery_name", "Unknown Brewery"),
                         brewery_id=hit.get("brewery_id"),
