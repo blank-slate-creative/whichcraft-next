@@ -1,7 +1,6 @@
 # @whichcraft/api-client
 
-A shared API client for the Whichcraft application, used by both the web and
-mobile apps.
+A shared API client for the Whichcraft application.
 
 ## Installation
 
@@ -29,26 +28,6 @@ export const serverBeverageApi = createBeverageApi(getServerAuthToken);
 
 // Example usage in a server component or server action
 // const beverages = await serverBeverageApi.getAll();
-```
-
-### Mobile App (React Native)
-
-```typescript
-// apps/mobile/utils/api.ts
-import { createBeverageApi } from "@whichcraft/api-client";
-import { supabase } from "@/utils/supabase";
-
-// Get the authentication token from Supabase (mobile)
-async function getMobileAuthToken() {
-  const { data } = await supabase.auth.getSession();
-  return data.session?.access_token;
-}
-
-// Create the mobile beverage API
-export const mobileBeverageApi = createBeverageApi(getMobileAuthToken);
-
-// Example usage in a React Native component
-// const beverages = await mobileBeverageApi.getAll();
 ```
 
 ## API

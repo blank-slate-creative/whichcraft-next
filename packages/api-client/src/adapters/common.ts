@@ -3,7 +3,7 @@ import { Beverage, BeverageFilters } from "../types";
 
 /**
  * Generic authentication token getter function
- * This can be implemented for any environment (web, mobile, etc.)
+ * This can be implemented for any environment (web, server, etc.)
  */
 export type GetAuthTokenFn = () => Promise<string | undefined>;
 

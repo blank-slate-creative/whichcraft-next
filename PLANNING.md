@@ -1,132 +1,41 @@
-# WhichCraft Next - Location Search Implementation Plan
+# WhichCraft Next - Planning
 
 ## Overview
 
-This document outlines the implementation plan for the native location search
-functionality in WhichCraft Next. The implementation will provide
-platform-specific location search capabilities through a custom Expo module
-(`@whichcraft/location-search`).
+This document outlines the architecture and development plans for WhichCraft Next, a monorepo containing the web and API applications.
 
-## Implementation Strategy
+## Current Architecture
 
-### Phase 1: Native Module Development
+### Apps
 
-1. **Module Setup & Configuration**
+- **Web App** (`apps/web`): Next.js 14 application with App Router
+  - TypeScript
+  - TailwindCSS with Shadcn UI components
+  - Supabase authentication
+  - Server and client components
 
-   - Package structure and dependencies
-   - TypeScript and build configuration
-   - Initial type definitions
+- **API** (`apps/api`): FastAPI backend
+  - Python with Pydantic models
+  - SQLAlchemy ORM
+  - PostgreSQL database (via Supabase)
+  - JWT authentication
+  - Alembic migrations
 
-2. **iOS Implementation**
+### Packages
 
-   - MapKit integration via MKLocalSearch
-   - Native search functionality
-   - Result formatting and error handling
+- **@whichcraft/api-client**: Shared API client for consuming the backend API
 
-3. **JavaScript Bridge**
-   - TypeScript wrapper and type definitions
-   - API design and implementation
-   - Error handling and recovery
+## Development Guidelines
 
-### Phase 2: Mobile App Integration
-
-1. **UI Components**
-
-   - Search input interface
-   - Results display
-   - Map integration
-
-2. **State Management**
-   - Search state handling
-   - Results caching
-   - Error management
-
-### Phase 3: Testing & Optimization
-
-1. **Testing Strategy**
-
-   - Unit tests for module
-   - Integration tests
-   - UI/UX testing
-
-2. **Performance Optimization**
-   - Response time improvements
-   - Memory management
-   - Battery impact optimization
-
-## Technical Specifications
-
-### Location Search Module API
-
-```typescript
-interface LocationSearchOptions {
-  query: string;
-  region?: {
-    latitude: number;
-    longitude: number;
-    radius: number;
-  };
-  limit?: number;
-}
-
-interface LocationResult {
-  id: string;
-  name: string;
-  address: string;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  placeDetails?: PlaceDetails;
-}
-
-// Core functionality
-function searchLocations(
-  options: LocationSearchOptions
-): Promise<LocationResult[]>;
-function getSearchSuggestions(query: string): Promise<string[]>;
-```
-
-### Platform-Specific Implementation Details
-
-#### iOS (MapKit)
-
-- MKLocalSearch for location queries
-- MKLocalSearchCompleter for autocomplete
-- Native coordinate handling
-- Address formatting
-
-#### Android (Future)
-
-- Google Places API integration
-- Platform-specific optimizations
-- Feature parity with iOS
+- Use TypeScript for all new frontend code
+- Follow PEP8 and use type hints for Python code
+- Write tests for new features
+- Keep files under 500 lines of code
+- Document complex logic with inline comments
 
 ## Future Considerations
 
-1. **Android Support**
-
-   - Google Places API implementation
-   - Native Android performance optimization
-   - Platform-specific features
-
-2. **Feature Expansion**
-
-   - Offline search capabilities
-   - Advanced filtering
-   - Custom region support
-   - Caching mechanisms
-
-3. **Performance Enhancements**
-   - Request optimization
-   - Result caching
-   - Memory management
-   - Battery optimization
-
-## Success Metrics
-
-- Search response time < 500ms
-- Accurate location results
-- Smooth UI/UX integration
-- Battery efficient implementation
-- Comprehensive error handling
+- Enhanced filtering and search capabilities
+- Additional statistics and insights
+- Performance optimizations
+- Enhanced user profiles and social features
