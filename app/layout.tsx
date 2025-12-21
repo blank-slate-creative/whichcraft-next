@@ -30,6 +30,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={spaceGrotesk.className} suppressHydrationWarning>
+      <head>
+        <meta name="apple-mobile-web-app-title" content="WhichCraft" />
+      </head>
       <body className="bg-background text-foreground flex flex-col h-screen overflow-hidden">
         <ThemeProvider
           attribute="class"
