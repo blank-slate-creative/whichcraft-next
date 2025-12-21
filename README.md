@@ -27,44 +27,37 @@ remember your favorites and avoid repeating mistakes.
 ## Tech Stack
 
 - **Frontend**:
-
-  - Next.js 14 with App Router
+  - Next.js 15 with App Router
+  - React 19
   - TypeScript
   - TailwindCSS for styling
   - Shadcn UI components
   - Lucide React icons
-  - Space Grotesk typography
 
 - **Backend**:
-
-  - FastAPI with Pydantic models and SQLAlchemy
+  - FastAPI (separate repository: [whichcraft-api](https://github.com/ericcecchi/whichcraft-api))
   - PostgreSQL database (via Supabase)
   - JWT authentication
-  - Alembic for database migrations
 
 - **Infrastructure**:
   - Supabase for authentication and database
-  - Fly.io for API deployment
   - Vercel for frontend deployment
-  - Turborepo for monorepo management
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or newer)
-- Python 3.9+
-- Docker (optional, for containerized deployment)
+- Node.js 20 or newer
+- npm 11.2.0 or newer
 - Supabase account
-- Fly.io account (optional, for deployment)
 
 ### Local Development
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/whichcraft.git
-   cd whichcraft
+   git clone https://github.com/ericcecchi/whichcraft-next.git
+   cd whichcraft-next
    ```
 
 2. Install dependencies:
@@ -73,21 +66,20 @@ remember your favorites and avoid repeating mistakes.
    npm install
    ```
 
-3. Create a `.env` file based on `.env.example` for the frontend in the
-   `apps/web` directory:
+3. Create a `.env` file based on `.env.example`:
 
    ```
    NEXT_PUBLIC_SUPABASE_URL=your-project-url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-   NEXT_PUBLIC_API_URL=http://localhost:5000
+   NEXT_PUBLIC_API_URL=http://localhost:5001
    ```
 
-   and for the backend, please refer to the [API repository](https://github.com/ericcecchi/whichcraft-api).
-
-4. Start the development servers:
+4. Start the development server:
    ```bash
    npm run dev
    ```
+
+   The application will be available at `http://localhost:3000`
 
 ### Build and Deploy
 
@@ -97,37 +89,61 @@ remember your favorites and avoid repeating mistakes.
    npm run build
    ```
 
-2. Deploy the frontend to Vercel:
+2. Run in production mode:
 
    ```bash
-   cd apps/web
+   npm start
+   ```
+
+3. Deploy to Vercel:
+
+   Connect your GitHub repository to Vercel or use the Vercel CLI:
+
+   ```bash
    vercel
    ```
 
-3. Deploy the API:
-   Please refer to the [API repository](https://github.com/ericcecchi/whichcraft-api) for deployment instructions.
+## Scripts
 
-## Database Schema
+- `npm run dev` - Start the development server with Turbopack
+- `npm run build` - Build the application for production
+- `npm start` - Start the production server
+- `npm run typecheck` - Run TypeScript type checking
+- `npm run lint` - Run ESLint
+- `npm run lint:fix` - Run ESLint with auto-fix
+- `npm run format` - Format code with Prettier
 
-The application uses the following main tables:
+## Project Structure
 
-- **Users**: User accounts and authentication information
-- **Producers**: Breweries and wineries that make beverages
-- **BeverageTypes**: Categories like Beer, Wine, etc.
-- **Beverages**: Detailed beverage information including name, style, ABV, etc.
-- **Entries**: User ratings and notes for beverages they've tried
+```
+whichcraft-next/
+├── app/                    # Next.js app directory
+│   ├── (auth-pages)/      # Authentication pages
+│   ├── collection/        # Beverage collection pages
+│   ├── stats/            # Statistics pages
+│   └── profile/          # User profile pages
+├── components/           # React components
+│   └── ui/              # Shadcn UI components
+├── lib/                 # Library code
+│   ├── api-client/      # API client for backend communication
+│   └── beverage-context/ # Beverage state management
+├── utils/               # Utility functions
+│   └── supabase/       # Supabase client configuration
+├── public/             # Static assets
+└── supabase/           # Supabase configuration and migrations
+```
 
-## API Endpoints
+## API Backend
 
-The backend provides the following main endpoints:
+The backend API is maintained in a separate repository:
+[whichcraft-api](https://github.com/ericcecchi/whichcraft-api)
 
-- `GET /api/beverages`: List all beverages in user's collection
-- `POST /api/beverages`: Add a new beverage to collection
-- `GET /api/beverages/:id`: Get details for a specific beverage
-- `PUT /api/beverages/:id`: Update a beverage entry
-- `DELETE /api/beverages/:id`: Remove a beverage from collection
-- `GET /api/users/me`: Get current user information
-- `GET /api/search/beer`: Search for beers to add to collection
+The API provides endpoints for:
+- Beverage CRUD operations
+- User authentication
+- Beer search via Untappd
+- Venue search
+- Statistics aggregation
 
 ## Contributing
 
@@ -137,62 +153,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is licensed under the MIT License - see the LICENSE file for
 details.
-
-# Whichcraft Next Monorepo
-
-This is a monorepo for the Whichcraft Next project, built with
-[Turborepo](https://turbo.build/repo).
-
-## What's inside?
-
-This monorepo uses [npm](https://www.npmjs.com/) as a package manager. It
-includes the following packages/apps:
-
-### Apps
-
-- `web`: a [Next.js](https://nextjs.org/) app
-- `api`: Moved to [ericcecchi/whichcraft-api](https://github.com/ericcecchi/whichcraft-api)
-
-### Packages
-
-- `turbo`: [Turborepo](https://turbo.build/repo) for monorepo management
-
-## Setup
-
-### Install dependencies
-
-```
-npm install
-```
-
-### Development
-
-To develop all apps and packages, run the following command:
-
-```
-npm run dev
-```
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-npm run build
-```
-
-### Deployment
-
-Each app can be deployed independently to its respective platform.
-
-#### Web App (Next.js)
-
-The web app can be deployed to Vercel.
-
-#### API (FastAPI)
-
-The API has been moved to its own repository. Please refer to [ericcecchi/whichcraft-api](https://github.com/ericcecchi/whichcraft-api).
-
-# WhichCraft Next
-
-A next-generation app for craft beer enthusiasts.
