@@ -1,7 +1,7 @@
 ---
 name: Web Frontend Instructions
 description: When updating UIs
-applyTo: apps/web/**/*.ts*
+applyTo: ./**/*.ts*
 ---
 
 - Use Shadcn and Radix for new UI components
