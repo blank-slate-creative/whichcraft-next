@@ -8,7 +8,7 @@ export function Footer() {
           &copy; {new Date().getFullYear()} WhichCraft. All rights reserved.
         </div>
         <div className="flex gap-6 text-sm">
-          <Link href="#" className="hover:text-foreground transition-colors">
+          <Link href="/privacy-policy" className="hover:text-foreground transition-colors">
             Privacy Policy
           </Link>
           <Link href="#" className="hover:text-foreground transition-colors">
