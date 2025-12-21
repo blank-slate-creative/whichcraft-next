@@ -20,7 +20,7 @@ export default async function ProfilePage() {
   const gravatarUrl = await getGravatarUrl(email, 120); // 120px size for the 32x32 avatar (4x for retina)
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-4 py-4">
       <h1 className="text-2xl font-bold mb-8 md:flex hidden">Profile</h1>
 
       <div className="mb-8">

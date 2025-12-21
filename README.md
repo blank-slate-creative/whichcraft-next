@@ -75,6 +75,7 @@ remember your favorites and avoid repeating mistakes.
    ```
 
 4. Start the development server:
+
    ```bash
    npm run dev
    ```
@@ -139,6 +140,7 @@ The backend API is maintained in a separate repository:
 [whichcraft-api](https://github.com/ericcecchi/whichcraft-api)
 
 The API provides endpoints for:
+
 - Beverage CRUD operations
 - User authentication
 - Beer search via Untappd
