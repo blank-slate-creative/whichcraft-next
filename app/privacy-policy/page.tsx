@@ -8,7 +8,7 @@ export default function PrivacyPolicyPage() {
 
       <div className="space-y-6 text-foreground">
         <p>
-          This Privacy Notice for Blank Slate Creative LLC (doing business as Blank Slate) ("<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>"), describes how and why we might access, collect, store, use, and/or share ("<strong>process</strong>") your personal information when you use our services ("<strong>Services</strong>"), including when you:
+          This Privacy Notice for Blank Slate Creative LLC (doing business as Blank Slate) (“<strong>we</strong>,” “<strong>us</strong>,” or “<strong>our</strong>”), describes how and why we might access, collect, store, use, and/or share (“<strong>process</strong>”) your personal information when you use our services (“<strong>Services</strong>”), including when you:
         </p>
         <ul className="list-disc pl-6 space-y-2">
           <li>Download and use our mobile application (WhichCraft), or any other application of ours that links to this Privacy Notice</li>
@@ -113,7 +113,7 @@ export default function PrivacyPolicyPage() {
           <p className="mb-4">The information we collect includes:</p>
           <ul className="list-disc pl-6 space-y-2 mb-4">
             <li>
-              <em>Log and Usage Data.</em> Log and usage data is service-related, diagnostic, usage, and performance information our servers automatically collect when you access or use our Services and which we record in log files. Depending on how you interact with us, this log data may include your IP address, device information, browser type, and settings and information about your activity in the Services (such as the date/time stamps associated with your usage, pages and files viewed, searches, and other actions you take such as which features you use), device event information (such as system activity, error reports (sometimes called "crash dumps"), and hardware settings).
+              <em>Log and Usage Data.</em> Log and usage data is service-related, diagnostic, usage, and performance information our servers automatically collect when you access or use our Services and which we record in log files. Depending on how you interact with us, this log data may include your IP address, device information, browser type, and settings and information about your activity in the Services (such as the date/time stamps associated with your usage, pages and files viewed, searches, and other actions you take such as which features you use), device event information (such as system activity, error reports (sometimes called “crash dumps”), and hardware settings).
             </li>
             <li>
               <em>Device Data.</em> We collect device data such as information about your computer, phone, tablet, or other device you use to access the Services. Depending on the device used, this device data may include information such as your IP address (or proxy server), device and application identification numbers, location, browser type, hardware model, Internet service provider and/or mobile carrier, operating system, and system configuration information.
@@ -195,11 +195,11 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-2xl font-semibold mt-8 mb-4">5. DO WE OFFER ARTIFICIAL INTELLIGENCE-BASED PRODUCTS?</h2>
           <p className="italic mb-4">In Short: We offer products, features, or tools powered by artificial intelligence, machine learning, or similar technologies.</p>
           <p className="mb-4">
-            As part of our Services, we offer products, features, or tools powered by artificial intelligence, machine learning, or similar technologies (collectively, "AI Products"). These tools are designed to enhance your experience and provide you with innovative solutions. The terms in this Privacy Notice govern your use of the AI Products within our Services.
+            As part of our Services, we offer products, features, or tools powered by artificial intelligence, machine learning, or similar technologies (collectively, “AI Products”). These tools are designed to enhance your experience and provide you with innovative solutions. The terms in this Privacy Notice govern your use of the AI Products within our Services.
           </p>
           <p className="mb-4"><strong>Use of AI Technologies</strong></p>
           <p className="mb-4">
-            We provide the AI Products through third-party service providers ("AI Service Providers"), including OpenAI, Anthropic and Google Cloud AI. As outlined in this Privacy Notice, your input, output, and personal information will be shared with and processed by these AI Service Providers to enable your use of our AI Products for purposes outlined in "WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL INFORMATION?" You must not use the AI Products in any way that violates the terms or policies of any AI Service Provider.
+            We provide the AI Products through third-party service providers (“AI Service Providers”), including OpenAI, Anthropic and Google Cloud AI. As outlined in this Privacy Notice, your input, output, and personal information will be shared with and processed by these AI Service Providers to enable your use of our AI Products for purposes outlined in “WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL INFORMATION?” You must not use the AI Products in any way that violates the terms or policies of any AI Service Provider.
           </p>
           <p className="mb-4"><strong>Our AI Products</strong></p>
           <p className="mb-4">Our AI Products are designed for the following functions:</p>
@@ -244,7 +244,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-2xl font-semibold mt-8 mb-4">9. WHAT ARE YOUR PRIVACY RIGHTS?</h2>
           <p className="italic mb-4">In Short: Depending on your state of residence in the US or in some regions, such as the European Economic Area (EEA), United Kingdom (UK), Switzerland, and Canada, you have rights that allow you greater access to and control over your personal information. You may review, change, or terminate your account at any time, depending on your country, province, or state of residence.</p>
           <p className="mb-4">
-            In some regions (like the EEA, UK, Switzerland, and Canada), you have certain rights under applicable data protection laws. These may include the right (i) to request access and obtain a copy of your personal information, (ii) to request rectification or erasure; (iii) to restrict the processing of your personal information; (iv) if applicable, to data portability; and (v) not to be subject to automated decision-making. If a decision that produces legal or similarly significant effects is made solely by automated means, we will inform you, explain the main factors, and offer a simple way to request human review. In certain circumstances, you may also have the right to object to the processing of your personal information. You can make such a request by contacting us by using the contact details provided in the section "HOW CAN YOU CONTACT US ABOUT THIS NOTICE?" below.
+            In some regions (like the EEA, UK, Switzerland, and Canada), you have certain rights under applicable data protection laws. These may include the right (i) to request access and obtain a copy of your personal information, (ii) to request rectification or erasure; (iii) to restrict the processing of your personal information; (iv) if applicable, to data portability; and (v) not to be subject to automated decision-making. If a decision that produces legal or similarly significant effects is made solely by automated means, we will inform you, explain the main factors, and offer a simple way to request human review. In certain circumstances, you may also have the right to object to the processing of your personal information. You can make such a request by contacting us by using the contact details provided in the section “HOW CAN YOU CONTACT US ABOUT THIS NOTICE?” below.
           </p>
           <p className="mb-4">We will consider and act upon any request in accordance with applicable data protection laws.</p>
           <p className="mb-4">
@@ -254,7 +254,7 @@ export default function PrivacyPolicyPage() {
             If you are located in Switzerland, you may contact the <a href="https://www.edoeb.admin.ch/edoeb/en/home.html" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Federal Data Protection and Information Commissioner</a>.
           </p>
           <p className="mb-4">
-            <strong>Withdrawing your consent:</strong> If we are relying on your consent to process your personal information, which may be express and/or implied consent depending on the applicable law, you have the right to withdraw your consent at any time. You can withdraw your consent at any time by contacting us by using the contact details provided in the section "HOW CAN YOU CONTACT US ABOUT THIS NOTICE?" below.
+            <strong>Withdrawing your consent:</strong> If we are relying on your consent to process your personal information, which may be express and/or implied consent depending on the applicable law, you have the right to withdraw your consent at any time. You can withdraw your consent at any time by contacting us by using the contact details provided in the section “HOW CAN YOU CONTACT US ABOUT THIS NOTICE?” below.
           </p>
           <p className="mb-4">
             However, please note that this will not affect the lawfulness of the processing before its withdrawal nor, when applicable law allows, will it affect the processing of your personal information conducted in reliance on lawful processing grounds other than consent.
@@ -267,7 +267,7 @@ export default function PrivacyPolicyPage() {
         <section id="DNT" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mt-8 mb-4">10. CONTROLS FOR DO-NOT-TRACK FEATURES</h2>
           <p className="mb-4">
-            Most web browsers and some mobile operating systems and mobile applications include a Do-Not-Track ("DNT") feature or setting you can activate to signal your privacy preference not to have data about your online browsing activities monitored and collected. At this stage, no uniform technology standard for recognizing and implementing DNT signals has been finalized. As such, we do not currently respond to DNT browser signals or any other mechanism that automatically communicates your choice not to be tracked online. If a standard for online tracking is adopted that we must follow in the future, we will inform you about that practice in a revised version of this Privacy Notice.
+            Most web browsers and some mobile operating systems and mobile applications include a Do-Not-Track (“DNT”) feature or setting you can activate to signal your privacy preference not to have data about your online browsing activities monitored and collected. At this stage, no uniform technology standard for recognizing and implementing DNT signals has been finalized. As such, we do not currently respond to DNT browser signals or any other mechanism that automatically communicates your choice not to be tracked online. If a standard for online tracking is adopted that we must follow in the future, we will inform you about that practice in a revised version of this Privacy Notice.
           </p>
           <p className="mb-4">
             California law requires us to let you know how we respond to web browser DNT signals. Because there currently is not an industry or legal standard for recognizing or honoring DNT signals, we do not respond to them at this time.
@@ -365,13 +365,13 @@ export default function PrivacyPolicyPage() {
           </ul>
 
           <h3 className="text-xl font-semibold mt-6 mb-3">Sources of Personal Information</h3>
-          <p className="mb-4">Learn more about the sources of personal information we collect in "WHAT INFORMATION DO WE COLLECT?"</p>
+          <p className="mb-4">Learn more about the sources of personal information we collect in “WHAT INFORMATION DO WE COLLECT?”</p>
 
           <h3 className="text-xl font-semibold mt-6 mb-3">How We Use and Share Personal Information</h3>
-          <p className="mb-4">Learn more about how we use your personal information in the section, "HOW DO WE PROCESS YOUR INFORMATION?"</p>
+          <p className="mb-4">Learn more about how we use your personal information in the section, “HOW DO WE PROCESS YOUR INFORMATION?”</p>
           <p className="mb-4"><strong>Will your information be shared with anyone else?</strong></p>
-          <p className="mb-4">We may disclose your personal information with our service providers pursuant to a written contract between us and each service provider. Learn more about how we disclose personal information to in the section, "WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?"</p>
-          <p className="mb-4">We may use your personal information for our own business purposes, such as for undertaking internal research for technological development and demonstration. This is not considered to be "selling" of your personal information.</p>
+          <p className="mb-4">We may disclose your personal information with our service providers pursuant to a written contract between us and each service provider. Learn more about how we disclose personal information to in the section, “WHEN AND WITH WHOM DO WE SHARE YOUR PERSONAL INFORMATION?”</p>
+          <p className="mb-4">We may use your personal information for our own business purposes, such as for undertaking internal research for technological development and demonstration. This is not considered to be “selling” of your personal information.</p>
           <p className="mb-4">We have not disclosed, sold, or shared any personal information to third parties for a business or commercial purpose in the preceding twelve (12) months. We will not sell or share personal information in the future belonging to website visitors, users, and other consumers.</p>
 
           <h3 className="text-xl font-semibold mt-6 mb-3">Your Rights</h3>
@@ -383,7 +383,7 @@ export default function PrivacyPolicyPage() {
             <li><strong>Right to request</strong> the deletion of your personal data</li>
             <li><strong>Right to obtain a copy</strong> of the personal data you previously shared with us</li>
             <li><strong>Right to non-discrimination</strong> for exercising your rights</li>
-            <li><strong>Right to opt out</strong> of the processing of your personal data if it is used for targeted advertising (or sharing as defined under California’s privacy law), the sale of personal data, or profiling in furtherance of decisions that produce legal or similarly significant effects ("profiling")</li>
+            <li><strong>Right to opt out</strong> of the processing of your personal data if it is used for targeted advertising (or sharing as defined under California’s privacy law), the sale of personal data, or profiling in furtherance of decisions that produce legal or similarly significant effects (“profiling”)</li>
           </ul>
           <p className="mb-4">Depending upon the state where you live, you may also have the following rights:</p>
           <ul className="list-disc pl-6 space-y-2 mb-4">
@@ -417,9 +417,9 @@ export default function PrivacyPolicyPage() {
             Under certain US state data protection laws, if we decline to take action regarding your request, you may appeal our decision by emailing us at <a href="mailto:privacy@blankslate.biz" className="text-primary hover:underline">privacy@blankslate.biz</a>. We will inform you in writing of any action taken or not taken in response to the appeal, including a written explanation of the reasons for the decisions. If your appeal is denied, you may submit a complaint to your state attorney general.
           </p>
 
-          <h3 className="text-xl font-semibold mt-6 mb-3">California "Shine The Light" Law</h3>
+          <h3 className="text-xl font-semibold mt-6 mb-3">California “Shine The Light” Law</h3>
           <p className="mb-4">
-            California Civil Code Section 1798.83, also known as the "Shine The Light" law, permits our users who are California residents to request and obtain from us, once a year and free of charge, information about categories of personal information (if any) we disclosed to third parties for direct marketing purposes and the names and addresses of all third parties with which we shared personal information in the immediately preceding calendar year. If you are a California resident and would like to make such a request, please submit your request in writing to us by using the contact details provided in the section "HOW CAN YOU CONTACT US ABOUT THIS NOTICE?"
+            California Civil Code Section 1798.83, also known as the “Shine The Light” law, permits our users who are California residents to request and obtain from us, once a year and free of charge, information about categories of personal information (if any) we disclosed to third parties for direct marketing purposes and the names and addresses of all third parties with which we shared personal information in the immediately preceding calendar year. If you are a California resident and would like to make such a request, please submit your request in writing to us by using the contact details provided in the section “HOW CAN YOU CONTACT US ABOUT THIS NOTICE?”
           </p>
         </section>
 
@@ -427,7 +427,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="text-2xl font-semibold mt-8 mb-4">12. DO WE MAKE UPDATES TO THIS NOTICE?</h2>
           <p className="italic mb-4">In Short: Yes, we will update this notice as necessary to stay compliant with relevant laws.</p>
           <p className="mb-4">
-            We may update this Privacy Notice from time to time. The updated version will be indicated by an updated "Revised" date at the top of this Privacy Notice. If we make material changes to this Privacy Notice, we may notify you either by prominently posting a notice of such changes or by directly sending you a notification. We encourage you to review this Privacy Notice frequently to be informed of how we are protecting your information.
+            We may update this Privacy Notice from time to time. The updated version will be indicated by an updated “Revised” date at the top of this Privacy Notice. If we make material changes to this Privacy Notice, we may notify you either by prominently posting a notice of such changes or by directly sending you a notification. We encourage you to review this Privacy Notice frequently to be informed of how we are protecting your information.
           </p>
         </section>
 
