@@ -3,6 +3,7 @@ import { redirectAuthenticatedToHome } from '@/utils/auth';
 import { PhoneMockup } from '@/components/landing/PhoneMockup';
 import { Footer } from '@/components/Footer';
 import { Shield, Zap, Ban, Apple } from 'lucide-react';
+import Image from 'next/image';
 
 export default async function Home() {
   // Redirect authenticated users to dashboard
@@ -13,19 +14,38 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen w-full">
       <main className="flex-1 w-full">
         {/* Hero Section */}
-        <section className="w-full py-20 md:py-32 lg:py-40 flex flex-col items-center text-center px-4">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-[900px]">
-            Remember what's worth ordering again
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-[600px] mb-10">
-            The fastest way to track the beers you drink. No ads, no social features, no noise—just
-            you and your brewlist.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="h-14 px-8 text-lg gap-2" disabled>
-              <Apple className="w-6 h-6" />
-              Coming Soon to App Store
-            </Button>
+        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 overflow-hidden">
+          <div className="container px-4 md:px-6 mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="flex flex-col items-center lg:items-start text-center lg:text-left space-y-8">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+                  Remember what's worth ordering again
+                </h1>
+                <p className="text-xl md:text-2xl text-muted-foreground max-w-[600px]">
+                  The fastest way to track the beers you drink. No ads, no social features, no
+                  noise—just you and your brewlist.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button size="lg" className="h-14 px-8 text-lg gap-2" disabled>
+                    <Apple className="w-6 h-6" />
+                    Coming Soon to App Store
+                  </Button>
+                </div>
+              </div>
+              <div className="flex justify-center lg:justify-end relative">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 rounded-full blur-3xl -z-10" />
+                <PhoneMockup className="rotate-[-5deg] hover:rotate-0 transition-transform duration-500">
+                  <Image
+                    src="/screens/brewlist.png"
+                    alt="Brewlist screen"
+                    width={300}
+                    height={600}
+                    className="w-full h-full object-cover"
+                    priority
+                  />
+                </PhoneMockup>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -35,11 +55,14 @@ export default async function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
               <div className="order-2 md:order-1">
                 <PhoneMockup className="bg-orange-500/10 border-orange-900/20">
-                  <div className="w-full h-full bg-gradient-to-b from-orange-500/20 to-background p-6 flex flex-col items-center justify-center text-center">
-                    <div className="w-24 h-24 rounded-full bg-orange-500/20 mb-4 animate-pulse" />
-                    <div className="w-3/4 h-4 bg-muted rounded mb-2" />
-                    <div className="w-1/2 h-4 bg-muted rounded" />
-                  </div>
+                  <Image
+                    src="/screens/add-tasting.png"
+                    alt="Log tasting screen"
+                    width={300}
+                    height={600}
+                    className="w-full h-full object-cover"
+                    priority
+                  />
                 </PhoneMockup>
               </div>
               <div className="order-1 md:order-2 text-center md:text-left">
@@ -72,20 +95,13 @@ export default async function Home() {
               </div>
               <div>
                 <PhoneMockup className="bg-blue-500/10 border-blue-900/20">
-                  <div className="w-full h-full bg-gradient-to-b from-blue-500/20 to-background p-6 flex flex-col gap-4">
-                    {[1, 2, 3, 4].map(i => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-4 p-3 rounded-xl bg-background/50 backdrop-blur-sm"
-                      >
-                        <div className="w-12 h-12 rounded-lg bg-blue-500/20" />
-                        <div className="flex-1">
-                          <div className="w-3/4 h-3 bg-muted rounded mb-2" />
-                          <div className="w-1/2 h-3 bg-muted rounded" />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  <Image
+                    src="/screens/search.png"
+                    alt="Search screen"
+                    width={300}
+                    height={600}
+                    className="w-full h-full object-cover"
+                  />
                 </PhoneMockup>
               </div>
             </div>

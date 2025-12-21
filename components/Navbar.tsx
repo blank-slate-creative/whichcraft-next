@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import NavbarClient from './NavbarClient';
-import AuthButton from './AuthButton';
 import { createClient } from '@/utils/supabase/server';
 import MobileNavHeader from './MobileNavHeader';
 
