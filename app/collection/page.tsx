@@ -39,8 +39,10 @@ export default async function Collection({
   }
 
   return (
-    <BeverageProvider initialBeverages={beverages}>
-      <CollectionContent error={error} />
-    </BeverageProvider>
+    <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-4 py-4">
+      <BeverageProvider initialBeverages={beverages}>
+        <CollectionContent error={error} />
+      </BeverageProvider>
+    </div>
   );
 }

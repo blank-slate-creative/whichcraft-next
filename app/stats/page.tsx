@@ -19,5 +19,9 @@ export default async function StatsPage() {
     error = err instanceof Error ? err.message : 'Failed to load beverages';
   }
 
-  return <StatsContent beverages={beverages} error={error} />;
+  return (
+    <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-4 py-4">
+      <StatsContent beverages={beverages} error={error} />
+    </div>
+  );
 }

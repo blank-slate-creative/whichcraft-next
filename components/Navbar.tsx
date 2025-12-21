@@ -27,7 +27,6 @@ export default async function Navbar() {
         </div>
         <div className="flex items-center gap-2">
           {session && <NavbarClient initialEmail={email} />}
-          <AuthButton />
         </div>
       </div>
     </nav>

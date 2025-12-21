@@ -1,7 +1,8 @@
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { redirectAuthenticatedToHome } from '@/utils/auth';
-import { ClipboardList, Search, Sun } from 'lucide-react';
+import { PhoneMockup } from '@/components/landing/PhoneMockup';
+import { Footer } from '@/components/Footer';
+import { Shield, Zap, Ban, Apple } from 'lucide-react';
 
 export default async function Home() {
   // Redirect authenticated users to dashboard
@@ -9,77 +10,145 @@ export default async function Home() {
 
   // Otherwise, show the homepage
   return (
-    <div className="flex flex-col items-center w-full">
-      {/* Hero Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32 flex flex-col items-center text-center">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-          Welcome to <span className="text-primary">WhichCraft</span>
-        </h1>
-        <p className="text-xl md:text-2xl text-muted-foreground max-w-[800px] mb-8">
-          Never forget your favorite beers and wines again. Track, rate, and discover new beverages
-          with ease.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Button asChild size="lg">
-            <Link href="/sign-up">Get Started</Link>
-          </Button>
-          <Button variant="outline" size="lg" asChild>
-            <Link href="/about">Learn More</Link>
-          </Button>
-        </div>
-      </section>
+    <div className="flex flex-col min-h-screen w-full">
+      <main className="flex-1 w-full">
+        {/* Hero Section */}
+        <section className="w-full py-20 md:py-32 lg:py-40 flex flex-col items-center text-center px-4">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-[900px]">
+            Remember what's worth ordering again
+          </h1>
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-[600px] mb-10">
+            The fastest way to track the beers you drink. No ads, no social features, no noise—just
+            you and your brewlist.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button size="lg" className="h-14 px-8 text-lg gap-2" disabled>
+              <Apple className="w-6 h-6" />
+              Coming Soon to App Store
+            </Button>
+          </div>
+        </section>
 
-      {/* Features Section */}
-      <section className="w-full py-12 md:py-24 bg-muted/50 rounded-lg">
-        <div className="container mx-auto px-3 sm:px-4 md:px-6">
-          <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="flex flex-col items-center text-center p-6 bg-background rounded-lg shadow-sm">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <ClipboardList className="text-primary" />
+        {/* Feature 1: Log Tastings */}
+        <section className="w-full py-20 md:py-32 bg-muted/30">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
+              <div className="order-2 md:order-1">
+                <PhoneMockup className="bg-orange-500/10 border-orange-900/20">
+                  <div className="w-full h-full bg-gradient-to-b from-orange-500/20 to-background p-6 flex flex-col items-center justify-center text-center">
+                    <div className="w-24 h-24 rounded-full bg-orange-500/20 mb-4 animate-pulse" />
+                    <div className="w-3/4 h-4 bg-muted rounded mb-2" />
+                    <div className="w-1/2 h-4 bg-muted rounded" />
+                  </div>
+                </PhoneMockup>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Track Your Tastings</h3>
-              <p className="text-muted-foreground">
-                Log every beer and wine you try in your personal collection.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="flex flex-col items-center text-center p-6 bg-background rounded-lg shadow-sm">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <Sun className="text-primary" />
+              <div className="order-1 md:order-2 text-center md:text-left">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                  Never waste a sip on something forgettable
+                </h2>
+                <p className="text-xl text-muted-foreground leading-relaxed">
+                  Log tastings in seconds. Thumbs up or down. Add notes. That's it. We don't make
+                  you fill out a form or rate things on a 10-point scale. You tried a beer. You
+                  liked it or you didn't. Move on.
+                </p>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Rate & Review</h3>
-              <p className="text-muted-foreground">
-                Give ratings and write notes about your experience with each beverage.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="flex flex-col items-center text-center p-6 bg-background rounded-lg shadow-sm">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <Search className="text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Search & Discover</h3>
-              <p className="text-muted-foreground">
-                Find your favorites and discover new beverages based on your preferences.
-              </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="w-full py-12 md:py-24 flex flex-col items-center text-center">
-        <h2 className="text-3xl font-bold mb-6">Ready to start tracking?</h2>
-        <p className="text-xl text-muted-foreground max-w-[600px] mb-8">
-          Join WhichCraft today and never forget your favorite drinks again.
-        </p>
-        <Button asChild size="lg">
-          <Link href="/sign-up">Create Free Account</Link>
-        </Button>
-      </section>
+        {/* Feature 2: Discover */}
+        <section className="w-full py-20 md:py-32">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
+              <div className="text-center md:text-left">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                  Discover new brews that match your taste
+                </h2>
+                <p className="text-xl text-muted-foreground leading-relaxed">
+                  Find any beer from a comprehensive catalog of hundreds of thousands of brews
+                  worldwide. Filter by liked, disliked, or browse everything you've tried. Sort by
+                  date, name, or rating—whatever makes sense to you.
+                </p>
+              </div>
+              <div>
+                <PhoneMockup className="bg-blue-500/10 border-blue-900/20">
+                  <div className="w-full h-full bg-gradient-to-b from-blue-500/20 to-background p-6 flex flex-col gap-4">
+                    {[1, 2, 3, 4].map(i => (
+                      <div
+                        key={i}
+                        className="flex items-center gap-4 p-3 rounded-xl bg-background/50 backdrop-blur-sm"
+                      >
+                        <div className="w-12 h-12 rounded-lg bg-blue-500/20" />
+                        <div className="flex-1">
+                          <div className="w-3/4 h-3 bg-muted rounded mb-2" />
+                          <div className="w-1/2 h-3 bg-muted rounded" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </PhoneMockup>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Value Props Grid */}
+        <section className="w-full py-20 md:py-32 bg-muted/30">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              {/* Prop 1 */}
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+                  <Shield className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">Private by Design</h3>
+                <p className="text-muted-foreground">
+                  Your tastings sync via iCloud. They're yours. We don't see them, we don't sell
+                  them, and we can't lose them in a data breach.
+                </p>
+              </div>
+
+              {/* Prop 2 */}
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+                  <Ban className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">No Ads, Ever</h3>
+                <p className="text-muted-foreground">
+                  We're not selling your attention to advertisers. You paid for the app (or you
+                  will). That's the business model. Clean and simple.
+                </p>
+              </div>
+
+              {/* Prop 3 */}
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+                  <Zap className="w-8 h-8 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">Actually Fast</h3>
+                <p className="text-muted-foreground">
+                  Built with SwiftUI and SwiftData. Native iOS. No web wrappers, no lag, no waiting
+                  for things to load.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Bottom CTA */}
+        <section className="w-full py-20 md:py-32 flex flex-col items-center text-center px-4">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">Your brewlist, your way.</h2>
+          <p className="text-xl text-muted-foreground max-w-[600px] mb-10">
+            Track beers without the social clutter. Private iCloud sync, no ads ever, native iOS
+            speed.
+          </p>
+          <Button size="lg" className="h-14 px-8 text-lg gap-2" disabled>
+            <Apple className="w-6 h-6" />
+            Coming Soon to App Store
+          </Button>
+        </section>
+      </main>
+      <Footer />
     </div>
   );
 }

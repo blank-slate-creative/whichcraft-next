@@ -3,6 +3,7 @@ name: Brand Guidelines
 description: Guidelines for maintaining the WhichCraft brand identity.
 applyTo: '**'
 ---
+
 # WhichCraft Brand Guidelines
 
 ## Voice & Tone
@@ -27,12 +28,12 @@ WhichCraft's voice is **straightforward, confident, and no-nonsense**. We don't 
 
 Consistency is key. Always use these terms:
 
-| Term | Usage |
-|------|-------|
-| **Brewlist** | The user's main collection of saved beers |
-| **Tasting** | A check-in or logging event |
-| **Brews / Beers** | The beverages themselves |
-| **Liked / Disliked** | User rating (thumbs up/down) |
+| Term                 | Usage                                     |
+| -------------------- | ----------------------------------------- |
+| **Brewlist**         | The user's main collection of saved beers |
+| **Tasting**          | A check-in or logging event               |
+| **Brews / Beers**    | The beverages themselves                  |
+| **Liked / Disliked** | User rating (thumbs up/down)              |
 
 ## Brand Personality
 

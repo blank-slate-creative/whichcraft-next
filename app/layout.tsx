@@ -38,9 +38,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <main className="flex-1 overflow-y-auto">
-            <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-4 py-4">{children}</div>
-          </main>
+          <main className="flex-1 overflow-y-auto">{children}</main>
           <BottomNav />
         </ThemeProvider>
       </body>
