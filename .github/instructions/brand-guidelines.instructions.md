@@ -40,6 +40,7 @@ Consistency is key. Always use these terms:
 - **Simple over fancy:** Feature simplicity is a feature, not a limitation.
 - **Privacy-first:** Your data stays yours. Always mention this.
 - **Ad-free forever:** Not a trial. Not a premium feature. Forever.
+- **Paid, never ad-supported:** The app is free today, with paid upgrades planned. Revenue comes from people choosing to pay for the app—never from ads or from selling data. Don't write copy that says the app costs money until it actually does.
 - **Fast:** Built with native iOS tech, not bloated web wrappers.
 
 ## Sample Content
@@ -78,7 +79,7 @@ Your tastings sync via iCloud. They're yours. We don't see them, we don't sell t
 Built with SwiftUI and SwiftData. Native iOS. No web wrappers, no lag, no waiting for things to load. Open the app, search, log, done.
 
 • No Ads, Ever
-We're not selling your attention to advertisers. You paid for the app (or you will). That's the business model. Clean and simple.
+We're not selling your attention to advertisers. The app is free to start, and anything we charge for will be the app itself—never your data. That's the business model. Clean and simple.
 
 COMING SOON
 

@@ -1,13 +1,14 @@
 import Link from 'next/link';
+import { APP_STORE_URL } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 
 export default function AboutPage() {
   return (
-    <div className="max-w-5xl mx-auto px-2 sm:px-3 md:px-4 py-4">
+    <div className="py-4">
       <div className="flex flex-col items-center w-full">
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-24 flex flex-col items-center text-center">
+        <section className="w-full py-12 md:py-24 flex flex-col items-center text-center px-4">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">About WhichCraft</h1>
           <p className="text-xl text-muted-foreground max-w-[800px] mb-8">
             Your personal beverage journal for tracking and discovering craft beers and fine wines.
@@ -16,7 +17,7 @@ export default function AboutPage() {
 
         {/* Mission Section */}
         <section className="w-full py-12 md:py-16">
-          <div className="container mx-auto px-3 sm:px-4 md:px-6">
+          <div className="container mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl font-bold mb-6">Our Mission</h2>
@@ -60,7 +61,7 @@ export default function AboutPage() {
 
         {/* How It Works Section */}
         <section className="w-full py-12 md:py-16 bg-muted/50 rounded-lg">
-          <div className="container mx-auto px-3 sm:px-4 md:px-6">
+          <div className="container mx-auto px-4 md:px-6">
             <h2 className="text-3xl font-bold text-center mb-12">How WhichCraft Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div className="flex flex-col items-center text-center">
@@ -104,18 +105,14 @@ export default function AboutPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="w-full py-12 md:py-24 flex flex-col items-center text-center">
+        <section className="w-full py-12 md:py-24 flex flex-col items-center text-center px-4">
           <h2 className="text-3xl font-bold mb-6">Ready to start your tasting journey?</h2>
           <p className="text-xl text-muted-foreground max-w-[600px] mb-8">
             Join WhichCraft today and build your personal beverage collection.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button asChild size="lg">
-              <a
-                href="https://apps.apple.com/us/app/whichcraft-beer-tracker/id6756764793"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer">
                 Download on the App Store
               </a>
             </Button>
