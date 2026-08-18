@@ -111,7 +111,13 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button asChild size="lg">
-              <Link href="/sign-up">Create Free Account</Link>
+              <a
+                href="https://apps.apple.com/us/app/whichcraft-beer-tracker/id6756764793"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Download on the App Store
+              </a>
             </Button>
             <Button variant="outline" size="lg" asChild>
               <Link href="/">Back to Home</Link>
