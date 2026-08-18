@@ -3,8 +3,7 @@ import { PhoneMockup } from '@/components/landing/PhoneMockup';
 import { Footer } from '@/components/Footer';
 import { Shield, Zap, Ban, Apple } from 'lucide-react';
 import Image from 'next/image';
-
-const APP_STORE_URL = 'https://apps.apple.com/us/app/whichcraft-beer-tracker/id6756764793';
+import { APP_STORE_URL } from '@/lib/constants';
 
 export default function Home() {
   return (
@@ -130,8 +129,9 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold mb-4">No Ads, Ever</h3>
                 <p className="text-muted-foreground">
-                  We're not selling your attention to advertisers. You paid for the app (or you
-                  will). That's the business model. Clean and simple.
+                  We're not selling your attention to advertisers. The app is free to start, and
+                  anything we charge for will be the app itself—never your data. That's the business
+                  model. Clean and simple.
                 </p>
               </div>
 
