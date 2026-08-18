@@ -1,15 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { redirectAuthenticatedToHome } from '@/utils/auth';
 import { PhoneMockup } from '@/components/landing/PhoneMockup';
 import { Footer } from '@/components/Footer';
 import { Shield, Zap, Ban, Apple } from 'lucide-react';
 import Image from 'next/image';
 
-export default async function Home() {
-  // Redirect authenticated users to dashboard
-  await redirectAuthenticatedToHome();
-
-  // Otherwise, show the homepage
+export default function Home() {
   return (
     <div className="flex flex-col min-h-screen w-full">
       <main className="flex-1 w-full">

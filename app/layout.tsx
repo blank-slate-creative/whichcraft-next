@@ -1,7 +1,6 @@
 import { Space_Grotesk } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import Navbar from '@/components/Navbar';
-import BottomNav from '@/components/BottomNav';
 import './globals.css';
 
 const spaceGrotesk = Space_Grotesk({
@@ -42,7 +41,6 @@ export default function RootLayout({
         >
           <Navbar />
           <main className="flex-1 overflow-y-auto">{children}</main>
-          <BottomNav />
         </ThemeProvider>
       </body>
     </html>
