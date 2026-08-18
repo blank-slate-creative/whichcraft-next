@@ -4,6 +4,8 @@ import { Footer } from '@/components/Footer';
 import { Shield, Zap, Ban, Apple } from 'lucide-react';
 import Image from 'next/image';
 
+const APP_STORE_URL = 'https://apps.apple.com/us/app/whichcraft-beer-tracker/id6756764793';
+
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen w-full">
@@ -21,9 +23,11 @@ export default function Home() {
                   noise—just you and your brewlist.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" className="h-14 px-8 text-lg gap-2" disabled>
-                    <Apple className="w-6 h-6" />
-                    Coming Soon to App Store
+                  <Button asChild size="lg" className="h-14 px-8 text-lg gap-2">
+                    <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer">
+                      <Apple className="w-6 h-6" />
+                      Download on the App Store
+                    </a>
                   </Button>
                 </div>
               </div>
@@ -153,9 +157,11 @@ export default function Home() {
             Track beers without the social clutter. Private iCloud sync, no ads ever, native iOS
             speed.
           </p>
-          <Button size="lg" className="h-14 px-8 text-lg gap-2" disabled>
-            <Apple className="w-6 h-6" />
-            Coming Soon to App Store
+          <Button asChild size="lg" className="h-14 px-8 text-lg gap-2">
+            <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer">
+              <Apple className="w-6 h-6" />
+              Download on the App Store
+            </a>
           </Button>
         </section>
       </main>
