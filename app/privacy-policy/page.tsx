@@ -4,11 +4,11 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <h1 className="text-3xl font-bold mb-2">PRIVACY POLICY</h1>
-      <p className="text-muted-foreground mb-8">Last updated December 21, 2025</p>
+      <p className="text-muted-foreground mb-8">Last updated October 10, 2026</p>
 
       <div className="space-y-6 text-foreground">
         <p>
-          This Privacy Notice for Blank Slate Creative LLC (doing business as Blank Slate) (“
+          This Privacy Notice for Blank Slate Creative, LLC (“
           <strong>we</strong>,” “<strong>us</strong>,” or “<strong>our</strong>”), describes how and
           why we might access, collect, store, use, and/or share (“<strong>process</strong>”) your
           personal information when you use our services (“<strong>Services</strong>”), including
@@ -1070,9 +1070,9 @@ export default function PrivacyPolicyPage() {
             or contact us by post at:
           </p>
           <address className="not-italic mb-4">
-            Blank Slate Creative LLC
+            Blank Slate Creative, LLC
             <br />
-            200 W Saint James St
+            278 W Rand Rd, Ste 1 PMB 1015
             <br />
             Arlington Heights, IL 60004
             <br />
