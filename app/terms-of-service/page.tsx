@@ -5,16 +5,16 @@ export default function TermsOfServicePage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <h1 className="text-3xl font-bold mb-2">TERMS OF SERVICE</h1>
-      <p className="text-muted-foreground mb-8">Last updated December 21, 2025</p>
+      <p className="text-muted-foreground mb-8">Last updated October 10, 2026</p>
 
       <div className="space-y-6 text-foreground">
         <section>
           <h2 className="text-2xl font-semibold mt-8 mb-4">AGREEMENT TO OUR LEGAL TERMS</h2>
           <p>
-            We are Blank Slate Creative LLC, doing business as Blank Slate (&ldquo;
-            <strong>Company</strong>,&rdquo; &ldquo;<strong>we</strong>,&rdquo; &ldquo;
-            <strong>us</strong>,&rdquo; &ldquo;<strong>our</strong>&rdquo;), a company registered in
-            Illinois, United States at 200 W Saint James St, Arlington Heights, IL 60004.
+            We are Blank Slate Creative, LLC (&ldquo;<strong>Company</strong>,&rdquo; &ldquo;
+            <strong>we</strong>,&rdquo; &ldquo;<strong>us</strong>,&rdquo; &ldquo;
+            <strong>our</strong>&rdquo;), an Illinois limited liability company. Our mailing address
+            is 278 W Rand Rd, Ste 1 PMB 1015, Arlington Heights, IL 60004, United States.
           </p>
           <p className="mt-4">
             We operate the website{' '}
@@ -35,12 +35,13 @@ export default function TermsOfServicePage() {
             <a href="mailto:eric@blankslate.biz" className="text-primary hover:underline">
               eric@blankslate.biz
             </a>{' '}
-            or by mail to 200 W Saint James St, Arlington Heights, IL 60004, United States.
+            or by mail to 278 W Rand Rd, Ste 1 PMB 1015, Arlington Heights, IL 60004, United
+            States.
           </p>
           <p className="mt-4">
             These Legal Terms constitute a legally binding agreement made between you, whether
             personally or on behalf of an entity (&ldquo;<strong>you</strong>&rdquo;), and Blank Slate
-            Creative LLC, concerning your access to and use of the Services. You agree that by
+            Creative, LLC, concerning your access to and use of the Services. You agree that by
             accessing the Services, you have read, understood, and agreed to be bound by all of
             these Legal Terms. IF YOU DO NOT AGREE WITH ALL OF THESE LEGAL TERMS, THEN YOU ARE
             EXPRESSLY PROHIBITED FROM USING THE SERVICES AND YOU MUST DISCONTINUE USE IMMEDIATELY.
@@ -81,11 +82,6 @@ export default function TermsOfServicePage() {
             <li>
               <a href="#userreps" className="hover:underline">
                 USER REPRESENTATIONS
-              </a>
-            </li>
-            <li>
-              <a href="#subscriptions" className="hover:underline">
-                SUBSCRIPTIONS
               </a>
             </li>
             <li>
@@ -344,82 +340,8 @@ export default function TermsOfServicePage() {
           </p>
         </section>
 
-        <section id="subscriptions" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">4. SUBSCRIPTIONS</h2>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Billing and Renewal</h3>
-          <p>
-            Your subscription will continue and automatically renew unless canceled. You consent to
-            our charging your payment method on a recurring basis without requiring your prior
-            approval for each recurring charge, until such time as you cancel the applicable order.
-            The length of your billing cycle will depend on the type of subscription plan you choose
-            when you subscribed to the Services.
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Free Trial</h3>
-          <p>
-            We offer a 14-day free trial to new users who register with the Services. The account
-            will be charged according to the user&apos;s chosen subscription at the end of the free
-            trial.
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Cancellation</h3>
-          <p>
-            Subscriptions are purchased through Apple and managed by the App Store. To cancel your
-            WhichCraft subscription, follow these steps on your iPhone, iPad, or Mac:
-          </p>
-          <p className="mt-2 font-semibold">On iPhone or iPad:</p>
-          <ul className="list-disc pl-6 mt-1 space-y-1">
-            <li>Open the Settings app.</li>
-            <li>Tap your Apple ID at the top of the screen.</li>
-            <li>Tap &ldquo;Subscriptions.&rdquo;</li>
-            <li>Select WhichCraft.</li>
-            <li>
-              Tap &ldquo;Cancel Subscription&rdquo; at the bottom of the page and confirm your choice.
-            </li>
-          </ul>
-          <p className="mt-2 font-semibold">On Mac:</p>
-          <ul className="list-disc pl-6 mt-1 space-y-1">
-            <li>Open the App Store app.</li>
-            <li>Click your name in the bottom left corner.</li>
-            <li>Click &ldquo;Account Settings.&rdquo;</li>
-            <li>Scroll down to &ldquo;Subscriptions&rdquo; and click &ldquo;Manage.&rdquo;</li>
-            <li>
-              Click &ldquo;Edit&rdquo; next to the WhichCraft subscription, then click &ldquo;Cancel
-              Subscription&rdquo; and confirm.
-            </li>
-          </ul>
-          <p className="mt-4">
-            <strong>Important Notes</strong>
-          </p>
-          <ul className="list-disc pl-6 mt-1 space-y-1">
-            <li>
-              Cancellation takes effect at the end of your current billing cycle; you will retain
-              access until then.
-            </li>
-            <li>
-              If you don&apos;t see a &ldquo;Cancel Subscription&rdquo; button, your subscription may
-              already be canceled or expired.
-            </li>
-          </ul>
-          <p className="mt-4">
-            Your cancellation will take effect at the end of the current paid term. If you have any
-            questions or are unsatisfied with our Services, please email us at{' '}
-            <a href="mailto:eric@blankslate.biz" className="text-primary hover:underline">
-              eric@blankslate.biz
-            </a>
-            .
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Fee Changes</h3>
-          <p>
-            We may, from time to time, make changes to the subscription fee and will communicate any
-            price changes to you in accordance with applicable law.
-          </p>
-        </section>
-
         <section id="prohibited" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">5. PROHIBITED ACTIVITIES</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">4. PROHIBITED ACTIVITIES</h2>
           <p>
             You may not access or use the Services for any purpose other than that for which we make
             the Services available. The Services may not be used in connection with any commercial
@@ -520,7 +442,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="ugc" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">6. USER GENERATED CONTRIBUTIONS</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">5. USER GENERATED CONTRIBUTIONS</h2>
           <p>
             The Services does not offer users to submit or post content. We may provide you with the
             opportunity to create, submit, post, display, transmit, perform, publish, distribute, or
@@ -594,7 +516,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="license" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">7. CONTRIBUTION LICENSE</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">6. CONTRIBUTION LICENSE</h2>
           <p>
             You and Services agree that we may access, store, process, and use any information and
             personal data that you provide following the terms of the Privacy Policy and your
@@ -616,7 +538,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="mobile" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">8. MOBILE APPLICATION LICENSE</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">7. MOBILE APPLICATION LICENSE</h2>
 
           <h3 className="text-xl font-semibold mt-6 mb-3">Use License</h3>
           <p>
@@ -674,7 +596,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="sitemanage" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">9. SERVICES MANAGEMENT</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">8. SERVICES MANAGEMENT</h2>
           <p>
             We reserve the right, but not the obligation, to: (1) monitor the Services for
             violations of these Legal Terms; (2) take appropriate legal action against anyone who,
@@ -691,7 +613,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="ppyes" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">10. PRIVACY POLICY</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">9. PRIVACY POLICY</h2>
           <p>
             We care about data privacy and security. Please review our Privacy Policy:{' '}
             <Link href="/privacy-policy" className="text-primary hover:underline">
@@ -708,7 +630,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="terms" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">11. TERM AND TERMINATION</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">10. TERM AND TERMINATION</h2>
           <p>
             These Legal Terms shall remain in full force and effect while you use the Services.
             WITHOUT LIMITING ANY OTHER PROVISION OF THESE LEGAL TERMS, WE RESERVE THE RIGHT TO, IN
@@ -730,7 +652,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="modifications" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">12. MODIFICATIONS AND INTERRUPTIONS</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">11. MODIFICATIONS AND INTERRUPTIONS</h2>
           <p>
             We reserve the right to change, modify, or remove the contents of the Services at any
             time or for any reason at our sole discretion without notice. However, we have no
@@ -752,7 +674,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="law" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">13. GOVERNING LAW</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">12. GOVERNING LAW</h2>
           <p>
             These Legal Terms and your use of the Services are governed by and construed in
             accordance with the laws of the State of Illinois applicable to agreements made and to
@@ -762,7 +684,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="disputes" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">14. DISPUTE RESOLUTION</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">13. DISPUTE RESOLUTION</h2>
 
           <h3 className="text-xl font-semibold mt-6 mb-3">Informal Negotiations</h3>
           <p>
@@ -851,7 +773,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="corrections" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">15. CORRECTIONS</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">14. CORRECTIONS</h2>
           <p>
             There may be information on the Services that contains typographical errors,
             inaccuracies, or omissions, including descriptions, pricing, availability, and various
@@ -862,7 +784,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="disclaimer" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">16. DISCLAIMER</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">15. DISCLAIMER</h2>
           <p className="uppercase">
             THE SERVICES ARE PROVIDED ON AN AS-IS AND AS-AVAILABLE BASIS. YOU AGREE THAT YOUR USE OF
             THE SERVICES WILL BE AT YOUR SOLE RISK. TO THE FULLEST EXTENT PERMITTED BY LAW, WE
@@ -891,7 +813,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="liability" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">17. LIMITATIONS OF LIABILITY</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">16. LIMITATIONS OF LIABILITY</h2>
           <p className="uppercase">
             IN NO EVENT WILL WE OR OUR DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE TO YOU OR ANY THIRD
             PARTY FOR ANY DIRECT, INDIRECT, CONSEQUENTIAL, EXEMPLARY, INCIDENTAL, SPECIAL, OR
@@ -908,7 +830,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="indemnification" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">18. INDEMNIFICATION</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">17. INDEMNIFICATION</h2>
           <p>
             You agree to defend, indemnify, and hold us harmless, including our subsidiaries,
             affiliates, and all of our respective officers, agents, partners, and employees, from
@@ -927,7 +849,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="userdata" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">19. USER DATA</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">18. USER DATA</h2>
           <p>
             We will maintain certain data that you transmit to the Services for the purpose of
             managing the performance of the Services, as well as data relating to your use of the
@@ -941,7 +863,7 @@ export default function TermsOfServicePage() {
 
         <section id="electronic" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mt-8 mb-4">
-            20. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES
+            19. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES
           </h2>
           <p>
             Visiting the Services, sending us emails, and completing online forms constitute
@@ -959,7 +881,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="california" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">21. CALIFORNIA USERS AND RESIDENTS</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">20. CALIFORNIA USERS AND RESIDENTS</h2>
           <p>
             If any complaint with us is not satisfactorily resolved, you can contact the Complaint
             Assistance Unit of the Division of Consumer Services of the California Department of
@@ -969,7 +891,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="misc" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">22. MISCELLANEOUS</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">21. MISCELLANEOUS</h2>
           <p>
             These Legal Terms and any policies or operating rules posted by us on the Services or in
             respect to the Services constitute the entire agreement and understanding between you
@@ -991,13 +913,13 @@ export default function TermsOfServicePage() {
         </section>
 
         <section id="contact" className="scroll-mt-20">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">23. CONTACT US</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">22. CONTACT US</h2>
           <p>
             In order to resolve a complaint regarding the Services or to receive further information
             regarding use of the Services, please contact us at:
           </p>
-          <p className="mt-4 font-bold">Blank Slate Creative LLC</p>
-          <p className="font-bold">200 W Saint James St</p>
+          <p className="mt-4 font-bold">Blank Slate Creative, LLC</p>
+          <p className="font-bold">278 W Rand Rd, Ste 1 PMB 1015</p>
           <p className="font-bold">Arlington Heights, IL 60004</p>
           <p className="font-bold">United States</p>
           <p className="mt-4 font-bold">
