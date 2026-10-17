@@ -30,33 +30,35 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
   }
+}
 
-  .dark {
-    --background: 20 14% 4%;
-    --foreground: 20 8% 98%;
-    --card: 20 12% 8%;
-    --card-foreground: 20 8% 98%;
-    --popover: 20 12% 8%;
-    --popover-foreground: 20 8% 98%;
-    --primary: 15 86% 56%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 20 10% 15%;
-    --secondary-foreground: 20 8% 98%;
-    --muted: 20 10% 15%;
-    --muted-foreground: 20 5% 65%;
-    --accent: 30 90% 60%;
-    --accent-foreground: 20 14% 4%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 20 10% 18%;
-    --input: 20 10% 18%;
-    --ring: 15 86% 56%;
-    --chart-1: 15 86% 56%;
-    --chart-2: 30 90% 60%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-  }
+/* Outside @layer base on purpose: Tailwind drops a base-layer rule whose class name never appears
+   in a scanned file, and the bare token `dark` appears only in next-themes' runtime class. */
+.dark {
+  --background: 20 14% 4%;
+  --foreground: 20 8% 98%;
+  --card: 20 12% 8%;
+  --card-foreground: 20 8% 98%;
+  --popover: 20 12% 8%;
+  --popover-foreground: 20 8% 98%;
+  --primary: 15 86% 56%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 20 10% 15%;
+  --secondary-foreground: 20 8% 98%;
+  --muted: 20 10% 15%;
+  --muted-foreground: 20 5% 65%;
+  --accent: 30 90% 60%;
+  --accent-foreground: 20 14% 4%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 20 10% 18%;
+  --input: 20 10% 18%;
+  --ring: 15 86% 56%;
+  --chart-1: 15 86% 56%;
+  --chart-2: 30 90% 60%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
 }
 
 @layer base {
@@ -66,15 +68,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
 }
