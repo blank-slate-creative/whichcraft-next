@@ -69,7 +69,3 @@ through a pull request.
 This repository once also held a web version of the app, with Supabase accounts and beer
 collections. It was removed in commit `cb9b4a1` and is not coming back; the iOS app is the product.
 The code, dependencies, and assets it left behind were deleted afterward.
-
-## License
-
-MIT.
