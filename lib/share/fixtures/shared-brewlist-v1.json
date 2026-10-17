@@ -1,0 +1,542 @@
+{
+  "description": "Share-link fixture for WhichCraft brew-list sharing, version 1. Shared by WhichCraft-iOS (WhichCraftTests/Fixtures) and whichcraft-next (the /l reader). A link is https://whichcraft.beer/l#<fragment>.",
+  "encoding": "fragment = base64url (RFC 4648 section 5, no padding) of raw DEFLATE (RFC 1951, no zlib header or checksum) of the UTF-8 JSON. JavaScript: DecompressionStream('deflate-raw'). Fixture fragments were made with Python zlib.compressobj(9, zlib.DEFLATED, -15). Encoders may differ byte for byte, so compare decoded lists, never fragments.",
+  "contract": [
+    "Reject (show an error, never partial content) any fragment that breaks a rule below.",
+    "Fragment: at most 20000 characters, only A-Z a-z 0-9 - _ (no padding, no + / =), and a length that is not 1 more than a multiple of 4.",
+    "Inflated JSON: at most 32768 bytes. Stop inflating at the limit; do not inflate first and measure after.",
+    "v must be 1. A different v is 'unsupportedVersion'. Check v before anything else.",
+    "beers: required array of 1 to 50 objects. title: optional string of at most 40 Unicode code points.",
+    "Each beer: name (required, not blank), producer (required string, may be empty), liked (required bool); style (optional string), abv (optional number from 0 to 100), untappdId (optional integer above 0).",
+    "name, producer, and style: at most 100 Unicode code points each. Count code points, not UTF-16 units.",
+    "No control characters (Unicode category Cc), no line or paragraph separators (U+2028, U+2029), and no bidirectional marks or overrides (U+200E, U+200F, U+202A to U+202E, U+2066 to U+2069) in the title, name, producer, or style.",
+    "Render everything as plain text, never as HTML or markdown. Show no images. Unknown extra keys are ignored.",
+    "Show the line: shared link, not verified by WhichCraft."
+  ],
+  "valid": [
+    {
+      "name": "friday-night",
+      "json": "{\"beers\":[{\"abv\":8,\"liked\":true,\"name\":\"Pliny the Elder\",\"producer\":\"Russian River Brewing Company\",\"style\":\"IPA - Imperial / Double\",\"untappdId\":4499},{\"abv\":8,\"liked\":false,\"name\":\"Heady Topper\",\"producer\":\"The Alchemist\",\"style\":\"IPA - Imperial / Double\"},{\"abv\":5.1,\"liked\":true,\"name\":\"Aecht Schlenkerla Märzen\",\"producer\":\"Brauerei Heller-Trum\",\"style\":\"Rauchbier\",\"untappdId\":1234},{\"liked\":true,\"name\":\"House Lager\",\"producer\":\"\"}],\"title\":\"Friday night picks\",\"v\":1}",
+      "fragment": "jY9NTgJBEIWvUqn1oEExkdmBP4FEE4LsjIuamZKp0NPTqe7GjITbeBMvZsNCEVm4q6Re3ve9DRbM6jF_3iAVa8yvMzSy4grzoJEztNQw5jgzYjsINcOdqVgxQ6dtFct05jiP3gtZmMuaFcbKb2KXcNM2jmyXoj50ZlcynY2gB9PGsQoZOIfbNhbpk2G0gZyrpgk7GAyH2-yPzSsZ_6MzYao6WLTOHbsskuLIlDU34sM_2N-oq7P-6ekjLusAT2Vt2K5YDcHj54e-s_0NHitFVhaYsDGsvYXG5oA_p1jWhex1D9b2Ly4HO4VT4EkbPcMDLY834vYlwyBhX3yvUlEHVpbJ0km58imc9vS3Xw",
+      "list": {
+        "v": 1,
+        "title": "Friday night picks",
+        "beers": [
+          {
+            "name": "Pliny the Elder",
+            "producer": "Russian River Brewing Company",
+            "liked": true,
+            "style": "IPA - Imperial / Double",
+            "abv": 8,
+            "untappdId": 4499
+          },
+          {
+            "name": "Heady Topper",
+            "producer": "The Alchemist",
+            "liked": false,
+            "style": "IPA - Imperial / Double",
+            "abv": 8
+          },
+          {
+            "name": "Aecht Schlenkerla Märzen",
+            "producer": "Brauerei Heller-Trum",
+            "liked": true,
+            "style": "Rauchbier",
+            "abv": 5.1,
+            "untappdId": 1234
+          },
+          {
+            "name": "House Lager",
+            "producer": "",
+            "liked": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "one-beer-no-title",
+      "json": "{\"beers\":[{\"liked\":true,\"name\":\"Zombie Dust\",\"producer\":\"3 Floyds Brewing\"}],\"v\":1}",
+      "fragment": "Dcm9CoAgFAbQV5Fvdok2x4geomjIvITkT1y1CPHd66ynQhNxgloqnD3JQGUuJBE2T1CYo9eWxFhShsTF0ZSd-I9eTC6-JomB6bHhQFslbqiufQ",
+      "list": {
+        "v": 1,
+        "beers": [
+          {
+            "name": "Zombie Dust",
+            "producer": "3 Floyds Brewing",
+            "liked": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "fifty-beers",
+      "json": "{\"beers\":[{\"abv\":5.0,\"liked\":true,\"name\":\"Beer number 01\",\"producer\":\"Brewery 1\",\"style\":\"Pale Ale - American\",\"untappdId\":1001},{\"abv\":5.5,\"liked\":true,\"name\":\"Beer number 02\",\"producer\":\"Brewery 2\",\"untappdId\":1002},{\"abv\":6.0,\"liked\":false,\"name\":\"Beer number 03\",\"producer\":\"Brewery 3\",\"style\":\"Pale Ale - American\",\"untappdId\":1003},{\"abv\":6.5,\"liked\":true,\"name\":\"Beer number 04\",\"producer\":\"Brewery 4\",\"untappdId\":1004},{\"abv\":4.5,\"liked\":true,\"name\":\"Beer number 05\",\"producer\":\"Brewery 5\",\"style\":\"Pale Ale - American\",\"untappdId\":1005},{\"abv\":5.0,\"liked\":false,\"name\":\"Beer number 06\",\"producer\":\"Brewery 6\",\"untappdId\":1006},{\"abv\":5.5,\"liked\":true,\"name\":\"Beer number 07\",\"producer\":\"Brewery 0\",\"style\":\"Pale Ale - American\",\"untappdId\":1007},{\"abv\":6.0,\"liked\":true,\"name\":\"Beer number 08\",\"producer\":\"Brewery 1\",\"untappdId\":1008},{\"abv\":6.5,\"liked\":false,\"name\":\"Beer number 09\",\"producer\":\"Brewery 2\",\"style\":\"Pale Ale - American\",\"untappdId\":1009},{\"abv\":4.5,\"liked\":true,\"name\":\"Beer number 10\",\"producer\":\"Brewery 3\",\"untappdId\":1010},{\"abv\":5.0,\"liked\":true,\"name\":\"Beer number 11\",\"producer\":\"Brewery 4\",\"style\":\"Pale Ale - American\",\"untappdId\":1011},{\"abv\":5.5,\"liked\":false,\"name\":\"Beer number 12\",\"producer\":\"Brewery 5\",\"untappdId\":1012},{\"abv\":6.0,\"liked\":true,\"name\":\"Beer number 13\",\"producer\":\"Brewery 6\",\"style\":\"Pale Ale - American\",\"untappdId\":1013},{\"abv\":6.5,\"liked\":true,\"name\":\"Beer number 14\",\"producer\":\"Brewery 0\",\"untappdId\":1014},{\"abv\":4.5,\"liked\":false,\"name\":\"Beer number 15\",\"producer\":\"Brewery 1\",\"style\":\"Pale Ale - American\",\"untappdId\":1015},{\"abv\":5.0,\"liked\":true,\"name\":\"Beer number 16\",\"producer\":\"Brewery 2\",\"untappdId\":1016},{\"abv\":5.5,\"liked\":true,\"name\":\"Beer number 17\",\"producer\":\"Brewery 3\",\"style\":\"Pale Ale - American\",\"untappdId\":1017},{\"abv\":6.0,\"liked\":false,\"name\":\"Beer number 18\",\"producer\":\"Brewery 4\",\"untappdId\":1018},{\"abv\":6.5,\"liked\":true,\"name\":\"Beer number 19\",\"producer\":\"Brewery 5\",\"style\":\"Pale Ale - American\",\"untappdId\":1019},{\"abv\":4.5,\"liked\":true,\"name\":\"Beer number 20\",\"producer\":\"Brewery 6\",\"untappdId\":1020},{\"abv\":5.0,\"liked\":false,\"name\":\"Beer number 21\",\"producer\":\"Brewery 0\",\"style\":\"Pale Ale - American\",\"untappdId\":1021},{\"abv\":5.5,\"liked\":true,\"name\":\"Beer number 22\",\"producer\":\"Brewery 1\",\"untappdId\":1022},{\"abv\":6.0,\"liked\":true,\"name\":\"Beer number 23\",\"producer\":\"Brewery 2\",\"style\":\"Pale Ale - American\",\"untappdId\":1023},{\"abv\":6.5,\"liked\":false,\"name\":\"Beer number 24\",\"producer\":\"Brewery 3\",\"untappdId\":1024},{\"abv\":4.5,\"liked\":true,\"name\":\"Beer number 25\",\"producer\":\"Brewery 4\",\"style\":\"Pale Ale - American\",\"untappdId\":1025},{\"abv\":5.0,\"liked\":true,\"name\":\"Beer number 26\",\"producer\":\"Brewery 5\",\"untappdId\":1026},{\"abv\":5.5,\"liked\":false,\"name\":\"Beer number 27\",\"producer\":\"Brewery 6\",\"style\":\"Pale Ale - American\",\"untappdId\":1027},{\"abv\":6.0,\"liked\":true,\"name\":\"Beer number 28\",\"producer\":\"Brewery 0\",\"untappdId\":1028},{\"abv\":6.5,\"liked\":true,\"name\":\"Beer number 29\",\"producer\":\"Brewery 1\",\"style\":\"Pale Ale - American\",\"untappdId\":1029},{\"abv\":4.5,\"liked\":false,\"name\":\"Beer number 30\",\"producer\":\"Brewery 2\",\"untappdId\":1030},{\"abv\":5.0,\"liked\":true,\"name\":\"Beer number 31\",\"producer\":\"Brewery 3\",\"style\":\"Pale Ale - American\",\"untappdId\":1031},{\"abv\":5.5,\"liked\":true,\"name\":\"Beer number 32\",\"producer\":\"Brewery 4\",\"untappdId\":1032},{\"abv\":6.0,\"liked\":false,\"name\":\"Beer number 33\",\"producer\":\"Brewery 5\",\"style\":\"Pale Ale - American\",\"untappdId\":1033},{\"abv\":6.5,\"liked\":true,\"name\":\"Beer number 34\",\"producer\":\"Brewery 6\",\"untappdId\":1034},{\"abv\":4.5,\"liked\":true,\"name\":\"Beer number 35\",\"producer\":\"Brewery 0\",\"style\":\"Pale Ale - American\",\"untappdId\":1035},{\"abv\":5.0,\"liked\":false,\"name\":\"Beer number 36\",\"producer\":\"Brewery 1\",\"untappdId\":1036},{\"abv\":5.5,\"liked\":true,\"name\":\"Beer number 37\",\"producer\":\"Brewery 2\",\"style\":\"Pale Ale - American\",\"untappdId\":1037},{\"abv\":6.0,\"liked\":true,\"name\":\"Beer number 38\",\"producer\":\"Brewery 3\",\"untappdId\":1038},{\"abv\":6.5,\"liked\":false,\"name\":\"Beer number 39\",\"producer\":\"Brewery 4\",\"style\":\"Pale Ale - American\",\"untappdId\":1039},{\"abv\":4.5,\"liked\":true,\"name\":\"Beer number 40\",\"producer\":\"Brewery 5\",\"untappdId\":1040},{\"abv\":5.0,\"liked\":true,\"name\":\"Beer number 41\",\"producer\":\"Brewery 6\",\"style\":\"Pale Ale - American\",\"untappdId\":1041},{\"abv\":5.5,\"liked\":false,\"name\":\"Beer number 42\",\"producer\":\"Brewery 0\",\"untappdId\":1042},{\"abv\":6.0,\"liked\":true,\"name\":\"Beer number 43\",\"producer\":\"Brewery 1\",\"style\":\"Pale Ale - American\",\"untappdId\":1043},{\"abv\":6.5,\"liked\":true,\"name\":\"Beer number 44\",\"producer\":\"Brewery 2\",\"untappdId\":1044},{\"abv\":4.5,\"liked\":false,\"name\":\"Beer number 45\",\"producer\":\"Brewery 3\",\"style\":\"Pale Ale - American\",\"untappdId\":1045},{\"abv\":5.0,\"liked\":true,\"name\":\"Beer number 46\",\"producer\":\"Brewery 4\",\"untappdId\":1046},{\"abv\":5.5,\"liked\":true,\"name\":\"Beer number 47\",\"producer\":\"Brewery 5\",\"style\":\"Pale Ale - American\",\"untappdId\":1047},{\"abv\":6.0,\"liked\":false,\"name\":\"Beer number 48\",\"producer\":\"Brewery 6\",\"untappdId\":1048},{\"abv\":6.5,\"liked\":true,\"name\":\"Beer number 49\",\"producer\":\"Brewery 0\",\"style\":\"Pale Ale - American\",\"untappdId\":1049},{\"abv\":4.5,\"liked\":true,\"name\":\"Beer number 50\",\"producer\":\"Brewery 1\",\"untappdId\":1050}],\"title\":\"Fifty beers\",\"v\":1}",
+      "fragment": "rdhNixpBEAbgvzL0eTZ0ffR8eNscArnlHnIY116QqCvjuEEW_3vGBESxe6kX-iCCDlVWd_F0tR9uGeN4cIufH25YvrtF-OJrt1n_jiu3mMZjrN1u2Ea3cF_n56rdcbuc3zy52u3Ht9XxJY6X78b4J46n6vLxYTptLs__GDaxep5fT9XzNo7rl2E3f3vcTcN-v_o-Ryfv6Vxf0wZDWk6n5YfAfA3c3NTzOmwOmciSjixgQXKT11KQptPqQ2C9BlZT4JAOHMB6ws0GmdaxSedtHiI34Na36cAeLKhNNkY-bZdv9PvAXXLnP1mpPt_LSEE91hjk841-F5h8cuvzgSnfykA9lCYhv47E-U6_j8zY1pPkWxkpCCSBNN_o94HTJHyyUqEI2hTAxmiMaBNIArVFzKYWPCuoM6JNHbj1fRG0CSSBvdFs9uBpwFQEbQbHBGYj2gySwFLEbBbwrGA1os3gmMChCNoMksCN0WxuwNOA2yJoMzgmcGdEm0ESuC9iNvfgWSHeiLaAY4JQEbQFJEHYaLagNweRImgLOCaIGtEWkAQJRcwW9OYgjRFtAccEaYugLSAJ0hnNFvTmIH0RtAUcE9Qb0VaQBKUiZit6c1A2oq3gmKBSBG0FSVA1mq3ozUFDEbQVHBO0MaKtIAnaFjFb0ZuDdka0FRwTtC-CtoIkBG80O_jzr9pN6-nfL_m2fp1O1f__HWs3J6PzXw",
+      "list": {
+        "v": 1,
+        "title": "Fifty beers",
+        "beers": [
+          {
+            "name": "Beer number 01",
+            "producer": "Brewery 1",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 5.0,
+            "untappdId": 1001
+          },
+          {
+            "name": "Beer number 02",
+            "producer": "Brewery 2",
+            "liked": true,
+            "abv": 5.5,
+            "untappdId": 1002
+          },
+          {
+            "name": "Beer number 03",
+            "producer": "Brewery 3",
+            "liked": false,
+            "style": "Pale Ale - American",
+            "abv": 6.0,
+            "untappdId": 1003
+          },
+          {
+            "name": "Beer number 04",
+            "producer": "Brewery 4",
+            "liked": true,
+            "abv": 6.5,
+            "untappdId": 1004
+          },
+          {
+            "name": "Beer number 05",
+            "producer": "Brewery 5",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 4.5,
+            "untappdId": 1005
+          },
+          {
+            "name": "Beer number 06",
+            "producer": "Brewery 6",
+            "liked": false,
+            "abv": 5.0,
+            "untappdId": 1006
+          },
+          {
+            "name": "Beer number 07",
+            "producer": "Brewery 0",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 5.5,
+            "untappdId": 1007
+          },
+          {
+            "name": "Beer number 08",
+            "producer": "Brewery 1",
+            "liked": true,
+            "abv": 6.0,
+            "untappdId": 1008
+          },
+          {
+            "name": "Beer number 09",
+            "producer": "Brewery 2",
+            "liked": false,
+            "style": "Pale Ale - American",
+            "abv": 6.5,
+            "untappdId": 1009
+          },
+          {
+            "name": "Beer number 10",
+            "producer": "Brewery 3",
+            "liked": true,
+            "abv": 4.5,
+            "untappdId": 1010
+          },
+          {
+            "name": "Beer number 11",
+            "producer": "Brewery 4",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 5.0,
+            "untappdId": 1011
+          },
+          {
+            "name": "Beer number 12",
+            "producer": "Brewery 5",
+            "liked": false,
+            "abv": 5.5,
+            "untappdId": 1012
+          },
+          {
+            "name": "Beer number 13",
+            "producer": "Brewery 6",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 6.0,
+            "untappdId": 1013
+          },
+          {
+            "name": "Beer number 14",
+            "producer": "Brewery 0",
+            "liked": true,
+            "abv": 6.5,
+            "untappdId": 1014
+          },
+          {
+            "name": "Beer number 15",
+            "producer": "Brewery 1",
+            "liked": false,
+            "style": "Pale Ale - American",
+            "abv": 4.5,
+            "untappdId": 1015
+          },
+          {
+            "name": "Beer number 16",
+            "producer": "Brewery 2",
+            "liked": true,
+            "abv": 5.0,
+            "untappdId": 1016
+          },
+          {
+            "name": "Beer number 17",
+            "producer": "Brewery 3",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 5.5,
+            "untappdId": 1017
+          },
+          {
+            "name": "Beer number 18",
+            "producer": "Brewery 4",
+            "liked": false,
+            "abv": 6.0,
+            "untappdId": 1018
+          },
+          {
+            "name": "Beer number 19",
+            "producer": "Brewery 5",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 6.5,
+            "untappdId": 1019
+          },
+          {
+            "name": "Beer number 20",
+            "producer": "Brewery 6",
+            "liked": true,
+            "abv": 4.5,
+            "untappdId": 1020
+          },
+          {
+            "name": "Beer number 21",
+            "producer": "Brewery 0",
+            "liked": false,
+            "style": "Pale Ale - American",
+            "abv": 5.0,
+            "untappdId": 1021
+          },
+          {
+            "name": "Beer number 22",
+            "producer": "Brewery 1",
+            "liked": true,
+            "abv": 5.5,
+            "untappdId": 1022
+          },
+          {
+            "name": "Beer number 23",
+            "producer": "Brewery 2",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 6.0,
+            "untappdId": 1023
+          },
+          {
+            "name": "Beer number 24",
+            "producer": "Brewery 3",
+            "liked": false,
+            "abv": 6.5,
+            "untappdId": 1024
+          },
+          {
+            "name": "Beer number 25",
+            "producer": "Brewery 4",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 4.5,
+            "untappdId": 1025
+          },
+          {
+            "name": "Beer number 26",
+            "producer": "Brewery 5",
+            "liked": true,
+            "abv": 5.0,
+            "untappdId": 1026
+          },
+          {
+            "name": "Beer number 27",
+            "producer": "Brewery 6",
+            "liked": false,
+            "style": "Pale Ale - American",
+            "abv": 5.5,
+            "untappdId": 1027
+          },
+          {
+            "name": "Beer number 28",
+            "producer": "Brewery 0",
+            "liked": true,
+            "abv": 6.0,
+            "untappdId": 1028
+          },
+          {
+            "name": "Beer number 29",
+            "producer": "Brewery 1",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 6.5,
+            "untappdId": 1029
+          },
+          {
+            "name": "Beer number 30",
+            "producer": "Brewery 2",
+            "liked": false,
+            "abv": 4.5,
+            "untappdId": 1030
+          },
+          {
+            "name": "Beer number 31",
+            "producer": "Brewery 3",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 5.0,
+            "untappdId": 1031
+          },
+          {
+            "name": "Beer number 32",
+            "producer": "Brewery 4",
+            "liked": true,
+            "abv": 5.5,
+            "untappdId": 1032
+          },
+          {
+            "name": "Beer number 33",
+            "producer": "Brewery 5",
+            "liked": false,
+            "style": "Pale Ale - American",
+            "abv": 6.0,
+            "untappdId": 1033
+          },
+          {
+            "name": "Beer number 34",
+            "producer": "Brewery 6",
+            "liked": true,
+            "abv": 6.5,
+            "untappdId": 1034
+          },
+          {
+            "name": "Beer number 35",
+            "producer": "Brewery 0",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 4.5,
+            "untappdId": 1035
+          },
+          {
+            "name": "Beer number 36",
+            "producer": "Brewery 1",
+            "liked": false,
+            "abv": 5.0,
+            "untappdId": 1036
+          },
+          {
+            "name": "Beer number 37",
+            "producer": "Brewery 2",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 5.5,
+            "untappdId": 1037
+          },
+          {
+            "name": "Beer number 38",
+            "producer": "Brewery 3",
+            "liked": true,
+            "abv": 6.0,
+            "untappdId": 1038
+          },
+          {
+            "name": "Beer number 39",
+            "producer": "Brewery 4",
+            "liked": false,
+            "style": "Pale Ale - American",
+            "abv": 6.5,
+            "untappdId": 1039
+          },
+          {
+            "name": "Beer number 40",
+            "producer": "Brewery 5",
+            "liked": true,
+            "abv": 4.5,
+            "untappdId": 1040
+          },
+          {
+            "name": "Beer number 41",
+            "producer": "Brewery 6",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 5.0,
+            "untappdId": 1041
+          },
+          {
+            "name": "Beer number 42",
+            "producer": "Brewery 0",
+            "liked": false,
+            "abv": 5.5,
+            "untappdId": 1042
+          },
+          {
+            "name": "Beer number 43",
+            "producer": "Brewery 1",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 6.0,
+            "untappdId": 1043
+          },
+          {
+            "name": "Beer number 44",
+            "producer": "Brewery 2",
+            "liked": true,
+            "abv": 6.5,
+            "untappdId": 1044
+          },
+          {
+            "name": "Beer number 45",
+            "producer": "Brewery 3",
+            "liked": false,
+            "style": "Pale Ale - American",
+            "abv": 4.5,
+            "untappdId": 1045
+          },
+          {
+            "name": "Beer number 46",
+            "producer": "Brewery 4",
+            "liked": true,
+            "abv": 5.0,
+            "untappdId": 1046
+          },
+          {
+            "name": "Beer number 47",
+            "producer": "Brewery 5",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 5.5,
+            "untappdId": 1047
+          },
+          {
+            "name": "Beer number 48",
+            "producer": "Brewery 6",
+            "liked": false,
+            "abv": 6.0,
+            "untappdId": 1048
+          },
+          {
+            "name": "Beer number 49",
+            "producer": "Brewery 0",
+            "liked": true,
+            "style": "Pale Ale - American",
+            "abv": 6.5,
+            "untappdId": 1049
+          },
+          {
+            "name": "Beer number 50",
+            "producer": "Brewery 1",
+            "liked": true,
+            "abv": 4.5,
+            "untappdId": 1050
+          }
+        ]
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "name": "unsupported-version",
+      "error": "unsupportedVersion",
+      "json": "{\"beers\":[{\"liked\":true,\"name\":\"Pliny the Elder\",\"producer\":\"Russian River\"}],\"v\":2}",
+      "fragment": "Dce9CoAgFAbQV5Fvdmq8e3u4RoPlhS6ZhX8Q4rvndk7DzhwTaG3wcrED5VhYI9ibQVi8hE_lk9XsHUdovPFx5RgkmJKS2KCM1PG-aVTQ1H8"
+    },
+    {
+      "name": "no-beers",
+      "error": "noBeers",
+      "json": "{\"beers\":[],\"v\":1}",
+      "fragment": "q1ZKSk0tKlayio7VUSpTsjKsBQA"
+    },
+    {
+      "name": "too-many-beers",
+      "error": "tooManyBeers",
+      "json": "{\"beers\":[{\"liked\":true,\"name\":\"Beer 0\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 1\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 2\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 3\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 4\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 5\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 6\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 7\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 8\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 9\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 10\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 11\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 12\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 13\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 14\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 15\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 16\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 17\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 18\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 19\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 20\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 21\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 22\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 23\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 24\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 25\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 26\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 27\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 28\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 29\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 30\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 31\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 32\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 33\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 34\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 35\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 36\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 37\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 38\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 39\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 40\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 41\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 42\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 43\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 44\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 45\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 46\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 47\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 48\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 49\",\"producer\":\"B\"},{\"liked\":true,\"name\":\"Beer 50\",\"producer\":\"B\"}],\"v\":1}",
+      "fragment": "ldU5DgIxDEDRqyDXKfAyLCm5BqIAxgViVWBoRtwdqJGQfhv_7snOKLvMdpe6HuV0OGYv9dGGLHLZnlOqrD7TyVSK3Nq1H_bZvm_yKn9qRbWh2lEdqO5QPUP1HNULVC-ZDsRkmso4lXkqA1UmqoxUmakyVGWqxlQN7ihTNaZqTNWYqjFVY6rGVI2pOlN1purw9DJVZ6rOVJ2pOlN1pupMNZhqMNVgqgF_VKYaTDWYajDVYKrBVLtf1U2Rp1R9vQE"
+    },
+    {
+      "name": "title-too-long",
+      "error": "titleTooLong",
+      "json": "{\"beers\":[{\"liked\":true,\"name\":\"Pliny the Elder\",\"producer\":\"Russian River\"}],\"title\":\"ttttttttttttttttttttttttttttttttttttttttt\",\"v\":1}",
+      "fragment": "jYwxCoAwEAS_ErZOY3u9vdiKRTQHHsYoyUUQ8e_GH7jVTDF7Y2JOGTTcCLKyB2kqbBHdxiB0QeJldGHTBs8JFkfafZkrEvqSs7hoejmrP6OFioYv07-rhyeoeV4"
+    },
+    {
+      "name": "name-too-long",
+      "error": "fieldTooLong",
+      "json": "{\"beers\":[{\"liked\":true,\"name\":\"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\",\"producer\":\"B\"}],\"v\":1}",
+      "fragment": "q1ZKSk0tKlayiq5WysnMTk1RsiopKk3VUcpLzE1VslLKowdQ0lEqKMpPKU1OLQJa6aRUG6ujVKZkZVgLAA"
+    },
+    {
+      "name": "missing-name",
+      "error": "missingName",
+      "json": "{\"beers\":[{\"liked\":true,\"name\":\"   \",\"producer\":\"B\"}],\"v\":1}",
+      "fragment": "q1ZKSk0tKlayiq5WysnMTk1RsiopKk3VUcpLzE1VslJSUFBQ0lEqKMpPKU1OLQIKOCnVxuoolSlZGdYCAA"
+    },
+    {
+      "name": "newline-in-name",
+      "error": "forbiddenCharacters",
+      "json": "{\"beers\":[{\"liked\":true,\"name\":\"Line one\\nLine two\",\"producer\":\"B\"}],\"v\":1}",
+      "fragment": "q1ZKSk0tKlayiq5WysnMTk1RsiopKk3VUcpLzE1VslLyycxLVcjPS43JA7NKyvOVdJQKivJTSpNTi4DyTkq1sTpKZUpWhrUA"
+    },
+    {
+      "name": "bidi-override-in-title",
+      "error": "forbiddenCharacters",
+      "json": "{\"beers\":[{\"liked\":true,\"name\":\"Pliny the Elder\",\"producer\":\"Russian River\"}],\"title\":\"abc‮def\",\"v\":1}",
+      "fragment": "q1ZKSk0tKlayiq5WysnMTk1RsiopKk3VUcpLzE1VslIKyMnMq1QoyUhVcM1JSS1S0lEqKMpPKU0GMq2UgkqLizMT8xSCMsuA_NpYHaWSzJIckLbEpORHDetSUtOAGsqUrAxrAQ"
+    },
+    {
+      "name": "abv-out-of-range",
+      "error": "badNumber",
+      "json": "{\"beers\":[{\"abv\":150,\"liked\":true,\"name\":\"Strong\",\"producer\":\"B\"}],\"v\":1}",
+      "fragment": "q1ZKSk0tKlayiq5WSkwqU7IyNDXQUcrJzE5NUbIqKSpN1VHKS8xNVbJSCi4pys9LV9JRKijKTylNTi0Cijkp1cbqKIF01QIA"
+    },
+    {
+      "name": "missing-beers-key",
+      "error": "notJSON",
+      "json": "{\"v\":1}",
+      "fragment": "q1YqU7IyrAUA"
+    },
+    {
+      "name": "not-base64",
+      "error": "notBase64",
+      "fragment": "not*base64*at*all"
+    },
+    {
+      "name": "not-deflate",
+      "error": "notCompressed",
+      "fragment": "BwA",
+      "note": "A DEFLATE block with the reserved type 3."
+    },
+    {
+      "name": "not-json",
+      "error": "notJSON",
+      "fragment": "K8nILFYAorz8EoWs4vw8AA"
+    },
+    {
+      "name": "inflates-past-limit",
+      "error": "tooLarge",
+      "fragment": "7cEBDQAAAMKgrO9fwhxuQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMC_AQ",
+      "note": "Small fragment that inflates past 32 KiB: a reader must stop inflating at the limit."
+    }
+  ]
+}
