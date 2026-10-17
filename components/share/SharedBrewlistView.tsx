@@ -31,7 +31,8 @@ export function SharedBrewlistView() {
   useEffect(() => {
     let cancelled = false;
     const read = async () => {
-      const result = await decodeBrewlist(window.location.hash);
+      // The decoder takes the fragment without its "#"; this is the one place that removes it.
+      const result = await decodeBrewlist(window.location.hash.replace(/^#/, ''));
       if (cancelled) return;
       setState(
         result.ok
@@ -81,7 +82,7 @@ export function SharedBrewlistView() {
         <div className="space-y-6">
           <header className="space-y-1">
             <h1 className="text-3xl font-bold break-words">
-              {state.list.title ?? 'A shared brew list'}
+              {state.list.title || 'A shared brew list'}
             </h1>
             <p className="text-muted-foreground">
               {state.list.beers.length} {state.list.beers.length === 1 ? 'beer' : 'beers'}

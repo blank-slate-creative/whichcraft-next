@@ -10,7 +10,8 @@
       {
         "appID": "S9ZV3U7URD.com.ericcecchi.WhichCraft-Next",
         "paths": [
-          "/l*"
+          "/l",
+          "/l/"
         ]
       }
     ]

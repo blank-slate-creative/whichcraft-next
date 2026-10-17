@@ -5,34 +5,43 @@
  * the "#" is never sent to a server, so we hold nothing and cannot take a link down. That is why the
  * decoder is strict: it caps every length, accepts only the known fields, and never returns markup.
  *
- * Wire format, version 1 (the iOS app encodes the same thing; see fixtures/brewlist-v1.json):
- *   payload  = base64url( rawDeflate( utf8( json ) ) )      no padding
+ * The contract is the iOS fixture, shared-brewlist-v1.json, copied byte for byte from
+ * WhichCraft-iOS (WhichCraftTests/Fixtures). Its "contract" array is the rule list this file
+ * implements: a link that breaks any rule is rejected whole, never trimmed, repaired, or shown in
+ * part, so a link that opens here also opens in the app and the other way round.
+ *
+ * Wire format, version 1:
+ *   payload  = base64url( rawDeflate( utf8( json ) ) )      no padding, only A-Z a-z 0-9 - _
  *   json     = { "v": 1, "title"?: string, "beers": Beer[] }
- *   Beer     = { "name": string, "producer"?: string, "style"?: string, "abv"?: number,
- *                "liked": boolean, "untappdId"?: number }
+ *   Beer     = { "name": string, "producer": string, "liked": boolean, "style"?: string,
+ *                "abv"?: number, "untappdId"?: number }
  * "Raw deflate" is RFC 1951 with no zlib header (Apple's COMPRESSION_ZLIB; `deflate-raw` on the
- * web). The decoder also accepts the zlib-wrapped form (RFC 1950) so a sender that adds the header
- * still works. Optional fields are left out when absent. Unknown fields are ignored.
+ * web). The zlib-wrapped form (RFC 1950) is rejected, as the app rejects it. Unknown fields are
+ * ignored. decodeBrewlist takes the fragment without its "#"; the page strips that itself.
  */
 
 export const SHARE_VERSION = 1;
 
-/** Caps. A link over any of these is rejected (sizes) or trimmed (text), never rendered whole. */
+/**
+ * Caps, from the shared contract. A link over any of these is rejected whole. Text caps count
+ * Unicode code points, not UTF-16 units.
+ */
 export const LIMITS = {
   /** Longest fragment we will even try to decode, in characters. */
-  maxFragmentChars: 16_384,
-  /** Largest inflated payload, in bytes. Stops a small link from inflating into a huge one. */
-  maxInflatedBytes: 65_536,
+  maxFragmentChars: 20_000,
+  /** Largest inflated payload, in bytes (32 KB). Stops a small link from inflating into a big one. */
+  maxInflatedBytes: 32_768,
   maxBeers: 50,
   titleChars: 40,
   nameChars: 100,
   producerChars: 100,
-  styleChars: 60,
+  styleChars: 100,
 } as const;
 
 export interface SharedBeer {
   name: string;
-  producer?: string;
+  /** Required by the contract; may be the empty string. */
+  producer: string;
   style?: string;
   abv?: number;
   liked: boolean;
@@ -47,8 +56,8 @@ export interface SharedBrewlist {
 
 export type DecodeFailure =
   | 'empty' // no fragment at all
-  | 'too-long' // fragment or inflated payload over the cap
-  | 'malformed' // not base64url, not deflate, not JSON, or the wrong shape
+  | 'too-long' // fragment, inflated payload, or beer count over the cap
+  | 'malformed' // not base64url, not raw deflate, not JSON, or any other rule broken
   | 'unsupported-version'; // a newer link than this page understands
 
 export type DecodeResult =
@@ -61,42 +70,45 @@ class Failure extends Error {
   }
 }
 
-// Control characters, zero-width and bidi-override characters, and the BOM. These let a crafted
-// name hide or reorder text, so they never reach the page.
-const UNSAFE_CHARS =
-  /[\u0000-\u001F\u007F-\u009F\u00AD\u200B-\u200F\u2028-\u202E\u2060-\u206F\uFEFF]/g;
+// Characters the contract forbids in the title, name, producer, and style: control characters
+// (Unicode Cc: U+0000 to U+001F and U+007F to U+009F), the line and paragraph separators, and the
+// bidirectional marks and overrides, which let a crafted name hide or reorder text. Nothing else is
+// touched: zero-width joiners stay, because they hold emoji sequences together.
+const FORBIDDEN_CHARS =
+  /[\u0000-\u001F\u007F-\u009F\u2028\u2029\u200E\u200F\u202A-\u202E\u2066-\u2069]/;
 
-/** Strip unsafe characters, collapse whitespace, and trim to `max` code points. */
-export function cleanText(input: string, max: number): string {
-  const flat = input.replace(UNSAFE_CHARS, ' ').replace(/\s+/g, ' ').trim();
-  const points = Array.from(flat);
-  return points.length > max
-    ? points
-        .slice(0, max - 1)
-        .join('')
-        .trimEnd() + '…'
-    : flat;
+/** True when `text` has none of the characters the contract forbids. */
+export function hasNoForbiddenCharacters(text: string): boolean {
+  return !FORBIDDEN_CHARS.test(text);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+/** A string within `max` code points and free of forbidden characters, exactly as sent. */
+function checkedText(value: unknown, max: number): string {
+  if (typeof value !== 'string') throw new Failure('malformed');
+  if (!hasNoForbiddenCharacters(value)) throw new Failure('malformed');
+  // A string of n UTF-16 units has at most n code points, so only count when it could be over.
+  if (value.length > max && Array.from(value).length > max) throw new Failure('malformed');
+  return value;
+}
+
+/** An optional string: absent or null is fine; anything else must pass checkedText. */
 function optionalText(value: unknown, max: number): string | undefined {
   if (value === undefined || value === null) return undefined;
-  if (typeof value !== 'string') throw new Failure('malformed');
-  const text = cleanText(value, max);
-  return text === '' ? undefined : text;
+  return checkedText(value, max);
 }
 
 function parseBeer(value: unknown): SharedBeer {
   if (!isRecord(value)) throw new Failure('malformed');
-  const name = optionalText(value.name, LIMITS.nameChars);
-  if (name === undefined || typeof value.liked !== 'boolean') throw new Failure('malformed');
+  const name = checkedText(value.name, LIMITS.nameChars);
+  if (name.trim() === '') throw new Failure('malformed');
+  const producer = checkedText(value.producer, LIMITS.producerChars);
+  if (typeof value.liked !== 'boolean') throw new Failure('malformed');
 
-  const beer: SharedBeer = { name, liked: value.liked };
-  const producer = optionalText(value.producer, LIMITS.producerChars);
-  if (producer !== undefined) beer.producer = producer;
+  const beer: SharedBeer = { name, producer, liked: value.liked };
   const style = optionalText(value.style, LIMITS.styleChars);
   if (style !== undefined) beer.style = style;
 
@@ -118,6 +130,7 @@ function parseBeer(value: unknown): SharedBeer {
 /** Validate decoded JSON into a brew list. Throws Failure; use decodeBrewlist for a result. */
 export function parseBrewlist(data: unknown): SharedBrewlist {
   if (!isRecord(data)) throw new Failure('malformed');
+  // The version comes first, so a newer link reads as "newer" whatever else it holds.
   if (typeof data.v !== 'number') throw new Failure('malformed');
   if (data.v !== SHARE_VERSION) throw new Failure('unsupported-version');
   if (!Array.isArray(data.beers) || data.beers.length === 0) throw new Failure('malformed');
@@ -130,9 +143,9 @@ export function parseBrewlist(data: unknown): SharedBrewlist {
 }
 
 function base64UrlToBytes(text: string): Uint8Array {
-  const body = text.replace(/=+$/, '');
-  if (!/^[A-Za-z0-9_-]+$/.test(body) || body.length % 4 === 1) throw new Failure('malformed');
-  const binary = atob(body.replace(/-/g, '+').replace(/_/g, '/'));
+  // Only the base64url alphabet, no padding: "=", "+", "/", and whitespace are all rejected.
+  if (!/^[A-Za-z0-9_-]+$/.test(text) || text.length % 4 === 1) throw new Failure('malformed');
+  const binary = atob(text.replace(/-/g, '+').replace(/_/g, '/'));
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
   return bytes;
@@ -144,10 +157,11 @@ export function bytesToBase64Url(bytes: Uint8Array): string {
   return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-async function inflate(bytes: Uint8Array, format: 'deflate-raw' | 'deflate'): Promise<Uint8Array> {
+/** Inflate raw DEFLATE (RFC 1951), stopping the moment the output passes the byte cap. */
+async function inflateRaw(bytes: Uint8Array): Promise<Uint8Array> {
   const stream = new Blob([bytes as BlobPart])
     .stream()
-    .pipeThrough(new DecompressionStream(format));
+    .pipeThrough(new DecompressionStream('deflate-raw'));
   const reader = stream.getReader();
   const chunks: Uint8Array[] = [];
   let total = 0;
@@ -170,31 +184,16 @@ async function inflate(bytes: Uint8Array, format: 'deflate-raw' | 'deflate'): Pr
   return out;
 }
 
-async function inflateEither(bytes: Uint8Array): Promise<Uint8Array> {
-  // A zlib header (RFC 1950) is 0x78 followed by a byte that makes the pair a multiple of 31.
-  const hasZlibHeader =
-    bytes.length > 2 && bytes[0] === 0x78 && (bytes[0] * 256 + bytes[1]) % 31 === 0;
-  const order: ('deflate-raw' | 'deflate')[] = hasZlibHeader
-    ? ['deflate', 'deflate-raw']
-    : ['deflate-raw', 'deflate'];
-  for (const format of order) {
-    try {
-      return await inflate(bytes, format);
-    } catch (error) {
-      if (error instanceof Failure) throw error;
-    }
-  }
-  throw new Failure('malformed');
-}
-
-/** Decode the text after the "#" of a share link. Never throws; never returns markup. */
+/**
+ * Decode the text after the "#" of a share link (without the "#" itself). Never throws; never
+ * returns markup; never returns part of a list.
+ */
 export async function decodeBrewlist(fragment: string): Promise<DecodeResult> {
   try {
-    const payload = fragment.startsWith('#') ? fragment.slice(1) : fragment;
-    if (payload.trim() === '') return { ok: false, reason: 'empty' };
-    if (payload.length > LIMITS.maxFragmentChars) return { ok: false, reason: 'too-long' };
+    if (fragment === '') return { ok: false, reason: 'empty' };
+    if (fragment.length > LIMITS.maxFragmentChars) return { ok: false, reason: 'too-long' };
 
-    const inflated = await inflateEither(base64UrlToBytes(payload.trim()));
+    const inflated = await inflateRaw(base64UrlToBytes(fragment));
     let json: unknown;
     try {
       json = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(inflated));
@@ -207,7 +206,7 @@ export async function decodeBrewlist(fragment: string): Promise<DecodeResult> {
   }
 }
 
-/** Encode a list into the text that goes after the "#". Used by tests and fixture tooling. */
+/** Encode a list into the text that goes after the "#". Used by tests. */
 export async function encodeBrewlist(list: SharedBrewlist): Promise<string> {
   const bytes = new TextEncoder().encode(JSON.stringify(list));
   const stream = new Blob([bytes as BlobPart])
