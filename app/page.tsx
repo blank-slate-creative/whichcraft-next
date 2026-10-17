@@ -83,12 +83,12 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-center">
               <div className="text-center md:text-left">
                 <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                  Discover new brews that match your taste
+                  Find any beer and remember if you liked it
                 </h2>
                 <p className="text-xl text-muted-foreground leading-relaxed">
                   Find any beer from a comprehensive catalog of hundreds of thousands of brews
                   worldwide. Filter by liked, disliked, or browse everything you've tried. Sort by
-                  date, name, or rating—whatever makes sense to you.
+                  date or name—whatever makes sense to you.
                 </p>
               </div>
               <div>
@@ -129,9 +129,8 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold mb-4">No Ads, Ever</h3>
                 <p className="text-muted-foreground">
-                  We're not selling your attention to advertisers. The app is free to start, and
-                  anything we charge for will be the app itself—never your data. That's the business
-                  model. Clean and simple.
+                  We're not selling your attention to advertisers. The app is free, and we will
+                  never make money from your data. Clean and simple.
                 </p>
               </div>
 

@@ -11,8 +11,9 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata = {
-  title: 'WhichCraft',
-  description: 'WhichCraft App',
+  title: 'WhichCraft: a private beer tracker for iPhone',
+  description:
+    'WhichCraft is an iPhone app for logging the beers you try and remembering the ones you liked. Private, with no ads. Download it on the App Store.',
 };
 
 export const viewport = {
