@@ -4,81 +4,37 @@ description: Core development guidelines for the whichcraft-next project
 applyTo: '**'
 ---
 
-# WhichCraft Web - Planning
+# WhichCraft site
 
 ## Overview
 
-This document outlines the architecture and development plans for WhichCraft Next, a Next.js web application for tracking and rating beverages.
+This repository is the marketing website for the WhichCraft iOS app (whichcraft.beer): a landing page, About, Privacy, Terms, and the `/l` shared brew-list reader. It has no accounts, no database, and no backend. The web version of the app was removed and is not coming back; do not rebuild any of it.
 
-## Current Architecture
+## Stack
 
-### Web App
-
-- **Technology**: Next.js 15 with App Router
-  - React 19
-  - TypeScript
-  - TailwindCSS with Shadcn UI components
-  - Lucide React icons
-  - Supabase authentication
-  - Server and client components
-
-### Local Libraries
-
-- **api-client** (`lib/api-client`): API client for consuming the backend API
-  - Type-safe API methods
-  - Authentication handling
-  - Request/response management
-- **beverage-context** (`lib/beverage-context`): React context for beverage state management
-  - Client-side state for beverages
-  - Optimistic updates
-  - Statistics calculation
-
-### Backend API
-
-The backend API is maintained in a separate repository: [whichcraft-api](https://github.com/ericcecchi/whichcraft-api)
-
-- FastAPI backend
-- Python with Pydantic models
-- SQLAlchemy ORM
-- PostgreSQL database (via Supabase)
-- JWT authentication
-- Alembic migrations
+- Next.js with the App Router, React, TypeScript
+- Tailwind CSS, with shadcn/ui components only where a page uses them (`components/ui/button.tsx` today)
+- Lucide icons
 
 ## Development Guidelines
 
-- Use TypeScript for all new frontend code
-- Follow React 19 best practices
-- Use server actions and server components instead of client state wherever possible to minimize bundle size and client code
-- Write tests for new features
+- Use TypeScript for all code
+- Prefer server components; use client components only where a page needs them
+- Write tests for logic, such as the share reader in `lib/share`
 - Keep files under 500 lines of code
-- Reuse components whenever possible. Do not create a new component unless you are sure a suitable one does not exist.
-- Document complex logic with inline comments
-- Use Shadcn and Radix for new UI components
-- Use existing Shadcn UI components before creating new ones
+- Reuse existing components before creating new ones
 - Get icons from Lucide
 - Follow the existing code style and patterns
 - Avoid making any major updates outside of the scope of the request
+- Add no new service, tracker, or analytics without the owner's approval
+- Run `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` before opening a pull request
 
 ## Project Structure
 
 ```
 whichcraft-next/
-├── app/                    # Next.js app directory (App Router)
-├── components/             # Reusable React components
-├── lib/                    # Local library code
-│   ├── api-client/        # API client library
-│   └── beverage-context/  # State management
-├── utils/                  # Utility functions
-├── hooks/                  # Custom React hooks
-├── public/                 # Static assets
-└── supabase/              # Supabase configuration
+├── app/          # Pages: /, /about, /privacy-policy, /terms-of-service, /l
+├── components/   # Navbar, Footer, landing and share components, ui/button
+├── lib/          # constants (App Store URL), utils, share/ (brew-list decoder and fixtures)
+└── public/       # Screenshots and the apple-app-site-association file
 ```
-
-## Future Considerations
-
-- Enhanced filtering and search capabilities
-- Additional statistics and insights
-- Performance optimizations
-- Enhanced user profiles and social features
-- Improved mobile experience
-- Offline support

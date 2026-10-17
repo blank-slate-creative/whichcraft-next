@@ -68,9 +68,9 @@ export default function AboutPage() {
                 <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold mb-4">
                   1
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Sign Up</h3>
+                <h3 className="text-xl font-semibold mb-2">Download</h3>
                 <p className="text-muted-foreground">
-                  Create your free account to get started with WhichCraft.
+                  Get WhichCraft from the App Store. It is free to start.
                 </p>
               </div>
               <div className="flex flex-col items-center text-center">

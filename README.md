@@ -1,151 +1,47 @@
-# WhichCraft
+# WhichCraft site
 
-WhichCraft is an application that helps users keep track of which beers and
-wines they've tried and whether they liked them or not. It provides a simple and
-intuitive interface for recording and rating beverages, making it easy to
-remember your favorites and avoid repeating mistakes.
+The public website for the WhichCraft iPhone app, live at [whichcraft.beer](https://whichcraft.beer).
+It is a small marketing site. It has no accounts, no database, and no server-side secrets.
 
-## Features
+## What is on it
 
-- **Beverage Collection Management**: Easily add, edit, and delete beers and
-  wines you've tried
-- **Like/Dislike Rating System**: Simple thumbs up/thumbs down approach to
-  rating beverages
-- **Detailed Beverage Information**: Track producer, style, ABV, and year for
-  each beverage
-- **Personal Notes**: Add your own tasting notes and location information
-- **Advanced Filtering & Sorting**: Filter by beverage type, rating, and sort by
-  various criteria
-- **Beverage Search**: Quickly find beverages in your collection
-- **Visual Statistics**: View insights about your collection with charts and
-  statistics
-- **Responsive Design**: Optimized for both desktop and mobile devices
-- **Dark/Light Mode**: Choose your preferred theme
-- **Secure Authentication**: Powered by Supabase authentication
-- **User Profiles**: Manage your account information
+| Path | What it is |
+| --- | --- |
+| `/` | Landing page, with the App Store link |
+| `/about` | About WhichCraft |
+| `/privacy-policy` | Privacy Policy |
+| `/terms-of-service` | Terms of Service |
+| `/l` | Reader for a brew list shared from the app (see below) |
 
-## Tech Stack
+The App Store link lives in one place, `lib/constants.ts`. Every download button imports it.
 
-- **Frontend**:
-  - Next.js 15 with App Router
-  - React 19
-  - TypeScript
-  - TailwindCSS for styling
-  - Shadcn UI components
-  - Lucide React icons
+## Run it
 
-- **Backend**:
-  - FastAPI (separate repository: [whichcraft-api](https://github.com/ericcecchi/whichcraft-api))
-  - PostgreSQL database (via Supabase)
-  - JWT authentication
+You need Node.js 20 or newer and npm 11.2.0 or newer. No environment variables are required
+(`.env.example` says so).
 
-- **Infrastructure**:
-  - Supabase for authentication and database
-  - Vercel for frontend deployment
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 20 or newer
-- npm 11.2.0 or newer
-- Supabase account
-
-### Local Development
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/ericcecchi/whichcraft-next.git
-   cd whichcraft-next
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-3. Create a `.env` file based on `.env.example`:
-
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=your-project-url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-   NEXT_PUBLIC_API_URL=http://localhost:5001
-   ```
-
-4. Start the development server:
-
-   ```bash
-   npm run dev
-   ```
-
-   The application will be available at `http://localhost:3000`
-
-### Build and Deploy
-
-1. Build the application:
-
-   ```bash
-   npm run build
-   ```
-
-2. Run in production mode:
-
-   ```bash
-   npm start
-   ```
-
-3. Deploy to Vercel:
-
-   Connect your GitHub repository to Vercel or use the Vercel CLI:
-
-   ```bash
-   vercel
-   ```
-
-## Scripts
-
-- `npm run dev` - Start the development server with Turbopack
-- `npm run build` - Build the application for production
-- `npm start` - Start the production server
-- `npm run typecheck` - Run TypeScript type checking
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Run ESLint with auto-fix
-- `npm run format` - Format code with Prettier
-
-## Project Structure
-
-```
-whichcraft-next/
-├── app/                    # Next.js app directory
-│   ├── (auth-pages)/      # Authentication pages
-│   ├── collection/        # Beverage collection pages
-│   ├── stats/            # Statistics pages
-│   └── profile/          # User profile pages
-├── components/           # React components
-│   └── ui/              # Shadcn UI components
-├── lib/                 # Library code
-│   ├── api-client/      # API client for backend communication
-│   └── beverage-context/ # Beverage state management
-├── utils/               # Utility functions
-│   └── supabase/       # Supabase client configuration
-├── public/             # Static assets
-└── supabase/           # Supabase configuration and migrations
+```bash
+npm install
+npm run dev     # http://localhost:3000
 ```
 
-## API Backend
+```bash
+npm run build   # production build
+npm start       # serve the build
+```
 
-The backend API is maintained in a separate repository:
-[whichcraft-api](https://github.com/ericcecchi/whichcraft-api)
+Other scripts:
 
-The API provides endpoints for:
+- `npm run typecheck` runs TypeScript.
+- `npm run lint` runs ESLint. `npm run lint:fix` fixes what it can.
+- `npm test` runs the Vitest suite (the share reader's tests).
+- `npm run format` runs Prettier.
 
-- Beverage CRUD operations
-- User authentication
-- Beer search via Untappd
-- Venue search
-- Statistics aggregation
+## What it is built with
+
+Next.js (App Router), React, TypeScript, and Tailwind CSS. The one shadcn/ui piece in use is
+`components/ui/button.tsx`; add others only when a page needs them. Icons come from Lucide, and
+the light and dark themes follow the visitor's system setting.
 
 ## Shared brew lists
 
@@ -163,11 +59,17 @@ site stores nothing. The page shows the title and each beer's name and producer 
 - Universal links: `public/.well-known/apple-app-site-association` (served as `application/json`
   from `next.config.ts`) hands `/l` and `/l/` to the app (the only paths the app accepts as share links).
 
-## Contributing
+## Deploys
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+The site deploys from `main` on Vercel. Merging to `main` changes whichcraft.beer, so work goes
+through a pull request.
+
+## History
+
+This repository once also held a web version of the app, with Supabase accounts and beer
+collections. It was removed in commit `cb9b4a1` and is not coming back; the iOS app is the product.
+The code, dependencies, and assets it left behind were deleted afterward.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for
-details.
+MIT.
