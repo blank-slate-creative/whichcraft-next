@@ -1,16 +1,16 @@
 {
   "webcredentials": {
     "apps": [
-      "S9ZV3U7URD.com.ericcecchi.whichcraft"
+      "S9ZV3U7URD.com.ericcecchi.WhichCraft-Next"
     ]
   },
   "applinks": {
     "apps": [],
     "details": [
       {
-        "appID": "S9ZV3U7URD.com.ericcecchi.whichcraft",
+        "appID": "S9ZV3U7URD.com.ericcecchi.WhichCraft-Next",
         "paths": [
-          "*"
+          "/l*"
         ]
       }
     ]

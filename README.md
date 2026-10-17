@@ -147,6 +147,20 @@ The API provides endpoints for:
 - Venue search
 - Statistics aggregation
 
+## Shared brew lists
+
+`/l` opens a brew list shared from the app. The list travels in the link itself
+(`https://whichcraft.beer/l#<payload>`); the part after the `#` is never sent to a server, so the
+site stores nothing. The page shows the title and each beer's name and producer as plain text, is
+`noindex`, and carries a "not verified by WhichCraft" line.
+
+- Format and limits: `lib/share/brewlist.ts`.
+- Shared test data, copied to the iOS repo so both sides decode the same payload:
+  `lib/share/fixtures/brewlist-v1.json` (regenerate with `node lib/share/fixtures/make-fixture.mjs`).
+- Tests: `npm test`.
+- Universal links: `public/.well-known/apple-app-site-association` (served as `application/json`
+  from `next.config.ts`) hands `/l*` to the app.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
