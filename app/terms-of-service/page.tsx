@@ -531,8 +531,9 @@ export default function TermsOfServicePage() {
             <a href="mailto:support@whichcraft.beer" className="text-primary hover:underline">
               support@whichcraft.beer
             </a>
-            . Because we do not store shared lists, we cannot edit or delete one, but we will
-            respond to reports and help you stop seeing the list.
+            . Because we do not store shared lists, we cannot edit or delete one. We reply within 24
+            hours to reports of objectionable content in a shared list, and help you stop seeing the
+            list.
           </p>
         </section>
 
@@ -661,8 +662,8 @@ export default function TermsOfServicePage() {
             COVENANT CONTAINED IN THESE LEGAL TERMS OR OF ANY APPLICABLE LAW OR REGULATION. WE MAY
             TERMINATE YOUR USE OR PARTICIPATION IN THE SERVICES OR, TO THE EXTENT WE HOLD IT, DELETE
             ANY CONTENT OR INFORMATION THAT YOU POSTED, AT ANY TIME, WITHOUT WARNING, IN OUR SOLE
-            DISCRETION. WE DO NOT HOLD SHARED BREWLISTS (SEE &quot;SHARED BREWLISTS&quot; IN SECTION
-            5).
+            DISCRETION. WE DO NOT HOLD SHARED BREWLISTS, AND WE REPLY TO REPORTS ABOUT THEM AS
+            SECTION 5 DESCRIBES.
           </p>
           <p className="mt-4">
             If we terminate or suspend your use of the Services for any reason, you are prohibited
