@@ -329,8 +329,9 @@ export default function PrivacyPolicyPage() {
             <a href="mailto:support@whichcraft.beer" className="text-primary hover:underline">
               support@whichcraft.beer
             </a>
-            . Because we do not store shared lists, we cannot edit or delete one, but we will
-            respond to your report and help you stop seeing it.
+            . Because we do not store shared lists, we cannot edit or delete one. We reply within 24
+            hours to reports of objectionable or abusive content in a shared list, and help you stop
+            seeing it.
           </p>
         </section>
 
