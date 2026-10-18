@@ -5,7 +5,7 @@ export default function TermsOfServicePage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <h1 className="text-3xl font-bold mb-2">TERMS OF SERVICE</h1>
-      <p className="text-muted-foreground mb-8">Last updated October 10, 2026</p>
+      <p className="text-muted-foreground mb-8">Last updated October 18, 2026</p>
 
       <div className="space-y-6 text-foreground">
         <section>
@@ -27,8 +27,8 @@ export default function TermsOfServicePage() {
             (collectively, the &ldquo;<strong>Services</strong>&rdquo;).
           </p>
           <p className="mt-4">
-            WhichCraft is the fastest way to track the beers you drink. No ads, no social features,
-            no noise—just you and your brewlist.
+            WhichCraft is the fastest way to track the beers you drink. No ads, no feeds or public
+            profiles, no noise—just you and your brewlist, shared only with people you choose.
           </p>
           <p className="mt-4">
             You can contact us by email at{' '}
@@ -335,7 +335,7 @@ export default function TermsOfServicePage() {
           </p>
           <p className="mt-4">
             If you provide any information that is untrue, inaccurate, not current, or incomplete,
-            we have the right to suspend or terminate your account and refuse any and all current or
+            we have the right to refuse any and all current or
             future use of the Services (or any portion thereof).
           </p>
         </section>
@@ -356,7 +356,7 @@ export default function TermsOfServicePage() {
             </li>
             <li>
               Trick, defraud, or mislead us and other users, especially in any attempt to learn
-              sensitive account information such as user passwords.
+              sensitive information such as passwords.
             </li>
             <li>
               Circumvent, disable, or otherwise interfere with security-related features of the
@@ -429,9 +429,9 @@ export default function TermsOfServicePage() {
             </li>
             <li>Use a buying agent or purchasing agent to make purchases on the Services.</li>
             <li>
-              Make any unauthorized use of the Services, including collecting usernames and/or email
-              addresses of users by electronic or other means for the purpose of sending unsolicited
-              email, or creating user accounts by automated means or under false pretenses.
+              Make any unauthorized use of the Services, including collecting the names or email
+              addresses of other users by electronic or other means for the purpose of sending
+              unsolicited email.
             </li>
             <li>
               Use the Services as part of any effort to compete with us or otherwise use the
@@ -444,7 +444,8 @@ export default function TermsOfServicePage() {
         <section id="ugc" className="scroll-mt-20">
           <h2 className="text-2xl font-semibold mt-8 mb-4">5. USER GENERATED CONTRIBUTIONS</h2>
           <p>
-            The Services does not offer users to submit or post content. We may provide you with the
+            The Services do not let you post content publicly, but you can share your brewlist with
+            people you choose (see Shared brewlists, below). We may also provide you with the
             opportunity to create, submit, post, display, transmit, perform, publish, distribute, or
             broadcast content and materials to us or on the Services, including but not limited to
             text, writings, video, audio, photographs, graphics, comments, suggestions, or personal
@@ -512,6 +513,26 @@ export default function TermsOfServicePage() {
             Any use of the Services in violation of the foregoing violates these Legal Terms and may
             result in, among other things, termination or suspension of your rights to use the
             Services.
+          </p>
+          <h3 className="text-xl font-semibold mt-6 mb-3">Shared brewlists</h3>
+          <p>
+            When you share a brewlist, as a snapshot link or, where the App offers it, as a live
+            list through Apple’s iCloud, its title and contents are your Contributions, and the
+            rules above apply to them. We do not tolerate objectionable content or abusive behavior
+            in shared lists. Share a list only with people who want it, and do not use share links
+            or invitations to spam, harass, impersonate, or mislead anyone.
+          </p>
+          <p className="mt-4">
+            We do not host shared lists. A snapshot link carries its list inside the link, and a
+            live list is stored in your iCloud and on the devices of the people you invite, who can
+            view it but not change it. We do not review or verify what a shared list says. If a
+            list someone shares with you is offensive or abusive, you can remove a live list from
+            your app at any time, and you can report it to us at{' '}
+            <a href="mailto:support@whichcraft.beer" className="text-primary hover:underline">
+              support@whichcraft.beer
+            </a>
+            . Because we do not store shared lists, we cannot edit or delete one, but we will
+            respond to reports and help you stop seeing the list.
           </p>
         </section>
 
@@ -642,10 +663,11 @@ export default function TermsOfServicePage() {
             THAT YOU POSTED AT ANY TIME, WITHOUT WARNING, IN OUR SOLE DISCRETION.
           </p>
           <p className="mt-4">
-            If we terminate or suspend your account for any reason, you are prohibited from
-            registering and creating a new account under your name, a fake or borrowed name, or the
+            If we terminate or suspend your use of the Services for any reason, you are prohibited
+            from using the Services under your name, a fake or borrowed name, or the
             name of any third party, even if you may be acting on behalf of the third party. In
-            addition to terminating or suspending your account, we reserve the right to take
+            addition to terminating or suspending your use of the Services, we reserve the right to
+            take
             appropriate legal action, including without limitation pursuing civil, criminal, and
             injunctive redress.
           </p>

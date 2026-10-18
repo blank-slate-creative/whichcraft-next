@@ -4,7 +4,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <h1 className="text-3xl font-bold mb-2">PRIVACY POLICY</h1>
-      <p className="text-muted-foreground mb-8">Last updated October 10, 2026</p>
+      <p className="text-muted-foreground mb-8">Last updated October 18, 2026</p>
 
       <div className="space-y-6 text-foreground">
         <p>
@@ -21,7 +21,8 @@ export default function PrivacyPolicyPage() {
           </li>
           <li>
             Use WhichCraft. WhichCraft is the fastest way to track the beers you drink. No ads, no
-            social features, no noise—just you and your brewlist.
+            feeds or public profiles, no noise—just you and your brewlist, shared only with people
+            you choose.
           </li>
           <li>Engage with us in other related ways, including any marketing or events</li>
         </ul>
@@ -235,8 +236,7 @@ export default function PrivacyPolicyPage() {
           </ul>
           <p className="mb-4">
             This information is primarily needed to maintain the security and operation of our
-            application(s), for troubleshooting, and for our internal analytics and reporting
-            purposes.
+            application(s) and for troubleshooting. We do not use it for analytics or advertising.
           </p>
           <p className="mb-4">
             All personal information that you provide to us must be true, complete, and accurate,
@@ -255,8 +255,8 @@ export default function PrivacyPolicyPage() {
             address, browser and device characteristics, operating system, language preferences,
             referring URLs, device name, country, location, information about how and when you use
             our Services, and other technical information. This information is primarily needed to
-            maintain the security and operation of our Services, and for our internal analytics and
-            reporting purposes.
+            maintain the security and operation of our Services and for troubleshooting. We do not
+            use it for analytics or advertising.
           </p>
           <p className="mb-4">The information we collect includes:</p>
           <ul className="list-disc pl-6 space-y-2 mb-4">
@@ -279,6 +279,51 @@ export default function PrivacyPolicyPage() {
               system configuration information.
             </li>
           </ul>
+          <h3 className="text-xl font-semibold mt-6 mb-3">Brewlists you choose to share</h3>
+          <p className="italic mb-4">
+            In Short: When you share a brewlist, it goes from you to the people you choose. We do
+            not receive, store, or have access to it.
+          </p>
+          <p className="mb-4">
+            Depending on your version of the app and your device, WhichCraft lets you share your
+            brewlist in up to two ways. You choose whether to share, what title to give the list,
+            and who receives it.
+          </p>
+          <ul className="list-disc pl-6 space-y-2 mb-4">
+            <li>
+              <em>Snapshot link.</em> The list travels inside the link itself: up to 50 beers, each
+              with its name, producer, style, ABV, catalog ID, and whether you liked it, plus the
+              optional title you write. It does not include your notes, places, photos, or dates.
+              Anyone who has the link can open it, in the WhichCraft app or on whichcraft.beer, and
+              it does not change after you send it. Browsers do not send the part of the link that
+              holds the list to our website’s server; the page reads it on your device. Because we
+              never hold the list, we cannot change, track, or revoke a link once you send it.
+            </li>
+            <li>
+              <em>Live list.</em> On iPhone and iPad, where the app offers it, you can share a list
+              that stays up to date, through Apple’s iCloud sharing from your own iCloud account,
+              with only the people you invite. Each person needs the WhichCraft app and an Apple
+              Account, and a forwarded invitation does not open the list for anyone you did not
+              invite. People you invite can view the list but not change it. It shows every beer on
+              your brewlist, each with its name, producer, style, ABV, catalog ID, whether you liked
+              it, and when you last had it, plus the optional title. It does not include your notes,
+              places, or photos. The list is stored in your iCloud and on the devices of the people
+              you invite, under Apple’s privacy policy. It is never on our servers, and we cannot
+              read it. iCloud may show the people you invite your name or Apple Account contact
+              details, and may show them to each other. You can stop sharing at any time; the list
+              then leaves their app the next time it connects to iCloud, but what they already saw
+              can’t be taken back.
+            </li>
+          </ul>
+          <p className="mb-4">
+            If a list someone shared with you concerns you, you can remove a live list from your app
+            at any time, and you can tell us at{' '}
+            <a href="mailto:support@whichcraft.beer" className="text-primary hover:underline">
+              support@whichcraft.beer
+            </a>
+            . Because we do not store shared lists, we cannot edit or delete one, but we will
+            respond to your report and help you stop seeing it.
+          </p>
         </section>
 
         <section id="infouse" className="scroll-mt-20">
@@ -494,6 +539,11 @@ export default function PrivacyPolicyPage() {
               financing, or acquisition of all or a portion of our business to another company.
             </li>
           </ul>
+          <p className="mb-4">
+            We do not share your brewlist with anyone. When you choose to share a list yourself, it
+            goes from you to the people you choose, through the link or Apple’s iCloud, as described
+            in “Brewlists you choose to share” in section 1.
+          </p>
         </section>
 
         <section id="ai" className="scroll-mt-20">
@@ -501,44 +551,13 @@ export default function PrivacyPolicyPage() {
             5. DO WE OFFER ARTIFICIAL INTELLIGENCE-BASED PRODUCTS?
           </h2>
           <p className="italic mb-4">
-            In Short: We offer products, features, or tools powered by artificial intelligence,
-            machine learning, or similar technologies.
+            In Short: No. WhichCraft does not offer products, features, or tools powered by
+            artificial intelligence.
           </p>
           <p className="mb-4">
-            As part of our Services, we offer products, features, or tools powered by artificial
-            intelligence, machine learning, or similar technologies (collectively, “AI Products”).
-            These tools are designed to enhance your experience and provide you with innovative
-            solutions. The terms in this Privacy Notice govern your use of the AI Products within
-            our Services.
-          </p>
-          <p className="mb-4">
-            <strong>Use of AI Technologies</strong>
-          </p>
-          <p className="mb-4">
-            We provide the AI Products through third-party service providers (“AI Service
-            Providers”), including OpenAI, Anthropic and Google Cloud AI. As outlined in this
-            Privacy Notice, your input, output, and personal information will be shared with and
-            processed by these AI Service Providers to enable your use of our AI Products for
-            purposes outlined in “WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL
-            INFORMATION?” You must not use the AI Products in any way that violates the terms or
-            policies of any AI Service Provider.
-          </p>
-          <p className="mb-4">
-            <strong>Our AI Products</strong>
-          </p>
-          <p className="mb-4">Our AI Products are designed for the following functions:</p>
-          <ul className="list-disc pl-6 space-y-2 mb-4">
-            <li>Image analysis</li>
-            <li>AI insights</li>
-          </ul>
-          <p className="mb-4">
-            <strong>How We Process Your Data Using AI</strong>
-          </p>
-          <p className="mb-4">
-            All personal information processed using our AI Products is handled in line with our
-            Privacy Notice and our agreement with third parties. This ensures high security and
-            safeguards your personal information throughout the process, giving you peace of mind
-            about your data's safety.
+            WhichCraft does not offer products, features, or tools powered by artificial
+            intelligence, machine learning, or similar technologies, and we do not share your
+            information with any artificial intelligence service provider.
           </p>
         </section>
 
@@ -602,10 +621,9 @@ export default function PrivacyPolicyPage() {
             the parent or guardian of such a minor and consent to such minor dependent’s use of the
             Services. If we learn that personal information from users less than 18 years of age or
             the equivalent age as specified by law in your jurisdiction has been collected, we will
-            deactivate the account and take reasonable measures to promptly delete such data from
-            our records. If you become aware of any data we may have collected from children under
-            age 18 or the equivalent age as specified by law in your jurisdiction, please contact us
-            at{' '}
+            take reasonable measures to promptly delete such data from our records. If you become
+            aware of any data we may have collected from children under age 18 or the equivalent age
+            as specified by law in your jurisdiction, please contact us at{' '}
             <a href="mailto:privacy@whichcraft.beer" className="text-primary hover:underline">
               privacy@whichcraft.beer
             </a>
@@ -618,9 +636,9 @@ export default function PrivacyPolicyPage() {
           <p className="italic mb-4">
             In Short: Depending on your state of residence in the US or in some regions, such as the
             European Economic Area (EEA), United Kingdom (UK), Switzerland, and Canada, you have
-            rights that allow you greater access to and control over your personal information. You
-            may review, change, or terminate your account at any time, depending on your country,
-            province, or state of residence.
+            rights that allow you greater access to and control over your personal information.
+            WhichCraft has no user accounts: your brewlist stays on your devices and in your own
+            iCloud, where you can review, change, or delete it at any time.
           </p>
           <p className="mb-4">
             In some regions (like the EEA, UK, Switzerland, and Canada), you have certain rights
