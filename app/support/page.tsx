@@ -21,8 +21,8 @@ export default function SupportPage() {
             <a href={`mailto:${SUPPORT_EMAIL}`} className="text-primary underline">
               {SUPPORT_EMAIL}
             </a>
-            . Tell us your iPhone or iPad model and the app version (Brewlist, then the info button)
-            if it&apos;s about the app.
+            . If it&apos;s about the app, tell us your iPhone or iPad model and the app version. In
+            WhichCraft 1.5 and later, the version is under Brewlist, then the info button.
           </p>
         </section>
 
@@ -38,8 +38,9 @@ export default function SupportPage() {
               Problem. You can email us, remove the list from your app at once, or both.
             </li>
             <li>
-              <strong>A link:</strong> tap the menu, then Report a Problem, or email us. A link is
-              only a copy someone sent you; close it and delete the message to stop seeing it.
+              <strong>A link:</strong> if it opened in WhichCraft, tap the menu, then Report a
+              Problem. If it opened in your web browser, email us. A link is only a copy someone
+              sent you; close it and delete the message to stop seeing it.
             </li>
           </ul>
           <p>
@@ -57,7 +58,8 @@ export default function SupportPage() {
           <h2 className="text-2xl font-semibold">Your data</h2>
           <p>
             WhichCraft has no accounts and no ads. Your tastings, notes, places, and photos stay on
-            your devices and in your own iCloud. The{' '}
+            your devices and in your own iCloud unless you share a Brewlist, and a shared Brewlist
+            never includes notes, places, or photos. The{' '}
             <Link href="/privacy-policy" className="text-primary underline">
               Privacy Policy
             </Link>{' '}
