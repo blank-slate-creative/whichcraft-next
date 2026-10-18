@@ -224,13 +224,16 @@ export default function PrivacyPolicyPage() {
             </li>
             <li>
               <em>Mobile Device Data.</em> The app does not collect your device ID, advertising
-              identifier, or a record of which features you use. When the app searches the beer
-              catalog, or when you visit this website, your device sends a request to our servers.
-              Like any internet service, they receive your Internet Protocol (IP) address and basic
-              technical details of the request, such as the browser or app version, in order to
-              answer it. Our beer search service records only the kind of request, its result, and
-              how long it took. Our hosting providers may keep standard request logs, including IP
-              addresses, for a limited time to run and secure the service.
+              identifier, or a record of which features you use, and it contains no analytics,
+              advertising, or crash-reporting tools. If you allow location access, the app uses your
+              location on your device, and with Apple Maps, to find places near you; it does not
+              send your location to us. When you search the beer catalog, the app sends the words
+              you type to our beer search service, which passes them to Algolia, the search service
+              that hosts the beer catalog, to return results. Algolia receives your search words but
+              not your IP address, and may keep them for a limited time. Beer label images load
+              directly from the catalog’s image server, which, like any internet service, receives
+              your IP address in order to send them. What our servers and service providers receive
+              with each request is described under “Information automatically collected” below.
             </li>
           </ul>
           <p className="mb-4">
@@ -244,40 +247,46 @@ export default function PrivacyPolicyPage() {
 
           <h3 className="text-xl font-semibold mt-6 mb-3">Information automatically collected</h3>
           <p className="italic mb-4">
-            In Short: Some information — such as your Internet Protocol (IP) address and/or browser
-            and device characteristics — is collected automatically when you visit our Services.
+            In Short: When you visit this website, or when the app searches the beer catalog, our
+            servers and service providers receive your Internet Protocol (IP) address and basic
+            technical details of the request.
           </p>
           <p className="mb-4">
-            We automatically collect certain information when you visit, use, or navigate the
-            Services. This information does not reveal your specific identity (like your name or
-            contact information) but may include device and usage information, such as your IP
-            address, browser and device characteristics, operating system, language preferences,
-            referring URLs, device name, country, location, information about how and when you use
-            our Services, and other technical information. This information is primarily needed to
-            maintain the security and operation of our Services and for troubleshooting. We do not
-            use it for analytics or advertising.
+            When you visit this website, or when the app searches the beer catalog, your device
+            sends a request to our servers. Like any internet service, they receive your Internet
+            Protocol (IP) address and basic technical details of the request, such as the browser or
+            app version, the operating system, your language setting, and the page or search
+            requested, in order to answer it. This information does not reveal your name or contact
+            information. We do not collect device or advertising identifiers, your location, or a
+            record of which features you use.
           </p>
           <p className="mb-4">The information we collect includes:</p>
           <ul className="list-disc pl-6 space-y-2 mb-4">
             <li>
-              <em>Log and Usage Data.</em> Log and usage data is service-related, diagnostic, usage,
-              and performance information our servers automatically collect when you access or use
-              our Services and which we record in log files. Depending on how you interact with us,
-              this log data may include your IP address, device information, browser type, and
-              settings and information about your activity in the Services (such as the date/time
-              stamps associated with your usage, pages and files viewed, searches, and other actions
-              you take such as which features you use), device event information (such as system
-              activity, error reports (sometimes called “crash dumps”), and hardware settings).
+              <em>Request logs.</em> Our beer search service records only the kind of request, its
+              result, how long it took, and, if a search fails, the error message. It does not
+              record your IP address. Our hosting providers may keep standard request logs,
+              including IP addresses, for a limited time to run and secure the service.
             </li>
             <li>
-              <em>Device Data.</em> We collect device data such as information about your computer,
-              phone, tablet, or other device you use to access the Services. Depending on the device
-              used, this device data may include information such as your IP address (or proxy
-              server), device and application identification numbers, location, browser type,
-              hardware model, Internet service provider and/or mobile carrier, operating system, and
-              system configuration information.
+              <em>Error monitoring.</em> Our beer search service uses Sentry, an error monitoring
+              service, to find and fix problems. When an error happens, Sentry receives the kind of
+              request and the part of the service it reached (for example, a beer search), the error
+              and where in our code it happened, and technical details of our server and its
+              software version. It does not receive the words you search for, the rest of the web
+              address, your IP address, or the other technical details your device sends with the
+              request. Sentry may keep this information for a limited time.
+            </li>
+            <li>
+              <em>Crash reports.</em> If you turn on sharing with app developers in your device’s
+              settings, Apple may share crash reports with us, under Apple’s privacy policy. The app
+              itself sends us none.
             </li>
           </ul>
+          <p className="mb-4">
+            We use this information only to run, secure, and troubleshoot the app and this website.
+            We do not use it for analytics or advertising, and we do not sell it.
+          </p>
           <h3 className="text-xl font-semibold mt-6 mb-3">Brewlists you choose to share</h3>
           <p className="italic mb-4">
             In Short: When you share a brewlist, it goes from you to the people you choose. We do
@@ -536,6 +545,12 @@ export default function PrivacyPolicyPage() {
               <strong>Business Transfers.</strong> We may share or transfer your information in
               connection with, or during negotiations of, any merger, sale of company assets,
               financing, or acquisition of all or a portion of our business to another company.
+            </li>
+            <li>
+              <strong>Service providers.</strong> Our hosting providers, Algolia (beer catalog
+              search), and Sentry (error monitoring) receive the information described under “Mobile
+              Device Data” and “Information automatically collected” in section 1, so that we can
+              answer requests and fix problems.
             </li>
           </ul>
           <p className="mb-4">
@@ -875,6 +890,12 @@ export default function PrivacyPolicyPage() {
               </tbody>
             </table>
           </div>
+
+          <p className="mb-4">
+            Our servers and hosting providers receive IP addresses, Algolia receives the words you
+            search for, and Sentry receives error reports, only as described under “Information
+            automatically collected” in section 1.
+          </p>
 
           <p className="mb-4">
             We may also collect other personal information outside of these categories through
