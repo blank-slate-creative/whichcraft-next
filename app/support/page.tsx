@@ -44,9 +44,9 @@ export default function SupportPage() {
             </li>
           </ul>
           <p>
-            We reply within 24 hours to reports of objectionable or abusive content in a shared
-            list, and help you stop seeing the list. We cannot edit or delete someone else&apos;s
-            list: WhichCraft does not store shared lists on its servers. See the{' '}
+            We reply within 24 hours to reports of objectionable content in a shared list, and help
+            you stop seeing the list. We cannot edit or delete someone else&apos;s list: WhichCraft
+            does not store shared lists on its servers. See the{' '}
             <Link href="/terms-of-service" className="text-primary underline">
               Terms of Service
             </Link>{' '}

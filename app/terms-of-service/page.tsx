@@ -532,8 +532,8 @@ export default function TermsOfServicePage() {
               support@whichcraft.beer
             </a>
             . Because we do not store shared lists, we cannot edit or delete one. We reply within 24
-            hours to reports of objectionable or abusive content in a shared list, and help you stop
-            seeing the list.
+            hours to reports of objectionable content in a shared list, and help you stop seeing the
+            list.
           </p>
         </section>
 
