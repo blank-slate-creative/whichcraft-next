@@ -18,8 +18,8 @@ export default function Home() {
                   Remember what's worth ordering again
                 </h1>
                 <p className="text-xl md:text-2xl text-muted-foreground max-w-[600px]">
-                  The fastest way to track the beers you drink. No ads, no social features, no
-                  noise—just you and your brewlist.
+                  The fastest way to track the beers you drink. No ads, no feeds, no noise—just you
+                  and your brewlist.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button asChild size="lg" className="h-14 px-8 text-lg gap-2">
@@ -153,7 +153,7 @@ export default function Home() {
         <section className="w-full py-20 md:py-32 flex flex-col items-center text-center px-4">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">Your brewlist, your way.</h2>
           <p className="text-xl text-muted-foreground max-w-[600px] mb-10">
-            Track beers without the social clutter. Private iCloud sync, no ads ever, native iOS
+            Track beers without feeds or followers. Private iCloud sync, no ads ever, native iOS
             speed.
           </p>
           <Button asChild size="lg" className="h-14 px-8 text-lg gap-2">

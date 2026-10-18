@@ -14,11 +14,8 @@ export function Footer() {
           <Link href="/terms-of-service" className="hover:text-foreground transition-colors">
             Terms of Service
           </Link>
-          <Link
-            href="mailto:support@whichcraft.beer"
-            className="hover:text-foreground transition-colors"
-          >
-            Contact
+          <Link href="/support" className="hover:text-foreground transition-colors">
+            Support
           </Link>
         </div>
       </div>

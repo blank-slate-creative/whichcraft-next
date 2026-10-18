@@ -4,7 +4,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <h1 className="text-3xl font-bold mb-2">PRIVACY POLICY</h1>
-      <p className="text-muted-foreground mb-8">Last updated October 10, 2026</p>
+      <p className="text-muted-foreground mb-8">Last updated October 18, 2026</p>
 
       <div className="space-y-6 text-foreground">
         <p>
@@ -21,7 +21,8 @@ export default function PrivacyPolicyPage() {
           </li>
           <li>
             Use WhichCraft. WhichCraft is the fastest way to track the beers you drink. No ads, no
-            social features, no noise—just you and your brewlist.
+            feeds or public profiles, no noise—just you and your brewlist, shared only with people
+            you choose.
           </li>
           <li>Engage with us in other related ways, including any marketing or events</li>
         </ul>
@@ -222,21 +223,22 @@ export default function PrivacyPolicyPage() {
               you wish to change our access or permissions, you may do so in your device's settings.
             </li>
             <li>
-              <em>Mobile Device Data.</em> We automatically collect device information (such as your
-              mobile device ID, model, and manufacturer), operating system, version information and
-              system configuration information, device and application identification numbers,
-              browser type and version, hardware model Internet service provider and/or mobile
-              carrier, and Internet Protocol (IP) address (or proxy server). If you are using our
-              application(s), we may also collect information about the phone network associated
-              with your mobile device, your mobile device’s operating system or platform, the type
-              of mobile device you use, your mobile device’s unique device ID, and information about
-              the features of our application(s) you accessed.
+              <em>Mobile Device Data.</em> The app does not collect your device ID, advertising
+              identifier, or a record of which features you use, and it contains no analytics,
+              advertising, or crash-reporting tools. If you allow location access, the app uses your
+              location on your device, and with Apple Maps, to find places near you; it does not
+              send your location to us. When you search the beer catalog, the app sends the words
+              you type to our beer search service, which passes them to Algolia, the search service
+              that hosts the beer catalog, to return results. Algolia receives your search words but
+              not your IP address, and may keep them for a limited time. Beer label images load
+              directly from the catalog’s image server, which, like any internet service, receives
+              your IP address in order to send them. What our servers and service providers receive
+              with each request is described under “Information automatically collected” below.
             </li>
           </ul>
           <p className="mb-4">
             This information is primarily needed to maintain the security and operation of our
-            application(s), for troubleshooting, and for our internal analytics and reporting
-            purposes.
+            application(s) and for troubleshooting. We do not use it for analytics or advertising.
           </p>
           <p className="mb-4">
             All personal information that you provide to us must be true, complete, and accurate,
@@ -245,40 +247,92 @@ export default function PrivacyPolicyPage() {
 
           <h3 className="text-xl font-semibold mt-6 mb-3">Information automatically collected</h3>
           <p className="italic mb-4">
-            In Short: Some information — such as your Internet Protocol (IP) address and/or browser
-            and device characteristics — is collected automatically when you visit our Services.
+            In Short: When you visit this website, or when the app searches the beer catalog, our
+            servers and service providers receive your Internet Protocol (IP) address and basic
+            technical details of the request.
           </p>
           <p className="mb-4">
-            We automatically collect certain information when you visit, use, or navigate the
-            Services. This information does not reveal your specific identity (like your name or
-            contact information) but may include device and usage information, such as your IP
-            address, browser and device characteristics, operating system, language preferences,
-            referring URLs, device name, country, location, information about how and when you use
-            our Services, and other technical information. This information is primarily needed to
-            maintain the security and operation of our Services, and for our internal analytics and
-            reporting purposes.
+            When you visit this website, or when the app searches the beer catalog, your device
+            sends a request to our servers. Like any internet service, they receive your Internet
+            Protocol (IP) address and basic technical details of the request, such as the browser or
+            app version, the operating system, your language setting, and the page or search
+            requested, in order to answer it. This information does not reveal your name or contact
+            information. We do not collect device or advertising identifiers, your location, or a
+            record of which features you use.
           </p>
           <p className="mb-4">The information we collect includes:</p>
           <ul className="list-disc pl-6 space-y-2 mb-4">
             <li>
-              <em>Log and Usage Data.</em> Log and usage data is service-related, diagnostic, usage,
-              and performance information our servers automatically collect when you access or use
-              our Services and which we record in log files. Depending on how you interact with us,
-              this log data may include your IP address, device information, browser type, and
-              settings and information about your activity in the Services (such as the date/time
-              stamps associated with your usage, pages and files viewed, searches, and other actions
-              you take such as which features you use), device event information (such as system
-              activity, error reports (sometimes called “crash dumps”), and hardware settings).
+              <em>Request logs.</em> Our beer search service records only the kind of request, its
+              result, how long it took, and, if a search fails, the error message. It does not
+              record your IP address. Our hosting providers may keep standard request logs,
+              including IP addresses, for a limited time to run and secure the service.
             </li>
             <li>
-              <em>Device Data.</em> We collect device data such as information about your computer,
-              phone, tablet, or other device you use to access the Services. Depending on the device
-              used, this device data may include information such as your IP address (or proxy
-              server), device and application identification numbers, location, browser type,
-              hardware model, Internet service provider and/or mobile carrier, operating system, and
-              system configuration information.
+              <em>Error monitoring.</em> Our beer search service uses Sentry, an error monitoring
+              service, to find and fix problems. When an error happens, Sentry receives the kind of
+              request and the part of the service it reached (for example, a beer search), the error
+              and where in our code it happened, and technical details of our server and its
+              software version. It does not receive the words you search for, the rest of the web
+              address, your IP address, or the other technical details your device sends with the
+              request. Sentry may keep this information for a limited time.
+            </li>
+            <li>
+              <em>Crash reports.</em> If you turn on sharing with app developers in your device’s
+              settings, Apple may share crash reports with us, under Apple’s privacy policy. The app
+              itself sends us none.
             </li>
           </ul>
+          <p className="mb-4">
+            We use this information only to run, secure, and troubleshoot the app and this website.
+            We do not use it for analytics or advertising, and we do not sell it.
+          </p>
+          <h3 className="text-xl font-semibold mt-6 mb-3">Brewlists you choose to share</h3>
+          <p className="italic mb-4">
+            In Short: When you share a brewlist, it goes from you to the people you choose. We do
+            not receive, store, or have access to it.
+          </p>
+          <p className="mb-4">
+            Depending on your version of the app and your device, WhichCraft lets you share your
+            brewlist in up to two ways. You choose whether to share, what title to give the list,
+            and who receives it.
+          </p>
+          <ul className="list-disc pl-6 space-y-2 mb-4">
+            <li>
+              <em>Snapshot link.</em> The list travels inside the link itself: up to 50 beers, each
+              with its name, producer, style, ABV, catalog ID, and whether you liked it, plus the
+              optional title you write. It does not include your notes, places, photos, or dates.
+              Anyone who has the link can open it, in the WhichCraft app or on whichcraft.beer, and
+              it does not change after you send it. Browsers do not send the part of the link that
+              holds the list to our website’s server; the page reads it on your device. Because we
+              never hold the list, we cannot change, track, or revoke a link once you send it.
+            </li>
+            <li>
+              <em>Live list.</em> On iPhone and iPad, where the app offers it, you can share a list
+              that stays up to date, through Apple’s iCloud sharing from your own iCloud account,
+              with only the people you invite. Each person needs the WhichCraft app and an Apple
+              Account, and a forwarded invitation does not open the list for anyone you did not
+              invite. People you invite can view the list but not change it. It shows every beer on
+              your brewlist, each with its name, producer, style, ABV, catalog ID, whether you liked
+              it, and when you last had it, plus the optional title. It does not include your notes,
+              places, or photos. The list is stored in your iCloud and on the devices of the people
+              you invite, under Apple’s privacy policy. It is never on our servers, and we cannot
+              read it. iCloud may show the people you invite your name or Apple Account contact
+              details, and may show them to each other. You can stop sharing at any time; the list
+              then leaves their app the next time it connects to iCloud, but what they already saw
+              can’t be taken back.
+            </li>
+          </ul>
+          <p className="mb-4">
+            If a list someone shared with you concerns you, you can remove a live list from your app
+            at any time, and you can tell us at{' '}
+            <a href="mailto:support@whichcraft.beer" className="text-primary hover:underline">
+              support@whichcraft.beer
+            </a>
+            . Because we do not store shared lists, we cannot edit or delete one. We reply within 24
+            hours to reports of objectionable content in a shared list, and help you stop seeing the
+            list.
+          </p>
         </section>
 
         <section id="infouse" className="scroll-mt-20">
@@ -493,7 +547,18 @@ export default function PrivacyPolicyPage() {
               connection with, or during negotiations of, any merger, sale of company assets,
               financing, or acquisition of all or a portion of our business to another company.
             </li>
+            <li>
+              <strong>Service providers.</strong> Our hosting providers, Algolia (beer catalog
+              search), and Sentry (error monitoring) receive the information described under “Mobile
+              Device Data” and “Information automatically collected” in section 1, so that we can
+              answer requests and fix problems.
+            </li>
           </ul>
+          <p className="mb-4">
+            We do not share your brewlist with anyone. When you choose to share a list yourself, it
+            goes from you to the people you choose, through the link or Apple’s iCloud, as described
+            in “Brewlists you choose to share” in section 1.
+          </p>
         </section>
 
         <section id="ai" className="scroll-mt-20">
@@ -501,44 +566,13 @@ export default function PrivacyPolicyPage() {
             5. DO WE OFFER ARTIFICIAL INTELLIGENCE-BASED PRODUCTS?
           </h2>
           <p className="italic mb-4">
-            In Short: We offer products, features, or tools powered by artificial intelligence,
-            machine learning, or similar technologies.
+            In Short: No. WhichCraft does not offer products, features, or tools powered by
+            artificial intelligence.
           </p>
           <p className="mb-4">
-            As part of our Services, we offer products, features, or tools powered by artificial
-            intelligence, machine learning, or similar technologies (collectively, “AI Products”).
-            These tools are designed to enhance your experience and provide you with innovative
-            solutions. The terms in this Privacy Notice govern your use of the AI Products within
-            our Services.
-          </p>
-          <p className="mb-4">
-            <strong>Use of AI Technologies</strong>
-          </p>
-          <p className="mb-4">
-            We provide the AI Products through third-party service providers (“AI Service
-            Providers”), including OpenAI, Anthropic and Google Cloud AI. As outlined in this
-            Privacy Notice, your input, output, and personal information will be shared with and
-            processed by these AI Service Providers to enable your use of our AI Products for
-            purposes outlined in “WHAT LEGAL BASES DO WE RELY ON TO PROCESS YOUR PERSONAL
-            INFORMATION?” You must not use the AI Products in any way that violates the terms or
-            policies of any AI Service Provider.
-          </p>
-          <p className="mb-4">
-            <strong>Our AI Products</strong>
-          </p>
-          <p className="mb-4">Our AI Products are designed for the following functions:</p>
-          <ul className="list-disc pl-6 space-y-2 mb-4">
-            <li>Image analysis</li>
-            <li>AI insights</li>
-          </ul>
-          <p className="mb-4">
-            <strong>How We Process Your Data Using AI</strong>
-          </p>
-          <p className="mb-4">
-            All personal information processed using our AI Products is handled in line with our
-            Privacy Notice and our agreement with third parties. This ensures high security and
-            safeguards your personal information throughout the process, giving you peace of mind
-            about your data's safety.
+            WhichCraft does not offer products, features, or tools powered by artificial
+            intelligence, machine learning, or similar technologies, and we do not share your
+            information with any artificial intelligence service provider.
           </p>
         </section>
 
@@ -602,10 +636,9 @@ export default function PrivacyPolicyPage() {
             the parent or guardian of such a minor and consent to such minor dependent’s use of the
             Services. If we learn that personal information from users less than 18 years of age or
             the equivalent age as specified by law in your jurisdiction has been collected, we will
-            deactivate the account and take reasonable measures to promptly delete such data from
-            our records. If you become aware of any data we may have collected from children under
-            age 18 or the equivalent age as specified by law in your jurisdiction, please contact us
-            at{' '}
+            take reasonable measures to promptly delete such data from our records. If you become
+            aware of any data we may have collected from children under age 18 or the equivalent age
+            as specified by law in your jurisdiction, please contact us at{' '}
             <a href="mailto:privacy@whichcraft.beer" className="text-primary hover:underline">
               privacy@whichcraft.beer
             </a>
@@ -618,9 +651,9 @@ export default function PrivacyPolicyPage() {
           <p className="italic mb-4">
             In Short: Depending on your state of residence in the US or in some regions, such as the
             European Economic Area (EEA), United Kingdom (UK), Switzerland, and Canada, you have
-            rights that allow you greater access to and control over your personal information. You
-            may review, change, or terminate your account at any time, depending on your country,
-            province, or state of residence.
+            rights that allow you greater access to and control over your personal information.
+            WhichCraft has no user accounts: your brewlist stays on your devices and in your own
+            iCloud, where you can review, change, or delete it at any time.
           </p>
           <p className="mb-4">
             In some regions (like the EEA, UK, Switzerland, and Canada), you have certain rights
@@ -858,6 +891,12 @@ export default function PrivacyPolicyPage() {
               </tbody>
             </table>
           </div>
+
+          <p className="mb-4">
+            Our servers and hosting providers receive IP addresses, Algolia receives the words you
+            search for, and Sentry receives error reports, only as described under “Information
+            automatically collected” in section 1.
+          </p>
 
           <p className="mb-4">
             We may also collect other personal information outside of these categories through
