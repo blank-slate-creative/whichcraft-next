@@ -20,6 +20,8 @@
  * ignored. decodeBrewlist takes the fragment without its "#"; the page strips that itself.
  */
 
+import { titleRejection } from './titleFilter';
+
 export const SHARE_VERSION = 1;
 
 /**
@@ -138,7 +140,8 @@ export function parseBrewlist(data: unknown): SharedBrewlist {
 
   const list: SharedBrewlist = { v: SHARE_VERSION, beers: data.beers.map(parseBeer) };
   const title = optionalText(data.title, LIMITS.titleChars);
-  if (title !== undefined) list.title = title;
+  // A title the filter rejects is not shown; the list still opens (titleFilter.ts, issue 1477).
+  if (title !== undefined && titleRejection(title) === null) list.title = title;
   return list;
 }
 

@@ -223,15 +223,14 @@ export default function PrivacyPolicyPage() {
               you wish to change our access or permissions, you may do so in your device's settings.
             </li>
             <li>
-              <em>Mobile Device Data.</em> We automatically collect device information (such as your
-              mobile device ID, model, and manufacturer), operating system, version information and
-              system configuration information, device and application identification numbers,
-              browser type and version, hardware model Internet service provider and/or mobile
-              carrier, and Internet Protocol (IP) address (or proxy server). If you are using our
-              application(s), we may also collect information about the phone network associated
-              with your mobile device, your mobile device’s operating system or platform, the type
-              of mobile device you use, your mobile device’s unique device ID, and information about
-              the features of our application(s) you accessed.
+              <em>Mobile Device Data.</em> The app does not collect your device ID, advertising
+              identifier, or a record of which features you use. When the app searches the beer
+              catalog, or when you visit this website, your device sends a request to our servers.
+              Like any internet service, they receive your Internet Protocol (IP) address and basic
+              technical details of the request, such as the browser or app version, in order to
+              answer it. Our beer search service records only the kind of request, its result, and
+              how long it took. Our hosting providers may keep standard request logs, including IP
+              addresses, for a limited time to run and secure the service.
             </li>
           </ul>
           <p className="mb-4">

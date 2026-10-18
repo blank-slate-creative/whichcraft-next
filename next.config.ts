@@ -8,6 +8,13 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   turbopack: {},
+  async redirects() {
+    // The App Store listing names the short paths (blank-slate issue 1477). They returned 404.
+    return [
+      { source: '/privacy', destination: '/privacy-policy', permanent: true },
+      { source: '/terms', destination: '/terms-of-service', permanent: true },
+    ];
+  },
   async headers() {
     return [
       {
