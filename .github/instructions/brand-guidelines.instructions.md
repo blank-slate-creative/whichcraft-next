@@ -49,17 +49,17 @@ Use the following samples as a reference for writing marketing copy, app store d
 
 ### Promotional Text
 
-Track the beers you drink. No ads, no social features, no noise—just your brewlist. Private, fast, and simple. iCloud sync keeps your tastings yours.
+Track the beers you drink. No ads, no feeds, no noise—just your brewlist. Private, fast, and simple. iCloud sync keeps your tastings yours.
 
 **Alternative options:**
 
-- Log every brew. Remember the good ones. No ads, no social network, no BS. Your tastings stay private in iCloud. Fast, simple, and actually yours.
-- Your brewlist, your way. Track beers without the social clutter. Private iCloud sync, no ads ever, native iOS speed. Simple tools for serious drinkers.
+- Log every brew. Remember the good ones. No ads, no feeds, no BS. Your tastings stay private in iCloud. Fast, simple, and actually yours.
+- Your brewlist, your way. Track beers without feeds or followers. Private iCloud sync, no ads ever, native iOS speed. Simple tools for serious drinkers.
 - Remember which beers you liked. Log tastings in seconds, sync privately via iCloud, filter your brewlist however you want. No ads. No social feed. Just you.
 
 ### App Store Description
 
-WhichCraft is the fastest way to track the beers you drink. No ads, no social features, no noise—just you and your brewlist.
+WhichCraft is the fastest way to track the beers you drink. No ads, no feeds, no noise—just you and your brewlist.
 
 WHAT YOU GET
 
