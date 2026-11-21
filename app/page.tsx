@@ -45,7 +45,7 @@ export default function Home() {
             <PhoneMockup className="relative mt-2 w-[270px] sm:w-[300px] lg:mt-16 lg:w-[330px]">
               <Image
                 src="/screens/brewlist.png"
-                alt="The Brewlist screen: a list of beers with a thumbs up or down on each"
+                alt="The Brewlist screen: a list of beers with their brewery, style and date"
                 width={1206}
                 height={2622}
                 sizes="(min-width: 1024px) 330px, 300px"
@@ -65,9 +65,9 @@ export default function Home() {
               Never waste a sip on something forgettable
             </h2>
             <p className="text-lg leading-relaxed md:text-xl">
-              Log tastings in seconds. Thumbs up or down. Add notes. That&apos;s it. We don&apos;t
-              make you fill out a form or rate things on a 10-point scale. You tried a beer. You
-              liked it or you didn&apos;t. Move on.
+              Log tastings in seconds. Would you drink it again? Absolutely or nope. Add notes.
+              That&apos;s it. We don&apos;t make you fill out a form or rate things on a 10-point
+              scale. You tried a beer. You liked it or you didn&apos;t. Move on.
             </p>
           </div>
           <div className="order-2 flex h-[380px] justify-center overflow-hidden md:order-1 md:h-[560px] md:items-start">
