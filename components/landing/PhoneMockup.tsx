@@ -5,26 +5,20 @@ interface PhoneMockupProps {
   children?: React.ReactNode;
 }
 
+/**
+ * A dark device frame (the brand's "Stout" bezel) for an app screenshot. Width comes from the
+ * caller; the screen keeps the screenshot's own proportions, and a parent with `overflow-hidden`
+ * can crop the bottom as the style board does.
+ */
 export function PhoneMockup({ className, children }: PhoneMockupProps) {
   return (
     <div
       className={cn(
-        'relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-900 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl',
+        'relative mx-auto w-[260px] rounded-[2.75rem] bg-[#0B0705] p-[9px] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)] ring-1 ring-white/10',
         className
       )}
     >
-      <div className="h-[32px] w-[3px] bg-gray-800 absolute -start-[17px] top-[72px] rounded-s-lg"></div>
-      <div className="h-[46px] w-[3px] bg-gray-800 absolute -start-[17px] top-[124px] rounded-s-lg"></div>
-      <div className="h-[46px] w-[3px] bg-gray-800 absolute -start-[17px] top-[178px] rounded-s-lg"></div>
-      <div className="h-[64px] w-[3px] bg-gray-800 absolute -end-[17px] top-[142px] rounded-e-lg"></div>
-      <div className="rounded-[2rem] overflow-hidden w-full h-full bg-white dark:bg-gray-800 flex items-center justify-center text-gray-400">
-        {children || (
-          <div className="flex flex-col items-center gap-2 p-4 text-center">
-            <span className="text-sm font-medium">App Screenshot</span>
-            <span className="text-xs opacity-70">300 x 600</span>
-          </div>
-        )}
-      </div>
+      <div className="overflow-hidden rounded-[2.15rem] bg-[#0B0705]">{children}</div>
     </div>
   );
 }

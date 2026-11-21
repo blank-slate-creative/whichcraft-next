@@ -1,18 +1,25 @@
 import Link from 'next/link';
+import { Logo } from '@/components/brand/Brand';
 
 export default function Navbar() {
   return (
-    <nav className="bg-background border-b border-b-foreground/10 h-16 z-10">
-      <div className="container mx-auto px-4 md:px-6 flex justify-between items-center h-full">
-        <Link href="/" className="font-bold text-xl" prefetch={true}>
-          WhichCraft
+    <header className="sticky top-0 z-20 h-16 border-b border-border bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <nav
+        aria-label="Main"
+        className="container mx-auto flex h-full items-center justify-between px-4 md:px-6"
+      >
+        <Link href="/" aria-label="WhichCraft home" className="rounded-lg" prefetch={true}>
+          <Logo />
         </Link>
         <div className="flex items-center gap-2">
-          <Link href="/about" className="py-2 px-4 rounded-md hover:bg-secondary transition-colors">
+          <Link
+            href="/about"
+            className="rounded-lg px-4 py-2 font-medium transition-colors hover:bg-accent"
+          >
             About
           </Link>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }
