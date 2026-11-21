@@ -23,41 +23,71 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-space-grotesk)'],
+        // Body is the system font (brand guide, Type). Display is Bricolage Grotesque, self-hosted.
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"SF Pro Text"',
+          '"Segoe UI"',
+          'system-ui',
+          'Roboto',
+          'Helvetica',
+          'Arial',
+          'sans-serif',
+        ],
+        display: ['var(--font-display)', 'ui-rounded', 'system-ui', 'sans-serif'],
       },
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        // The Taproom palette (company/portfolio/whichcraft/brand-refresh-plan.md). Names are
+        // fixed colours; the semantic tokens below switch with the light and dark scheme.
+        stout: 'rgb(var(--stout) / <alpha-value>)',
+        porter: 'rgb(var(--porter) / <alpha-value>)',
+        amber: 'rgb(var(--amber) / <alpha-value>)',
+        'amber-ink': 'rgb(var(--amber-ink) / <alpha-value>)',
+        gold: 'rgb(var(--gold) / <alpha-value>)',
+        head: 'rgb(var(--head) / <alpha-value>)',
+        foam: 'rgb(var(--foam) / <alpha-value>)',
+        ink: 'rgb(var(--ink) / <alpha-value>)',
+        'stout-lit': 'rgb(var(--stout-lit) / <alpha-value>)',
+        'stout-mute': 'rgb(var(--stout-mute) / <alpha-value>)',
+        border: 'rgb(var(--border) / <alpha-value>)',
+        input: 'rgb(var(--border) / <alpha-value>)',
+        ring: 'rgb(var(--ring) / <alpha-value>)',
+        background: 'rgb(var(--background) / <alpha-value>)',
+        foreground: 'rgb(var(--foreground) / <alpha-value>)',
+        // The one action colour: Amber with Ink text, in both schemes.
+        action: {
+          DEFAULT: 'rgb(var(--amber) / <alpha-value>)',
+          foreground: 'rgb(var(--ink) / <alpha-value>)',
+        },
+        // Accent text and links: Amber Ink on light, Gold on dark. Never plain Amber as light text.
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+          DEFAULT: 'rgb(var(--primary) / <alpha-value>)',
+          foreground: 'rgb(var(--primary-foreground) / <alpha-value>)',
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
+          DEFAULT: 'rgb(var(--muted) / <alpha-value>)',
+          foreground: 'rgb(var(--foreground) / <alpha-value>)',
         },
         destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
+          DEFAULT: 'rgb(var(--destructive) / <alpha-value>)',
+          foreground: 'rgb(var(--destructive-foreground) / <alpha-value>)',
         },
         muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
+          DEFAULT: 'rgb(var(--muted) / <alpha-value>)',
+          foreground: 'rgb(var(--muted-foreground) / <alpha-value>)',
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
+          DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
+          foreground: 'rgb(var(--foreground) / <alpha-value>)',
         },
         popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
+          DEFAULT: 'rgb(var(--card) / <alpha-value>)',
+          foreground: 'rgb(var(--foreground) / <alpha-value>)',
         },
         card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
+          DEFAULT: 'rgb(var(--card) / <alpha-value>)',
+          foreground: 'rgb(var(--foreground) / <alpha-value>)',
         },
       },
       borderRadius: {

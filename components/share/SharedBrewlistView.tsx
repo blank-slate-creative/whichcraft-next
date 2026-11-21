@@ -56,7 +56,7 @@ export function SharedBrewlistView() {
     <article>
       <p
         role="note"
-        className="mb-6 rounded-md border border-foreground/10 bg-muted/50 px-4 py-3 text-sm text-muted-foreground"
+        className="mb-6 rounded-xl border border-border bg-muted px-4 py-3 text-sm text-muted-foreground"
       >
         Shared link, not verified by WhichCraft. Anyone can make a link like this, so only trust one
         from someone you know.
@@ -70,7 +70,7 @@ export function SharedBrewlistView() {
 
       {state.status === 'error' && (
         <div role="alert" className="space-y-4">
-          <h1 className="text-2xl font-bold">This list didn&apos;t open</h1>
+          <h1 className="display text-4xl">This list didn&apos;t open</h1>
           <p className="text-muted-foreground">{ERROR_COPY[state.reason]}</p>
           <Button asChild variant="outline">
             <Link href="/">Go to WhichCraft</Link>
@@ -81,7 +81,7 @@ export function SharedBrewlistView() {
       {state.status === 'ready' && (
         <div className="space-y-6">
           <header className="space-y-1">
-            <h1 className="text-3xl font-bold break-words">
+            <h1 className="display break-words text-4xl md:text-5xl">
               {state.list.title || 'A shared brew list'}
             </h1>
             <p className="text-muted-foreground">
@@ -89,7 +89,7 @@ export function SharedBrewlistView() {
             </p>
           </header>
 
-          <ol className="divide-y divide-foreground/10 rounded-lg border bg-card">
+          <ol className="divide-y divide-border overflow-hidden rounded-[1.25rem] border border-border bg-card">
             {state.list.beers.map((beer, index) => (
               <li key={index} className="px-4 py-3">
                 <p className="font-semibold break-words">{beer.name}</p>
@@ -104,7 +104,11 @@ export function SharedBrewlistView() {
             <p className="text-muted-foreground">
               WhichCraft keeps track of the beers you&apos;ve tried and whether you liked them.
             </p>
-            <Button asChild size="lg" className="gap-2">
+            <Button
+              asChild
+              size="lg"
+              className="h-auto min-h-11 gap-2 whitespace-normal py-3 text-center"
+            >
               <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer">
                 <Apple className="w-5 h-5" />
                 Get WhichCraft on the App Store
