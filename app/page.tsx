@@ -25,7 +25,7 @@ export default function Home() {
     <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-3 pb-16 pt-3 sm:px-4 md:gap-6 md:px-6 md:pt-4">
       {/* Hero: a Stout panel in both schemes, the mark large and behind the phone */}
       <section className="panel-stout relative overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem]">
-        <MarkLayer className="pointer-events-none absolute -right-24 top-1/2 w-[640px] max-w-none -translate-y-1/2 opacity-[0.13] md:-right-10 md:w-[820px]" />
+        <MarkLayer className="pointer-events-none absolute -right-10 top-1/2 hidden w-[820px] max-w-none -translate-y-1/2 opacity-[0.13] lg:block" />
         <div className="relative grid grid-cols-1 items-center gap-10 px-6 pt-12 md:px-12 md:pt-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-6 lg:px-16 lg:pt-0">
           <div className="flex flex-col items-start space-y-7 lg:py-28">
             <h1 className="display text-[2.9rem] leading-[0.98] sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
@@ -146,7 +146,7 @@ export default function Home() {
 
       {/* Bottom CTA */}
       <section className="panel-stout relative mt-2 overflow-hidden rounded-[1.75rem] px-6 py-16 text-center md:mt-4 md:rounded-[2.5rem] md:py-24">
-        <MarkLayer className="pointer-events-none absolute left-1/2 top-1/2 w-[520px] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-[0.09] md:w-[760px]" />
+        <MarkLayer className="pointer-events-none absolute left-1/2 top-1/2 hidden w-[760px] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-[0.09] lg:block" />
         <div className="relative flex flex-col items-center">
           <h2 className="display mb-6 text-4xl md:text-6xl">Your brewlist, your way.</h2>
           <p className="mb-10 max-w-[600px] text-lg text-stout-mute md:text-xl">
