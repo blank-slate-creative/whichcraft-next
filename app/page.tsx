@@ -102,10 +102,10 @@ export default function Home() {
             </p>
           </div>
           <div className="flex h-[380px] justify-center overflow-hidden md:h-[560px] md:items-start">
-            <PhoneMockup className="mt-0 w-[270px] md:mt-14 md:w-[300px]">
+            <PhoneMockup island className="mt-0 w-[270px] md:mt-14 md:w-[300px]">
               <Image
-                src="/screens/search.png"
-                alt="The search screen: a search for High, with a match from your Brewlist and new beers from the catalog"
+                src="/screens/search.jpg"
+                alt="The search screen: a Search for beers field above Recently Saved beers with their brewery, style and an Absolutely! or Nope rating"
                 width={1206}
                 height={2622}
                 sizes="300px"
