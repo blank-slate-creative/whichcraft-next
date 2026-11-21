@@ -42,12 +42,15 @@ export default function Home() {
               aria-hidden="true"
               className="absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber/20 blur-3xl"
             />
-            <PhoneMockup className="relative mt-2 w-[270px] sm:w-[300px] lg:mt-16 lg:w-[330px]">
+            <PhoneMockup
+              island
+              className="relative mt-2 w-[270px] sm:w-[300px] lg:mt-16 lg:w-[330px]"
+            >
               <Image
-                src="/screens/brewlist.png"
-                alt="The Brewlist screen: a list of beers with their brewery, style and date"
+                src="/screens/brewlist.jpg"
+                alt="The Brewlist screen: beers with their brewery, style, date and an Absolutely! rating"
                 width={1206}
-                height={2622}
+                height={2620}
                 sizes="(min-width: 1024px) 330px, 300px"
                 className="h-auto w-full"
                 priority
@@ -71,12 +74,12 @@ export default function Home() {
             </p>
           </div>
           <div className="order-2 flex h-[380px] justify-center overflow-hidden md:order-1 md:h-[560px] md:items-start">
-            <PhoneMockup className="mt-0 w-[270px] md:mt-14 md:w-[300px]">
+            <PhoneMockup island className="mt-0 w-[270px] md:mt-14 md:w-[300px]">
               <Image
-                src="/screens/add-tasting.png"
-                alt="The log a tasting screen"
+                src="/screens/add-tasting.jpg"
+                alt="The Add brew screen for Zombie Dust, asking Would drink again? with Absolutely! and Nope buttons, then date, location and notes"
                 width={1206}
-                height={2622}
+                height={2620}
                 sizes="300px"
                 className="h-auto w-full"
               />
@@ -102,7 +105,7 @@ export default function Home() {
             <PhoneMockup className="mt-0 w-[270px] md:mt-14 md:w-[300px]">
               <Image
                 src="/screens/search.png"
-                alt="The search screen"
+                alt="The search screen: a search for High, with a match from your Brewlist and new beers from the catalog"
                 width={1206}
                 height={2622}
                 sizes="300px"
