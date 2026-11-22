@@ -28,12 +28,12 @@ WhichCraft's voice is **straightforward, confident, and no-nonsense**. We don't 
 
 Consistency is key. Always use these terms:
 
-| Term                 | Usage                                     |
-| -------------------- | ----------------------------------------- |
-| **Brewlist**         | The user's main collection of saved beers |
-| **Tasting**          | A check-in or logging event               |
-| **Brews / Beers**    | The beverages themselves                  |
-| **Liked / Disliked** | User rating (thumbs up/down)              |
+| Term                 | Usage                                                              |
+| -------------------- | ------------------------------------------------------------------ |
+| **Brewlist**         | The user's main collection of saved beers                          |
+| **Tasting**          | A check-in or logging event                                        |
+| **Brews / Beers**    | The beverages themselves                                           |
+| **Liked / Disliked** | User rating: a filled glass (Absolutely!) or an empty glass (Nope) |
 
 ## Brand Personality
 
@@ -70,7 +70,7 @@ Find any beer from a comprehensive catalog of hundreds of thousands of brews wor
 Every tasting gets saved to your personal collection. Filter by liked, disliked, or browse everything you've tried. Sort by date, name, or rating—whatever makes sense to you.
 
 • Log Tastings
-Thumbs up or down. Add notes. That's it. We don't make you fill out a form or rate things on a 10-point scale. You tried a beer. You liked it or you didn't. Move on.
+Would you drink it again? Absolutely! or Nope. Add notes. That's it. We don't make you fill out a form or rate things on a 10-point scale. You tried a beer. You liked it or you didn't. Move on.
 
 • Private by Design
 Your tastings sync via iCloud. They're yours. We don't see them, we don't sell them, and we can't lose them in a data breach. Your brewlist lives in your iCloud account, not on some company's server.

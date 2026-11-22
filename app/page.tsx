@@ -68,7 +68,7 @@ export default function Home() {
               Never waste a sip on something forgettable
             </h2>
             <p className="text-lg leading-relaxed md:text-xl">
-              Log tastings in seconds. Would you drink it again? Absolutely or nope. Add notes.
+              Log tastings in seconds. Would you drink it again? Absolutely! or Nope. Add notes.
               That&apos;s it. We don&apos;t make you fill out a form or rate things on a 10-point
               scale. You tried a beer. You liked it or you didn&apos;t. Move on.
             </p>
@@ -77,7 +77,7 @@ export default function Home() {
             <PhoneMockup island className="mt-0 w-[270px] md:mt-14 md:w-[300px]">
               <Image
                 src="/screens/add-tasting.jpg"
-                alt="The Add brew screen for Zombie Dust, asking Would drink again? with Absolutely! and Nope buttons, then date, location and notes"
+                alt="The Add brew screen for Zombie Dust, asking Would drink again? with Absolutely! and Nope buttons"
                 width={1206}
                 height={2620}
                 sizes="300px"
