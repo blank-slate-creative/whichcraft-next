@@ -87,8 +87,8 @@ export default function AboutPage() {
                 <div className="display mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber text-2xl text-ink">
                   3
                 </div>
-                <h3 className="display mb-2 text-2xl">Absolutely or Nope</h3>
-                <p className="text-muted-foreground">Absolutely or nope, plus notes.</p>
+                <h3 className="display mb-2 text-2xl">Absolutely! or Nope</h3>
+                <p className="text-muted-foreground">Absolutely! or Nope, plus notes.</p>
               </div>
               <div className="flex flex-col items-center text-center">
                 <div className="display mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber text-2xl text-ink">
