@@ -4,7 +4,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-4xl">
       <h1 className="display mb-3 text-4xl md:text-5xl">PRIVACY POLICY</h1>
-      <p className="text-muted-foreground mb-8">Last updated October 18, 2026</p>
+      <p className="text-muted-foreground mb-8">Last updated November 22, 2026</p>
 
       <div className="space-y-6 text-foreground">
         <p>
@@ -192,10 +192,10 @@ export default function PrivacyPolicyPage() {
             <strong>Sensitive Information.</strong> We do not process sensitive information.
           </p>
           <p className="mb-4">
-            <strong>Payment Data.</strong> We may collect data necessary to process your payment if
-            you choose to make purchases, such as your payment instrument number, and the security
-            code associated with your payment instrument. All payment data is handled and stored by
-            Apple Inc. You may find their privacy notice link(s) here:{' '}
+            <strong>Payment Data.</strong> We do not collect your payment instrument number or the
+            security code associated with it. If you leave a tip, Apple handles the payment under
+            its own terms and privacy policy. The app sends nothing about your tip to us. You may
+            find Apple's privacy notice link(s) here:{' '}
             <a
               href="https://www.apple.com/legal/privacy/"
               target="_blank"
@@ -364,9 +364,8 @@ export default function PrivacyPolicyPage() {
               and policies, and other similar information.
             </li>
             <li>
-              <strong>To fulfill and manage your orders.</strong> We may process your information to
-              fulfill and manage your orders, payments, returns, and exchanges made through the
-              Services.
+              <strong>Tips.</strong> If you leave a tip, Apple handles the payment under its own
+              terms and privacy policy. The app sends nothing about your tip to us.
             </li>
             <li>
               <strong>To enable user-to-user communications.</strong> We may process your
